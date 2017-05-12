@@ -1,0 +1,9 @@
+/scripts/predictions_to_original_shape.py
+# Idea files from JetBrains IDEs (PyCharm)
+.idea
+.cache
+*.pyc
+params/params*
+!params/params_example.py
+scripts/write_plot_val_subjects.py
+mprofile*

@@ -1,0 +1,11 @@
+Keras
+Theano
+nibabel
+numpy
+scikit-image
+SimpleITK
+scipy
+pytest
+cython
+matplotlib
+h5py
