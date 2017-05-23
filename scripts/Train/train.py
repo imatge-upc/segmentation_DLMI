@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
 
     print 'Getting parameters to train the model...'
-    params = p.PARAMS_DICT[params_string].get_params
+    params = p.PARAMS_DICT[params_string].get_params()
     filepath = join(params[p.OUTPUT_PATH], 'logs', filename + '.txt')
     filepath_weights = join(params[p.OUTPUT_PATH], 'model_weights', filename + '.h5')
     load_weights_filepath = join(params[p.OUTPUT_PATH], 'model_weights', load_weights_file + '.h5') if load_weights_file != -1 else None
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         num_modalities=num_modalities,
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
-        model_name=params[p.MODEL_NAME],
+        model_name='u_net',
         weights_filename=load_weights_filepath
     )
     model.summary()

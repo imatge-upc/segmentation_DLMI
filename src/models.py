@@ -1,8 +1,8 @@
-from keras.layers import Convolution3D, Lambda, AveragePooling3D, MaxPooling3D, PReLU, Input, merge, \
-    Merge, BatchNormalization
+from keras.layers import  Lambda, AveragePooling3D, MaxPooling3D, PReLU, Input, merge, \
+    Merge, BatchNormalization, Conv3D, Concatenate, concatenate ,Convolution3D
 from keras.models import Sequential, Model
 from keras.optimizers import RMSprop, Adam
-from keras.regularizers import WeightRegularizer
+from keras.regularizers import L1L2
 
 from src.activations import elementwise_softmax_3d
 from src.losses import categorical_crossentropy_3d
@@ -132,7 +132,7 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = L1L2(l1=L1_reg, l2=L2_reg)
         optimizer = RMSprop(learning_rate, rho=rho, epsilon=epsilon)
 
         # Model
@@ -205,7 +205,7 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = L1L2(l1=L1_reg, l2=L2_reg)
         optimizer = RMSprop(learning_rate, rho=rho, epsilon=epsilon)
 
         # Model
@@ -282,7 +282,7 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = L1L2(l1=L1_reg, l2=L2_reg)
         optimizer = Adam(lr=lr, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon)
 
         # Architecture definition
@@ -398,7 +398,7 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = L1L2(l1=L1_reg, l2=L2_reg)
         optimizer = RMSprop(learning_rate, rho=rho, epsilon=epsilon)
 
         # Model
@@ -557,28 +557,28 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = [WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = [L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg)
                        ]
         optimizer = Adam(learning_rate, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon)
 
@@ -739,29 +739,29 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = [WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = [L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg)
                        ]
         optimizer = Adam(lr=lr, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, clipnorm = 1.)
 
@@ -944,29 +944,29 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = [WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = [L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg)
                        ]
         optimizer = Adam(lr=lr, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, clipnorm = 1.)
 
@@ -1144,70 +1144,70 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='Softmax')
-        regularizer = WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = L1L2(l1=L1_reg, l2=L2_reg)
         optimizer = Adam(lr=lr, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, clipnorm = 1.)
 
         # Architecture definition
 
         # First level
         x = Input(shape=input_shape, name='U-net input')
-        tmp = Convolution3D(8, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 1.1')(x)
+        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv 1.1',
+                     activation='relu',
+                     padding='same')(x)
         tmp = BatchNormalization(axis=1, name='batch norm 1.1')(tmp)
-        tmp = Convolution3D(8, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 1.2')(tmp)
+        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv 1.2',  activation='relu',
+                     padding='same')(tmp)
         z1 = BatchNormalization(axis=1, name='batch norm 1.2')(tmp)
         tmp = MaxPooling3D(pool_size=pool_size, name='pool 1')(z1)
 
         # Second level
-        tmp = Convolution3D(16, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 2.1')(tmp)
+        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv 2.1',  activation='relu',
+                     padding='same')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 2.1')(tmp)
-        tmp = Convolution3D(16, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 2.2')(tmp)
+        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv 2.2',  activation='relu',
+                     padding='same')(tmp)
         z2 = BatchNormalization(axis=1, name='batch norm 2.2')(tmp)
         tmp = MaxPooling3D(pool_size=pool_size, name='pool 2')(z2)
 
         # Third level
-        tmp = Convolution3D(32, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 3.1')(tmp)
+        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv 3.1',  activation='relu',
+                     padding='same')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 3.1')(tmp)
-        tmp = Convolution3D(32, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 3.2')(tmp)
+        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv 3.2',  activation='relu',
+                     padding='same')(tmp)
         z3 = BatchNormalization(axis=1, name='batch norm 3.2')(tmp)
         tmp = MaxPooling3D(pool_size=pool_size, name='pool 3')(z3)
 
         # Fourth level
-        tmp = Convolution3D(64, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 4.1')(tmp)
+        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv 4.1',  activation='relu',
+                     padding='same')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 4.1')(tmp)
-        tmp = Convolution3D(64, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 4.2')(tmp)
+        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv 4.2',  activation='relu',
+                     padding='same')(tmp)
         z4 = BatchNormalization(axis=1, name='batch norm 4.2')(tmp)
         tmp = MaxPooling3D(pool_size=pool_size, name='pool 4')(z4)
 
         # Fifth level
-        tmp = Convolution3D(128, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 5.1')(tmp)
+        tmp = Conv3D(128, (3, 3, 3), kernel_initializer=initializer, name='conv 5.1',  activation='relu',
+                     padding='same')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 5.1')(tmp)
-        tmp = Convolution3D(128, 3, 3, 3, init=initializer, activation='relu', border_mode='same',  # Inflexion point
-                             name='conv 5.2')(tmp)
+        tmp = Conv3D(128, (3, 3, 3), kernel_initializer=initializer, name='conv 5.2',  activation='relu',
+                     padding='same')(tmp)          #inflection point
         tmp = BatchNormalization(axis=1, name='batch norm 5.2')(tmp)
         tmp = Upsampling3D_mod(size=pool_size, name='up 5')(tmp)
 
-
         # Fourth level
-        tmp = merge([tmp, z4], mode='concat', concat_axis=1, name='merge 4')
-        tmp = Convolution3D(64, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 4.3')(tmp)
+        tmp = concatenate([tmp, z4], axis=1, name='merge 4')
+        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv 4.3', activation='relu',
+                     padding='same')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 4.3')(tmp)
-        tmp = Convolution3D(64, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
-                             name='conv 4.4')(tmp)
+        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv 4.4',  activation='relu',
+                     padding='same')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 4.4')(tmp)
         tmp = Upsampling3D_mod(size=pool_size, name='up 4')(tmp)
 
         # Third level
-        tmp = merge([tmp, z3], mode='concat', concat_axis=1, name='merge 3')
+        tmp = concatenate([tmp, z3], axis=1, name='merge 3')
         tmp = Convolution3D(32, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
                              name='conv 3.3')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 3.3')(tmp)
@@ -1217,7 +1217,7 @@ class BratsModels(object):
         tmp = Upsampling3D_mod(size=pool_size, name='up 3')(tmp)
 
         # Second level
-        tmp = merge([tmp, z2], mode='concat', concat_axis=1, name='merge 2')
+        tmp = concatenate([tmp, z2], axis=1, name='merge 2')
         tmp = Convolution3D(16, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
                              name='conv 2.3')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 2.3')(tmp)
@@ -1227,7 +1227,7 @@ class BratsModels(object):
         tmp = Upsampling3D_mod(size=pool_size, name='up 2')(tmp)
 
         # First level
-        tmp = merge([tmp, z1], mode='concat', concat_axis=1, name='merge 1')
+        tmp = concatenate([tmp, z1], axis=1, name='merge 1')
         tmp = Convolution3D(8, 3, 3, 3, init=initializer, activation='relu', border_mode='same',
                              name='conv 1.3')(tmp)
         tmp = BatchNormalization(axis=1, name='batch norm 1.3')(tmp)
@@ -1309,29 +1309,29 @@ class BratsModels(object):
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='Softmax')
         optimizer = Adam(lr=lr, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, clipnorm = 1.)
-        regularizer = [WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = [L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg)
                        ]
         # Architecture definition
 
@@ -1494,28 +1494,28 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = [WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = [L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg)
                        ]
         optimizer = Adam(learning_rate, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, clipnorm=1.)
 
@@ -1670,28 +1670,28 @@ class BratsModels(object):
 
         # Activations, regularizers and optimizers
         softmax_activation = Lambda(elementwise_softmax_3d, name='softmax')
-        regularizer = [WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg),
-                       WeightRegularizer(l1=L1_reg, l2=L2_reg)
+        regularizer = [L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg),
+                       L1L2(l1=L1_reg, l2=L2_reg)
                        ]
         optimizer = Adam(learning_rate, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, clipnorm=1.)
 

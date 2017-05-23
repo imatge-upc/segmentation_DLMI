@@ -32,10 +32,10 @@ CLASS_WEIGHTS = 'class_weights'
 N_SUBJECTS = 'N_subjects'
 
 
-from params import params_train, params_pretrain, params_full, params_test
+from params import params_train, params_pretrain#, params_full, params_test
 PARAMS_DICT = {
     'pretrain': params_pretrain,
     'train': params_train,
-    'full': params_full,
-    'test': params_test
+    #'full': params_full,
+    #'test': params_test
 }
