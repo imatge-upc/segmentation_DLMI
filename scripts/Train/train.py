@@ -7,13 +7,15 @@ from src.callbacks import LearningRateDecayAccuracyPlateaus
 from src.dataset import Dataset_train
 from src.helpers import io_utils
 from src.models import BratsModels
+from keras import backend as K
+
 
 import params as p
 
 if __name__ == "__main__":
 
     """ PARAMETERS """
-
+    #K.set_image_dim_ordering('tf')
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", help="Filename", type=str)
     parser.add_argument("-m", help="Model", type=str)
@@ -31,7 +33,7 @@ if __name__ == "__main__":
     params = p.PARAMS_DICT[params_string].get_params()
     filepath = join(params[p.OUTPUT_PATH], 'logs', filename + '.txt')
     filepath_weights = join(params[p.OUTPUT_PATH], 'model_weights', filename + '.h5')
-    load_weights_filepath = join(params[p.OUTPUT_PATH], 'model_weights', load_weights_file + '.h5') if load_weights_file != -1 else None
+    load_weights_filepath = None#join(params[p.OUTPUT_PATH], 'model_weights', load_weights_file + '.h5') if load_weights_file != -1 else None
 
     num_modalities = int(params[p.BOOLEAN_FLAIR]) + int(params[p.BOOLEAN_T1]) + int(params[p.BOOLEAN_T1C]) + int(params[p.BOOLEAN_T2])
 
@@ -40,7 +42,7 @@ if __name__ == "__main__":
     """ REDIRECT STDOUT TO FILE """
     print 'Output redirected to file... '
     print 'Suggestion: Use tail command to see the output'
-    io_utils.redirect_stdout_to_file(filepath=filepath)
+    #io_utils.redirect_stdout_to_file(filepath=filepath)
 
 
 
@@ -53,8 +55,8 @@ if __name__ == "__main__":
         model_name='u_net',
         weights_filename=load_weights_filepath
     )
-    model.summary()
 
+    model.summary()
 
 
 
@@ -100,12 +102,15 @@ if __name__ == "__main__":
     """ MODEL TRAINING """
     print
     print 'Training started...'
-    print 'Samples per epoch:' + str(params[p.N_SEGMENTS_TRAIN])
+    #print 'Samples per epoch: ' + str(params[p.N_SEGMENTS_TRAIN])
+    print 'Steps per epoch: ' + str(params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE])
     print 'Output_shape: ' + str(output_shape)
 
-    model.fit_generator(generator_train, samples_per_epoch=params[p.N_SEGMENTS_TRAIN],
-                        nb_epoch=35, validation_data=generator_val,
-                        nb_val_samples=params[p.N_SEGMENTS_VALIDATION],
+    model.fit_generator(generator=generator_train,
+                        steps_per_epoch=params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE], #posar el nombre d'iteracions=segments/batchsize (160 i no 800)
+                        epochs=2,
+                        validation_data=generator_val,
+                        validation_steps=params[p.N_SEGMENTS_VALIDATION]/params[p.BATCH_SIZE],
                         callbacks=[cb_saveWeights, cb_learningRateScheduler],
                         class_weight=dataset.class_weights)
 

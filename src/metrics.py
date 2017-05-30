@@ -107,9 +107,9 @@ def dice_enhance(y_true, y_pred):
         Dice metric
     """
 
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 4, :, :, :]
-    mask_pred = y_pred_decision[:, 4, :, :, :]
+    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=4, keepdims=True), 'int8') #abans axis=1
+    mask_true = y_true[:, 4, :, :, :]#[:, :, :, :, 4]
+    mask_pred = y_pred_decision[:, 4, :, :, :]#[:, :, :, :, 4]
 
     y_sum = K.sum(mask_true * mask_pred)
 

@@ -42,6 +42,7 @@ class Dataset(object):
         self.subject_list = self.create_subjects()
 
     def create_subjects(self):
+
         booleanFLAIR = self.booleanFLAIR
         booleanT1 = self.booleanT1
         booleanT1c = self.booleanT1c
@@ -122,7 +123,7 @@ class Dataset_train(Dataset):
 
         self.id_list_train = id_list_train
         self.id_list_validation = id_list_validation
-        self.subject_list = self.create_subjects()
+        #self.subject_list = self.create_subjects()
 
         self.data_augmentation_flag = data_augmentation_flag
 
@@ -149,7 +150,7 @@ class Dataset_train(Dataset):
 
     def create_subjects(self):
 
-        super(Dataset_train,self).create_subjects()
+        subject_list = super(Dataset_train,self).create_subjects()
         self.subject_list = self._split_train_val(subject_list=subject_list)
 
         return self.subject_list
@@ -210,8 +211,8 @@ class Dataset_train(Dataset):
         for index_cat in range(n_categories):
             n_segments_distribution[:,index_cat] = int(np.floor( n_segments_per_category[index_cat] / n_subjects ))
             np.random.seed(42)
-            n_segments_distribution[np.random.randint(0, n_subjects, size=n_segments_per_category[index_cat] % n_subjects, dtype="int32"),
-                                    index_cat] += 1
+            n_segments_distribution[np.random.randint(0, int(n_subjects), size=int(n_segments_per_category[int(index_cat)]) % int(n_subjects), dtype="int32"),
+                                    int(index_cat)] += 1
 
         return n_segments_distribution
 
@@ -263,8 +264,6 @@ class Dataset_train(Dataset):
 
             for index_segment in range(central_voxels_coordinates.shape[1]):
                 coor = segments_coordinates[:, index_segment, :]
-                print 'b'
-                print coor
                 image_segments[cur_segment] = image_channels[:, coor[0, 0]:coor[0, 1] + 1, coor[1, 0]:coor[1, 1] + 1,
                                               coor[2, 0]:coor[2, 1] + 1]
                 labels_whole_segment = image_labels[coor[0, 0]:coor[0, 1] + 1, coor[1, 0]:coor[1, 1] + 1,
@@ -443,8 +442,6 @@ class Dataset_train(Dataset):
         for subj in subj_list:
             labels = subj.load_labels()
             mask = subj.load_ROI_mask()
-            print 'a'
-            print np.unique(labels)
             class_frequencies += np.bincount(labels.flatten().astype('int'), weights=mask.flatten(),
                                              minlength=self.n_classes)
         class_frequencies = class_frequencies / np.sum(class_frequencies)
