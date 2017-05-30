@@ -8,6 +8,7 @@ from src.dataset import Dataset_train
 from src.helpers import io_utils
 from src.models import BratsModels
 from keras import backend as K
+import numpy as np
 
 
 import params as p
@@ -15,7 +16,6 @@ import params as p
 if __name__ == "__main__":
 
     """ PARAMETERS """
-    #K.set_image_dim_ordering('tf')
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", help="Filename", type=str)
     parser.add_argument("-m", help="Model", type=str)
@@ -107,10 +107,10 @@ if __name__ == "__main__":
     print 'Output_shape: ' + str(output_shape)
 
     model.fit_generator(generator=generator_train,
-                        steps_per_epoch=params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE], #posar el nombre d'iteracions=segments/batchsize (160 i no 800)
+                        steps_per_epoch=int(np.ceil(params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE])), #posar el nombre d'iteracions=segments/batchsize (160 i no 800)
                         epochs=2,
                         validation_data=generator_val,
-                        validation_steps=params[p.N_SEGMENTS_VALIDATION]/params[p.BATCH_SIZE],
+                        validation_steps=int(np.ceil(params[p.N_SEGMENTS_VALIDATION]/params[p.BATCH_SIZE])),
                         callbacks=[cb_saveWeights, cb_learningRateScheduler],
                         class_weight=dataset.class_weights)
 

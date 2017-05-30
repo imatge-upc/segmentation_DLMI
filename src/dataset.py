@@ -202,16 +202,16 @@ class Dataset_train(Dataset):
         # n_subjects, then the first subjects will have more segments until we reach the desired number of segments
         n_segments_per_category= np.ones(n_categories, dtype='int32') * np.floor(n_segments / n_categories)
         np.random.seed(42)
-        index_fill_categories = np.random.choice(n_categories, size=n_segments % n_categories, replace=True,p=prob_sampling_samples)
+        index_fill_categories = np.random.choice(n_categories, size=int(n_segments % n_categories), replace=True,p=prob_sampling_samples)
         for index_cat in index_fill_categories:
             n_segments_per_category[index_cat] += 1
 
         # If spliting exact number of segments between classes, take one more of the positive class
         n_segments_distribution = np.zeros((n_subjects, n_categories),dtype = "int32")
         for index_cat in range(n_categories):
-            n_segments_distribution[:,index_cat] = int(np.floor( n_segments_per_category[index_cat] / n_subjects ))
+            n_segments_distribution[:,index_cat] = np.floor( n_segments_per_category[index_cat] / n_subjects )
             np.random.seed(42)
-            n_segments_distribution[np.random.randint(0, int(n_subjects), size=int(n_segments_per_category[int(index_cat)]) % int(n_subjects), dtype="int32"),
+            n_segments_distribution[np.random.randint(0, int(n_subjects), size=int(n_segments_per_category[index_cat]) % int(n_subjects), dtype="int32"),
                                     int(index_cat)] += 1
 
         return n_segments_distribution
@@ -329,7 +329,7 @@ class Dataset_train(Dataset):
         while True:
             if train_val == 'train':
                 subj_list_train = filter(lambda subject: subject.train0_val1_both2 == 0 or subject.train0_val1_both2 == 2,subj_list)
-                n_segments_subepoch = self.n_segments_per_epoch_train / self.n_subepochs
+                n_segments_subepoch = int(np.ceil(self.n_segments_per_epoch_train / self.n_subepochs))
                 n_subjects = self.n_subjects_per_epoch_train
 
                 for subepoch in range(self.n_subepochs):
@@ -348,6 +348,10 @@ class Dataset_train(Dataset):
                         except:
                             features = image_segments[i * batch_size:, :, :, :]
                             labels = one_hot_representation(label_segments[i * batch_size:, :, :, :], self.n_classes)
+
+                        # Changing to tensorflow dim order
+                        features = np.transpose(features, (0, 2, 3, 4, 1))
+                        labels = np.transpose(labels, (0, 2, 3, 4, 1))
 
                         yield features, labels
 
@@ -374,6 +378,9 @@ class Dataset_train(Dataset):
                         labels = one_hot_representation(
                             label_segments[num_batch * batch_size:(num_batch + 1) * batch_size, :, :, :],
                             self.n_classes)
+
+                    features = np.transpose(features, (0, 2, 3, 4, 1))
+                    labels = np.transpose(labels, (0, 2, 3, 4, 1))
 
                     yield features, labels
 
