@@ -1,4 +1,6 @@
 import keras.backend as K
+import tensorflow as tf
+import numpy as np
 
 
 def dice(y_true, y_pred):
@@ -29,7 +31,7 @@ def dice(y_true, y_pred):
 
 
 def accuracy(y_true, y_pred):
-    return K.mean(K.equal(K.argmax(y_true, axis=1), K.argmax(y_pred, axis=1)))
+    return K.mean(K.equal(K.argmax(y_true, axis=4), K.argmax(y_pred, axis=4)))
 
 
 def dice_whole(y_true, y_pred):
@@ -50,10 +52,15 @@ def dice_whole(y_true, y_pred):
     scalar
         Dice metric
     """
+    print 'shapes!'
+    print np.shape(y_pred)
+    print np.shape(y_true)
 
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = K.sum(y_true[:, [1, 2, 3, 4], :, :, :], axis=1)
-    mask_pred = K.sum(y_pred_decision[:, [1, 2, 3, 4], :, :, :], axis=1)
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))#, 'float32') #abans axis=1
+    print np.shape(y_pred_decision)
+
+    mask_true = K.sum(y_true[:, :, :, :,1:4], axis=4)
+    mask_pred = K.sum(y_pred_decision[:, :, :, :, 1:4], axis=4)
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -79,9 +86,14 @@ def dice_core(y_true, y_pred):
         Dice metric
     """
 
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = K.sum(y_true[:, [1, 3, 4], :, :, :], axis=1)
-    mask_pred = K.sum(y_pred_decision[:, [1, 3, 4], :, :, :], axis=1)
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))  # , 'float32') #abans axis=1
+
+    mask_true1 = y_true[:, :, :, :, 3:]
+    mask_true2 = y_true[:, :, :, :, 1:2]
+    mask_true = K.sum(K.concatenate([mask_true1, mask_true2], axis=4), axis=4)
+    mask_pred1 = y_pred_decision[:, :, :, :, 3:]
+    mask_pred2 = y_pred_decision[:, :, :, :, 1:2]
+    mask_pred = K.sum(K.concatenate([mask_pred1, mask_pred2], axis=4), axis=4)
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -107,9 +119,9 @@ def dice_enhance(y_true, y_pred):
         Dice metric
     """
 
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=4, keepdims=True), 'int8') #abans axis=1
-    mask_true = y_true[:, 4, :, :, :]#[:, :, :, :, 4]
-    mask_pred = y_pred_decision[:, 4, :, :, :]#[:, :, :, :, 4]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))#, 'float32') #abans axis=1
+    mask_true = y_true[:, :, :, :, 4]
+    mask_pred = y_pred_decision[:, :, :, :, 4]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -117,9 +129,9 @@ def dice_enhance(y_true, y_pred):
 
 
 def precision_0(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 0, :, :, :]
-    mask_pred = y_pred_decision[:, 0, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 0]
+    mask_pred = y_pred_decision[:, :, :, :, 0]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -127,9 +139,9 @@ def precision_0(y_true, y_pred):
 
 
 def precision_1(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 1, :, :, :]
-    mask_pred = y_pred_decision[:, 1, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 1]
+    mask_pred = y_pred_decision[:, :, :, :, 1]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -137,9 +149,9 @@ def precision_1(y_true, y_pred):
 
 
 def precision_2(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 2, :, :, :]
-    mask_pred = y_pred_decision[:, 2, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 2]
+    mask_pred = y_pred_decision[:, :, :, :, 2]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -147,9 +159,9 @@ def precision_2(y_true, y_pred):
 
 
 def precision_3(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 3, :, :, :]
-    mask_pred = y_pred_decision[:, 3, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 3]
+    mask_pred = y_pred_decision[:, :, :, :, 3]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -157,9 +169,9 @@ def precision_3(y_true, y_pred):
 
 
 def precision_4(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 4, :, :, :]
-    mask_pred = y_pred_decision[:, 4, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 4]
+    mask_pred = y_pred_decision[:, :, :, :, 4]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -167,9 +179,9 @@ def precision_4(y_true, y_pred):
 
 
 def recall_0(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 0, :, :, :]
-    mask_pred = y_pred_decision[:, 0, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 0]
+    mask_pred = y_pred_decision[:, :, :, :, 0]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -177,9 +189,9 @@ def recall_0(y_true, y_pred):
 
 
 def recall_1(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 1, :, :, :]
-    mask_pred = y_pred_decision[:, 1, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 1]
+    mask_pred = y_pred_decision[:, :, :, :, 1]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -187,9 +199,9 @@ def recall_1(y_true, y_pred):
 
 
 def recall_2(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 2, :, :, :]
-    mask_pred = y_pred_decision[:, 2, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 2]
+    mask_pred = y_pred_decision[:, :, :, :, 2]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -197,9 +209,9 @@ def recall_2(y_true, y_pred):
 
 
 def recall_3(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 3, :, :, :]
-    mask_pred = y_pred_decision[:, 3, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 3]
+    mask_pred = y_pred_decision[:, :, :, :, 3]
 
     y_sum = K.sum(mask_true * mask_pred)
 
@@ -207,9 +219,9 @@ def recall_3(y_true, y_pred):
 
 
 def recall_4(y_true, y_pred):
-    y_pred_decision = K.cast(y_pred / K.max(y_pred, axis=1, keepdims=True), 'int8')
-    mask_true = y_true[:, 4, :, :, :]
-    mask_pred = y_pred_decision[:, 4, :, :, :]
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    mask_true = y_true[:, :, :, :, 4]
+    mask_pred = y_pred_decision[:, :, :, :, 4]
 
     y_sum = K.sum(mask_true * mask_pred)
 
