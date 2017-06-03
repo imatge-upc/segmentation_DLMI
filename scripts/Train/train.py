@@ -42,7 +42,7 @@ if __name__ == "__main__":
     """ REDIRECT STDOUT TO FILE """
     print 'Output redirected to file... '
     print 'Suggestion: Use tail command to see the output'
-    #io_utils.redirect_stdout_to_file(filepath=filepath)
+    io_utils.redirect_stdout_to_file(filepath=filepath)
 
 
 
@@ -55,6 +55,7 @@ if __name__ == "__main__":
         model_name='u_net',
         weights_filename=load_weights_filepath
     )
+
 
     model.summary()
 
@@ -108,10 +109,10 @@ if __name__ == "__main__":
 
     model.fit_generator(generator=generator_train,
                         steps_per_epoch=int(np.ceil(params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE])), #posar el nombre d'iteracions=segments/batchsize (160 i no 800)
-                        epochs=2,
+                        epochs=35,
                         validation_data=generator_val,
                         validation_steps=int(np.ceil(params[p.N_SEGMENTS_VALIDATION]/params[p.BATCH_SIZE])),
-                        callbacks=[cb_saveWeights, cb_learningRateScheduler],
+                        callbacks=[cb_saveWeights],#, cb_learningRateScheduler],
                         class_weight=dataset.class_weights)
 
     print 'Finished training'

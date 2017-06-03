@@ -1,5 +1,6 @@
 import keras.backend as K
-
+import numpy as np
+import tensorflow as tf
 from src.metrics import dice_whole
 
 
@@ -20,12 +21,12 @@ def categorical_crossentropy_3d(y_true, y_predicted):
     scalar
         Categorical cross-entropy loss value
     """
-
-    y_true_flatten = K.reshape(y_true,(-1,1))
-    y_pred_flatten = K.reshape(y_predicted,(-1,1))
+    y_true_flatten = K.flatten(y_true)
+    y_pred_flatten = K.flatten(y_predicted)
     y_pred_flatten_log = -K.log(y_pred_flatten + K.epsilon())
     num_total_elements = K.sum(y_true_flatten)
-    cross_entropy = K.dot(K.transpose(y_true_flatten), y_pred_flatten_log)
+    #cross_entropy = K.dot(y_true_flatten, K.transpose(y_pred_flatten_log))
+    cross_entropy = tf.reduce_sum(tf.multiply(y_true_flatten, y_pred_flatten_log))
     mean_cross_entropy = cross_entropy / (num_total_elements + K.epsilon())
     return mean_cross_entropy
 
