@@ -15,10 +15,10 @@ def elementwise_softmax_3d(matrix):
     -------
     keras.placeholder
         Placeholder for a 3D array with the softmax distribution for all classes with shape
-        (num_samples, num_classes, dim1, dim2, dim3)
+        (num_samples, dim1, dim2, dim3, num_classes)
 
     """
     expon = lambda x: K.exp(x)
     expon_matrix = expon(matrix)
-    softmax_matrix = expon_matrix / K.sum(expon_matrix, axis=1, keepdims=True)
+    softmax_matrix = expon_matrix / K.sum(expon_matrix, axis=4, keepdims=True)
     return softmax_matrix
