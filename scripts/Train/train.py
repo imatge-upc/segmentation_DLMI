@@ -1,14 +1,16 @@
 import argparse
 import sys
 import os
-from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau, LearningRateScheduler
 from os.path import join
 from src.callbacks import LearningRateDecayAccuracyPlateaus
 from src.dataset import Dataset_train
 from src.helpers import io_utils
 from src.models import BratsModels
 from keras import backend as K
+from keras.utils import plot_model
 import numpy as np
+from src.callbacks import exponential_decay
 
 
 import params as p
@@ -33,7 +35,7 @@ if __name__ == "__main__":
     params = p.PARAMS_DICT[params_string].get_params()
     filepath = join(params[p.OUTPUT_PATH], 'logs', filename + '.txt')
     filepath_weights = join(params[p.OUTPUT_PATH], 'model_weights', filename + '.h5')
-    load_weights_filepath = None#join(params[p.OUTPUT_PATH], 'model_weights', load_weights_file + '.h5') if load_weights_file != -1 else None
+    load_weights_filepath = join(params[p.OUTPUT_PATH], 'model_weights', load_weights_file + '.h5') if load_weights_file != -1 else None
 
     num_modalities = int(params[p.BOOLEAN_FLAIR]) + int(params[p.BOOLEAN_T1]) + int(params[p.BOOLEAN_T1C]) + int(params[p.BOOLEAN_T2])
 
@@ -58,6 +60,8 @@ if __name__ == "__main__":
 
 
     model.summary()
+    plot_file = join(params[p.OUTPUT_PATH], filename +'.png')
+    plot_model(model, to_file=plot_file)
 
 
 
@@ -95,10 +99,12 @@ if __name__ == "__main__":
     generator_train = dataset.data_generator(batch_size=params[p.BATCH_SIZE], train_val='train')
     generator_val = dataset.data_generator(batch_size=params[p.BATCH_SIZE], train_val='val')
 
+    num_epochs = 35
     cb_saveWeights = ModelCheckpoint(filepath=filepath_weights, save_best_only=True, mode='min')
     cb_earlyStopping = EarlyStopping(patience=5)
     cb_learningRateScheduler = LearningRateDecayAccuracyPlateaus(decay_rate=2)
-
+    cb_learningRateScheduler2 = ReduceLROnPlateau(factor=0.5, patience=2)
+    #cb_learningRateScheduler = LearningRateScheduler(schedule=exponential_decay(initial_lrate=0.0005, decay=0.5, epochs=num_epochs))
 
     """ MODEL TRAINING """
     print
@@ -109,10 +115,10 @@ if __name__ == "__main__":
 
     model.fit_generator(generator=generator_train,
                         steps_per_epoch=int(np.ceil(params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE])), #posar el nombre d'iteracions=segments/batchsize (160 i no 800)
-                        epochs=35,
+                        epochs=num_epochs,
                         validation_data=generator_val,
                         validation_steps=int(np.ceil(params[p.N_SEGMENTS_VALIDATION]/params[p.BATCH_SIZE])),
-                        callbacks=[cb_saveWeights],#, cb_learningRateScheduler],
+                        callbacks=[cb_saveWeights],#, cb_learningRateScheduler2],
                         class_weight=dataset.class_weights)
 
     print 'Finished training'

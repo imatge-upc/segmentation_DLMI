@@ -1,4 +1,5 @@
 import numpy as np
+import keras.backend as K
 from src.helpers.preprocessing_utils import padding3D
 
 
@@ -35,7 +36,7 @@ class SamplingScheme(object):
 
     def normalize(self, weights):
         weights = np.asarray(weights, dtype = "int32")
-        return weights / (1.0*np.sum(weights))
+        return weights / (1.0*np.sum(weights))#+K.epsilon())
 
     def get_mask_boundaries(self,image_shape,mask_shape,ROI_mask):
         half_segment_dimensions = np.zeros((len(image_shape), 2), dtype='int32')

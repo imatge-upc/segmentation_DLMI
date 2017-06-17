@@ -120,7 +120,7 @@ class BratsModels(object):
         #     assert dim % 32 == 0  # As there are 5 (2, 2, 2) max-poolings, 2 ** 5 is the minimum input size
 
         # Hyperaparametre values
-        lr = 0.00005 #inicialment 0.0005
+        lr = 0.0005 #inicialment 0.0005
         beta_1 = 0.9
         beta_2 = 0.999
         epsilon = 10 ** (-8 )
@@ -141,151 +141,170 @@ class BratsModels(object):
         optimizer = Adam(lr=lr, beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, clipnorm = 1.)
 
         # Architecture definition
-
-        # First level
+        # INPUT
         x = Input(shape=input_shape, name='V-net_input')
-        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.1', padding='same')(x)
-        tmp = BatchNormalization(axis=4, name='batch_norm_1.1')(tmp)
+        first_conv = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_initial', padding='same')(x)
+
+        # First block (down)
+        tmp = BatchNormalization(axis=4, name='batch_norm_1.1')(first_conv)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.2', padding='same')(tmp)
+        z1 = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.1', padding='same')(tmp)
 
-        tmp2 = Conv3D(8, (1, 1, 1), kernel_initializer=initializer, name='conv_1.3', padding='same')(x)
+        c11 = Conv3D(8, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_1.1', padding='same')(first_conv)
+        end_11 = Add()([z1, c11])
 
-        z1 = Add()([tmp, tmp2])
-        end_1 = MaxPooling3D(pool_size=pool_size, name='pool_1')(z1)
 
-        # Second level
-        tmp = BatchNormalization(axis=4, name='batch_norm_2.1')(end_1)
-        in_2 = Activation('relu')(tmp)
-
-        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.1', padding='same')(in_2)
+        # Second block (down)
+        tmp = BatchNormalization(axis=4, name='batch_norm_2.1')(end_11)
+        tmp = Activation('relu')(tmp)
+        tmp = Conv3D(16, (2, 2, 2), strides=(2, 2, 2), kernel_initializer=initializer, name='downpool_1',padding='same')(tmp)
         tmp = BatchNormalization(axis=4, name='batch_norm_2.2')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.2', padding='same')(tmp)
+        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.1', padding='same')(tmp)
+        tmp = BatchNormalization(axis=4, name='batch_norm_2.3')(tmp)
+        tmp = Activation('relu')(tmp)
+        z2 = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.2', padding='same')(tmp)
 
-        tmp2 = Conv3D(16, (1, 1, 1), kernel_initializer=initializer, name='conv_2.3', padding='same')(in_2)
+        c21 = MaxPooling3D(pool_size=pool_size, name='pool_1')(end_11)
+        c21 = Conv3D(16, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_2.1', padding='same')(c21)
 
-        z2 = Add()([tmp, tmp2])
-        end_2 = MaxPooling3D(pool_size=pool_size, name='pool_2')(z2)
+        end_21 = Add()([z2, c21])
 
-        # Third level
-        tmp = BatchNormalization(axis=4, name='batch_norm_3.1')(end_2)
-        in_3 = Activation('relu')(tmp)
-
-        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.1', padding='same')(in_3)
+        # Third block (down)
+        tmp = BatchNormalization(axis=4, name='batch_norm_3.1')(end_21)
+        tmp = Activation('relu')(tmp)
+        tmp = Conv3D(32, (2, 2, 2), strides=(2,2,2), kernel_initializer=initializer, name='downpool_2', padding='same')(tmp)
         tmp = BatchNormalization(axis=4, name='batch_norm_3.2')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.2', padding='same')(tmp)
+        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.1', padding='same')(tmp)
+        tmp = BatchNormalization(axis=4, name='batch_norm_3.3')(tmp)
+        tmp = Activation('relu')(tmp)
+        z3 = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.2', padding='same')(tmp)
 
-        tmp2 = Conv3D(32, (1, 1, 1), kernel_initializer=initializer, name='conv_3.3', padding='same')(in_3)
+        c31 = MaxPooling3D(pool_size=pool_size, name='pool_2')(end_21)
+        c31 = Conv3D(32, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_3.1', padding='same')(c31)
 
-        z3 = Add()([tmp, tmp2])
-        end_3 = MaxPooling3D(pool_size=pool_size, name='pool_3')(z3)
+        end_31 = Add()([z3, c31])
 
-        # Fourth level
-        tmp = BatchNormalization(axis=4, name='batch_norm_4.1')(end_3)
-        in_4 = Activation('relu')(tmp)
 
-        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.1', padding='same')(in_4)
+        # Fourth block (down)
+        tmp = BatchNormalization(axis=4, name='batch_norm_4.1')(end_31)
+        tmp = Activation('relu')(tmp)
+        tmp = Conv3D(64, (2, 2, 2), strides=(2,2,2), kernel_initializer=initializer, name='downpool_3', padding='same')(tmp)
         tmp = BatchNormalization(axis=4, name='batch_norm_4.2')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.2', padding='same')(tmp)
+        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.1', padding='same')(tmp)
+        tmp = BatchNormalization(axis=4, name='batch_norm_4.3')(tmp)
+        tmp = Activation('relu')(tmp)
+        z4 = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.2', padding='same')(tmp)
 
-        tmp2 = Conv3D(64, (1, 1, 1), kernel_initializer=initializer, name='conv_4.3', padding='same')(in_4)
+        c41 = MaxPooling3D(pool_size=pool_size, name='pool_3')(end_31)
+        c41 = Conv3D(64, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_4.1', padding='same')(c41)
 
-        z4 = Add()([tmp, tmp2])
-        end_4 = MaxPooling3D(pool_size=pool_size, name='pool_4')(z4)
+        end_41 = Add()([z4, c41])
 
-        # Fifth level
-        tmp = BatchNormalization(axis=4, name='batch_norm_5.1')(end_4)
-        in_5 = Activation('relu')(tmp)
-
-        tmp = Conv3D(128, (3, 3, 3), kernel_initializer=initializer, name='conv_5.1', padding='same')(in_5)
+        # Fifth block
+        tmp = BatchNormalization(axis=4, name='batch_norm_5.1')(end_41)
+        tmp = Activation('relu')(tmp)
+        tmp = Conv3D(128, (2, 2, 2), strides=(2,2,2), kernel_initializer=initializer, name='downpool_4', padding='same')(tmp)
         tmp = BatchNormalization(axis=4, name='batch_norm_5.2')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(128, (3, 3, 3), kernel_initializer=initializer, name='conv_5.2', padding='same')(tmp)          #inflection point
+        tmp = Conv3D(128, (3, 3, 3), kernel_initializer=initializer, name='conv_5.1', padding='same')(tmp)
+        tmp = BatchNormalization(axis=4, name='batch_norm_5.3')(tmp)
+        tmp = Activation('relu')(tmp)
+        tmp = Conv3D(128, (3, 3, 3), kernel_initializer=initializer, name='conv_5.2', padding='same')(tmp)  # inflection point
 
-        tmp2 = Conv3D(128, (1, 1, 1), kernel_initializer=initializer, name='conv_5.3', padding='same')(in_5)
+        c5 = MaxPooling3D(pool_size=pool_size, name='pool_4')(end_41)
+        c5 = Conv3D(128, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_5', padding='same')(c5)
 
-        z5 = Add()([tmp, tmp2])
-        end_5 = Upsampling3D_mod(size=pool_size, name='up_5')(z5)
-        # afegir una conv pre concat
+        end_5 = Add()([tmp, c5])
 
-
-        # Fourth level
-        #ordre: BN+activation+conv3x3x3+concat
+        # Fourth block (up)
         tmp = BatchNormalization(axis=4, name='batch_norm_4.4')(end_5)
         tmp = Activation('relu')(tmp)
-        in_42 = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.4', padding='same')(tmp)
-
-        tmp = Concatenate(axis=4)([in_42, z4])
+        tmp = Upsampling3D_mod(size=pool_size, name='up_4')(tmp)
+        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_up_4', padding='same')(tmp)
+        tmp = Concatenate(axis=4)([tmp, z4])
         tmp = BatchNormalization(axis=4, name='batch_norm_4.5')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.5', padding='same')(tmp)
+        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.3', padding='same')(tmp)
         tmp = BatchNormalization(axis=4, name='batch_norm_4.6')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.6', padding='same')(tmp)
+        tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.4', padding='same')(tmp)
 
-        tmp = Add()([tmp, in_42])
-        end_42 = Upsampling3D_mod(size=pool_size, name='up_4')(tmp)
+        c42 = Upsampling3D_mod(size=pool_size, name='up_4conn')(end_5)
+        c42 = Conv3D(64, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_4.2', padding='same')(c42)
 
-        # Third level
+        end_42 = Add()([tmp, c42])
+
+
+        # Third block (up)
         tmp = BatchNormalization(axis=4, name='batch_norm_3.4')(end_42)
         tmp = Activation('relu')(tmp)
-        in_32 = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.4', padding='same')(tmp)
-
-        tmp = Concatenate(axis=4)([in_32, z3])
+        tmp = Upsampling3D_mod(size=pool_size, name='up_3')(tmp)
+        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_up_3', padding='same')(tmp)
+        tmp = Concatenate(axis=4)([tmp, z3])
         tmp = BatchNormalization(axis=4, name='batch_norm_3.5')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.5', padding='same')(tmp)
+        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.3', padding='same')(tmp)
         tmp = BatchNormalization(axis=4, name='batch_norm_3.6')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.6', padding='same')(tmp)
+        tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.4', padding='same')(tmp)
 
-        tmp = Add()([tmp, in_32])
-        end_32 = Upsampling3D_mod(size=pool_size, name='up_3')(tmp)
+        c32 = Upsampling3D_mod(size=pool_size, name='up_3conn')(end_42)
+        c32 = Conv3D(32, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_3.2', padding='same')(c32)
+
+        end_32 = Add()([tmp, c32])
 
 
-        # Second level
+        # Second block (up)
         tmp = BatchNormalization(axis=4, name='batch_norm_2.4')(end_32)
         tmp = Activation('relu')(tmp)
-        in_22 = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.4', padding='same')(tmp)
-
-        tmp = Concatenate(axis=4)([in_22, z2])
+        tmp = Upsampling3D_mod(size=pool_size, name='up_2')(tmp)
+        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_up_2', padding='same')(tmp)
+        tmp = Concatenate(axis=4)([tmp, z2])
         tmp = BatchNormalization(axis=4, name='batch_norm_2.5')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.5', padding='same')(tmp)
+        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.3', padding='same')(tmp)
         tmp = BatchNormalization(axis=4, name='batch_norm_2.6')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.6', padding='same')(tmp)
+        tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.4', padding='same')(tmp)
 
-        tmp = Add()([tmp, in_22])
-        end_22 = Upsampling3D_mod(size=pool_size, name='up_2')(tmp)
+        c22 = Upsampling3D_mod(size=pool_size, name='up_2conn')(end_32)
+        c22 = Conv3D(16, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_2.2', padding='same')(c22)
 
-        # First level
+        end_22 = Add()([tmp, c22])
+
+        # First block (up)
         tmp = BatchNormalization(axis=4, name='batch_norm_1.4')(end_22)
         tmp = Activation('relu')(tmp)
-        in_12 = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.4', padding='same')(tmp)
-
-        tmp = Concatenate(axis=4)([in_12, z1])
+        tmp = Upsampling3D_mod(size=pool_size, name='up_1')(tmp)
+        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_up_1', padding='same')(tmp)
+        tmp = Concatenate(axis=4)([tmp, z1])
         tmp = BatchNormalization(axis=4, name='batch_norm_1.5')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.5', padding='same')(tmp)
+        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.3', padding='same')(tmp)
         tmp = BatchNormalization(axis=4, name='batch_norm_1.6')(tmp)
         tmp = Activation('relu')(tmp)
-        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.6', padding='same')(tmp)
+        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.4', padding='same')(tmp)
 
-        tmp = Add()([tmp,in_12])
-        tmp = BatchNormalization(axis=4, name='batch_norm_1.7')(tmp)
-        end_12 = Activation('relu')(tmp)
+        c12 = Upsampling3D_mod(size=pool_size, name='up_1_conn')(end_22)
+        c12 = Conv3D(8, (1, 1, 1), kernel_initializer=initializer, name='conv_conn_1.2', padding='same')(c12)
+
+        end_12 = Add()([tmp,c12])
+
+        # Final convolution
+        tmp = BatchNormalization(axis=4, name='batch_norm_1.7')(end_12)
+        tmp = Activation('relu')(tmp)
+        tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_pre_softmax', padding='same')(tmp)
+        tmp = BatchNormalization(axis=4, name='batch_norm_pre_softmax')(tmp)
+        in_softmax = Activation('relu')(tmp)
 
         # Classification layer
         classification = Conv3D(num_classes, (1, 1, 1) , kernel_initializer=initializer, kernel_regularizer=regularizer,
-                                #activation='relu',
-                                name='final_convolution')(end_12)
-        classification_norm = BatchNormalization(axis=4, name='final_batch_norm')(classification)
-        classification_activation = Activation('relu')(classification_norm)
-        y = softmax_activation(classification_activation)#, output_shape=output_shape)
+                                name='final_convolution_1x1x1')(in_softmax)
+        classification = BatchNormalization(axis=4, name='final_batch_norm')(classification)
+        y = softmax_activation(classification)
 
         model = Model(inputs=x, outputs=y)
         # if pre_train:
@@ -365,7 +384,7 @@ class BratsModels(object):
 #         tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.1', padding='same', activation='relu')(x)
 #         tmp = BatchNormalization(axis=4, name='batch_norm_1.1')(tmp)
 #         tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.2', padding='same', activation='relu')(tmp)
-#         z1 = BatchNormalization(axis=4, name='batch_norm_1.2')(tmp)
+#        # z1 = BatchNormalization(axis=4, name='batch_norm_1.2')(tmp)
 # #
 #         end_1 = MaxPooling3D(pool_size=pool_size, name='pool_1')(z1)
 #
@@ -373,21 +392,21 @@ class BratsModels(object):
 #         tmp = Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.1', padding='same', activation='relu')(end_1)
 #         tmp = BatchNormalization(axis=4, name='batch_norm_2.1')(tmp)
 #         tmp= Conv3D(16, (3, 3, 3), kernel_initializer=initializer, name='conv_2.2', padding='same', activation='relu')(tmp)
-#         z2 = BatchNormalization(axis=4, name='batch_norm_2.2')(tmp)
+#        # z2 = BatchNormalization(axis=4, name='batch_norm_2.2')(tmp)
 #         end_2 = MaxPooling3D(pool_size=pool_size, name='pool_2')(z2)
 #
 #         # Third level
 #         tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.1', padding='same', activation='relu')(end_2)
 #         tmp = BatchNormalization(axis=4, name='batch_norm_3.1')(tmp)
 #         tmp = Conv3D(32, (3, 3, 3), kernel_initializer=initializer, name='conv_3.2', padding='same', activation='relu')(tmp)
-#         z3 = BatchNormalization(axis=4, name='batch_norm_3.2')(tmp)
+#        # z3 = BatchNormalization(axis=4, name='batch_norm_3.2')(tmp)
 #         end_3 = MaxPooling3D(pool_size=pool_size, name='pool_3')(z3)
 #
 #         # Fourth level
 #         tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.1', padding='same', activation='relu')(end_3)
 #         tmp = BatchNormalization(axis=4, name='batch_norm_4.1')(tmp)
 #         tmp = Conv3D(64, (3, 3, 3), kernel_initializer=initializer, name='conv_4.2', padding='same', activation='relu')(tmp)
-#         z4 = BatchNormalization(axis=4, name='batch_norm_4.2')(tmp)
+#        # z4 = BatchNormalization(axis=4, name='batch_norm_4.2')(tmp)
 #         end_4 = MaxPooling3D(pool_size=pool_size, name='pool_4')(z4)
 #
 #         # Fifth level
@@ -428,12 +447,12 @@ class BratsModels(object):
 #         tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.4', padding='same', activation='relu')(tmp)
 #         tmp = BatchNormalization(axis=4, name='batch_norm_1.4')(tmp)
 #         tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, name='conv_1.5', padding='same', activation='relu')(tmp)
-#         end_12 = BatchNormalization(axis=4, name='batch_norm_1.5')(tmp)
+#         end#_12 = BatchNormalization(axis=4, name='batch_norm_1.5')(tmp)
 #
 #         # Classification layer
 #         classification = Conv3D(num_classes, (1, 1, 1) , kernel_initializer=initializer, kernel_regularizer=regularizer,
 #                                 activation='relu', name='final_convolution')(end_12)
-#         classification_norm = BatchNormalization(axis=4, name='final_batch_norm')(classification)
+#         classification_n#orm = BatchNormalization(axis=4, name='final_batch_norm')(classification)
 #         y = softmax_activation(classification_norm)#, output_shape=output_shape)
 #
 #         #print str(y)

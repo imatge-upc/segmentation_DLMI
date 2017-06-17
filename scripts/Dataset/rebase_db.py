@@ -27,8 +27,8 @@ def function_to_filter(match_string, unmatched_string=None):
 
 """ CONSTANTS """
 
-DATA_PATH = '/projects/neuro/BRATS/BRATS2015_Training_old/HGG'
-REBASE_PATH = '/projects/neuro/BRATS/BRATS2015_Training/HGG'
+DATA_PATH = '/projects/neuro/BRATS/BRATS2017_old/HGG'
+REBASE_PATH = '/projects/neuro/BRATS/BRATS2017_Training/HGG'
 
 subject_list = os.listdir(os.path.join(DATA_PATH))
 

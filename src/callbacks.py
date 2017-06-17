@@ -1,7 +1,7 @@
 import numpy as np
 from keras import backend as K
 from keras.callbacks import Callback
-
+import math
 
 class PredefinedLearningRateDecay(Callback):
     def __init__(self, decay_rate, predefined_epochs=None):
@@ -37,14 +37,21 @@ class LearningRateDecayAccuracyPlateaus(Callback):
         if current > self.last:
             self.accumulation += 1
             if self.accumulation > 1:
-                lr = self.model.optimizer.lr.get_value() / self.decay_rate
+                lr = self.model.optimizer.lr.get_value / self.decay_rate
             else:
-                lr = self.model.optimizer.lr.get_value()
+                lr = self.model.optimizer.lr.get_value
         else:
-            lr =  self.model.optimizer.lr.get_value()
+            lr =  self.model.optimizer.lr.get_value
             self.accumulation = 0
 
         self.last = current
         self.model.optimizer.lr.set_value(lr)
 
 
+# learning rate schedule
+def exponential_decay(epoch):
+    initial_lrate=0.0005
+    decay = 0.5
+    epochs_drop = 2
+    lrate = initial_lrate * math.pow(decay, math.floor((1+epoch)/epochs_drop))
+    return lrate

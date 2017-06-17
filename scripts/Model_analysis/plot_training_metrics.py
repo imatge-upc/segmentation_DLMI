@@ -1,5 +1,8 @@
 import argparse
 import sys
+import matplotlib
+
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 import params as p
@@ -11,7 +14,7 @@ if __name__ == "__main__":
 
     # Switch backend
     # plt.switch_backend('Qt4Agg')
-
+    # print plt.get_backend()
     # Parse arguments from command-line
     arguments_parser = argparse.ArgumentParser()
     arguments_parser.add_argument('-params', help='Name of the model to be used', choices=p.PARAMS_DICT.keys())
@@ -25,6 +28,7 @@ if __name__ == "__main__":
 
     params = p.PARAMS_DICT[params_string].get_params()
     train_losses, val_losses = get_loss_lines(log_file, metric=metric, metric_dictionary=m.METRICS_DICT)
+
 
     print 'Number of train metrics: {}'.format(len(train_losses))
     print 'Number of validation metrics: {}'.format(len(val_losses))
@@ -41,6 +45,9 @@ if __name__ == "__main__":
     print len(val_losses)
     print len(t_val)
 
+    #print t_train
+    #print train_losses
+    #plt.plot(t_train)
     train = plt.plot(t_train, train_losses, 'b-*', label='Training ' + metric)
     val = plt.plot(t_val, val_losses, 'r-*', label='Validation ' + metric)
 
