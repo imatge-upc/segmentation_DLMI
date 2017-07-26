@@ -1,0 +1,15 @@
+METRICS_DICT = {
+    'loss': 2,
+    'accuracy': 3,
+    'dice_whole': 4,
+    'dice_core': 5,
+    'dice_enhance': 6,
+    'precision_0': 7,
+    'precision_1': 8,
+    'precision_2': 9,
+    'precision_3': 10,
+    'recall_0': 11,
+    'recall_1': 12,
+    'recall_2': 13,
+    'recall_3': 14,
+}

@@ -2,7 +2,7 @@ import nibabel as nib
 from glob import glob
 import os
 from skimage.morphology import remove_small_objects
-from src.helpers import io_utils
+from src.utils import io_utils
 from sklearn.metrics import recall_score, precision_score, accuracy_score
 import numpy as np
 import argparse
@@ -94,10 +94,10 @@ if __name__ == "__main__":
         nib.save(final_pred, save_path)
 
 
-        print '{} / {} processed'.format(ind + 1, total_predictions)
+        print('{} / {} processed'.format(ind + 1, total_predictions))
 
 
-    print 'Done'
+    print('Done')
 
 
 

@@ -2,11 +2,11 @@ import unittest
 import numpy as np
 from nose.plugins.attrib import attr
 from src.dataset import Dataset_train
-from src.helpers.Subject import Subject
-from src.helpers.preprocessing_utils import one_hot_representation
-from src.helpers.io_utils import *
+from src.utils.Subject import Subject
+from src.utils.preprocessing_utils import one_hot_representation
+from src.utils.io_utils import *
 from keras.utils.np_utils import to_categorical
-from src.helpers.sampling import FBScheme, WholeScheme
+from src.utils.sampling import FBScheme, WholeScheme
 
 class TestSubject(unittest.TestCase):
     def test_init(self):

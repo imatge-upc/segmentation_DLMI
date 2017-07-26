@@ -4,7 +4,7 @@ import keras.backend as K
 def elementwise_softmax_3d(matrix):
     """
     Computes element-wise softmax for 3D arrays (volumes), that is, for a matrix with shape
-    (num_samples, num_classes, dim1, dim2, dim3)
+    (num_samples, dim1, dim2, dim3, num_classes)
 
     Parameters
     ----------

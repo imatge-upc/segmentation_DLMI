@@ -20,38 +20,36 @@ class PredefinedLearningRateDecay(Callback):
         self.model.optimizer.lr.set_value(lr)
 
 
-class LearningRateDecayAccuracyPlateaus(Callback):
-    def __init__(self,decay_rate):
-        self.decay_rate = float(decay_rate)
-
-        super(LearningRateDecayAccuracyPlateaus, self).__init__()
+class LearningRateExponentialDecay(Callback):
+    def __init__(self,epoch_n,num_epoch):
+        self.epoch_n = epoch_n
+        self.num_epoch = num_epoch
+        super(LearningRateExponentialDecay, self).__init__()
 
 
     def on_train_begin(self, logs={}):
-        self.wait = 0  # Allow instances to be re-used
-        self.last = -np.Inf
-        self.accumulation = 0
+        self.lr_init = K.get_value(self.model.optimizer.lr)
 
     def on_epoch_end(self, epoch, logs={}):
-        current = logs.get('loss')
-        if current > self.last:
-            self.accumulation += 1
-            if self.accumulation > 1:
-                lr = self.model.optimizer.lr.get_value / self.decay_rate
-            else:
-                lr = self.model.optimizer.lr.get_value
-        else:
-            lr =  self.model.optimizer.lr.get_value
-            self.accumulation = 0
+        if epoch > self.epoch_n:
+            ratio = 1.0 * (self.num_epoch - epoch)  # epoch_n + 1 because learning rate is set for next epoch
+            ratio = max(0, ratio / (self.num_epoch - self.epoch_n))
+            lr = np.float32(self.lr_init * ratio)
+            K.set_value(self.model.optimizer.lr,lr)
 
-        self.last = current
-        self.model.optimizer.lr.set_value(lr)
+class LearningRateDecay(Callback):
+    def __init__(self, epoch_n=0, decay=0.1):
+        self.epoch_n = epoch_n
+        self.decay = decay
+        super(LearningRateDecay, self).__init__()
 
+    def on_train_begin(self, logs={}):
+        self.lr_init = K.get_value(self.model.optimizer.lr)
 
-# learning rate schedule
-def exponential_decay(epoch):
-    initial_lrate=0.0005
-    decay = 0.5
-    epochs_drop = 2
-    lrate = initial_lrate * math.pow(decay, math.floor((1+epoch)/epochs_drop))
-    return lrate
+    def on_epoch_end(self, epoch, logs={}):
+        if epoch > self.epoch_n:
+            ratio = 1.0 - self.decay*(epoch - self.epoch_n )
+            ratio = max(0, ratio)
+            lr = np.float32(self.lr_init * ratio)
+            K.set_value(self.model.optimizer.lr, lr)
+

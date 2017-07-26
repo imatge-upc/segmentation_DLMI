@@ -1,26 +1,284 @@
 from keras import backend as K
-from keras.layers import Lambda, Convolution3D, UpSampling3D
+import tensorflow as tf
+from keras.layers import Layer, BatchNormalization, InputSpec
+
+
+def repeat_channels(rep):
+    def funct(x):
+        return K.repeat_elements(x, rep, axis=4)
+    return funct
+
+def repeat_channels_shape(rep):
+    def funct(input_shape):
+        return (input_shape[0], input_shape[1], input_shape[2], input_shape[3], input_shape[4]*rep)
+    return funct
+
+
+def complementary_mask(x):
+    return K.ones_like(x) - x
+
+
+def mask_tensor(x):
+    tensor, mask = x
+    rep = K.int_shape(tensor)[4]
+
+    return tensor*K.repeat_elements(mask, rep, axis=4)
+
+
+def fill_background_mask(x):
+    tensor, mask = x
+    rep = K.int_shape(tensor)[4] - 1
+    full_mask = K.ones_like(mask) - mask
+    K.repeat_elements(mask, rep, axis=4)
+
+    return tensor + full_mask
+
+
+def dice_1(y):
+    """
+    Computes the Sorensen-Dice metric, where P come from class 1,2,3,4,5
+                    TP
+        Dice = 2 -------
+                  T + P
+    Parameters
+    ----------
+    y_true : keras.placeholder
+        Placeholder that contains the ground truth labels of the classes
+    y_pred : keras.placeholder
+        Placeholder that contains the class prediction
+
+    Returns
+    -------
+    scalar
+        Dice metric
+    """
+    y_true, y_pred = y
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+
+    mask_true = y_true[:, :, :, :,1]
+    mask_pred = y_pred_decision[:, :, :, :, 1]
+
+    y_sum = K.sum(mask_true * mask_pred)
+
+    return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
+
+
+def dice_2(y):
+    """
+    Computes the Sorensen-Dice metric, where P come from class 1,2,3,4,5
+                    TP
+        Dice = 2 -------
+                  T + P
+    Parameters
+    ----------
+    y_true : keras.placeholder
+        Placeholder that contains the ground truth labels of the classes
+    y_pred : keras.placeholder
+        Placeholder that contains the class prediction
+
+    Returns
+    -------
+    scalar
+        Dice metric
+    """
+    y_true, y_pred = y
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+
+    mask_true = y_true[:, :, :, :, 2]
+    mask_pred = y_pred_decision[:, :, :, :, 2]
+
+    y_sum = K.sum(mask_true * mask_pred)
+
+    return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
+
+
+def dice_3(y):
+    """
+    Computes the Sorensen-Dice metric, where P come from class 1,2,3,4,0
+                    TP
+        Dice = 2 -------
+                  T + P
+    Parameters
+    ----------
+    y_true : keras.placeholder
+        Placeholder that contains the ground truth labels of the classes
+    y_pred : keras.placeholder
+        Placeholder that contains the class prediction
+
+    Returns
+    -------
+    scalar
+        Dice metric
+    """
+    y_true, y_pred = y
+    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+
+    mask_true = y_true[:, :, :, :, 3]
+    mask_pred = y_pred_decision[:, :, :, :, 3]
+
+    y_sum = K.sum(mask_true * mask_pred)
+
+    return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
 
 
 
-class Upsampling3D_mod(UpSampling3D):
-    def get_output_shape_for(self, input_shape):
+class BatchNormalizationMasked(BatchNormalization):
 
-        if self.dim_ordering == 'th':
-            conv_dim1 = input_shape[2] * self.size[0] if input_shape[2] is not None else None
-            conv_dim2 = input_shape[3] * self.size[1] if input_shape[3] is not None else None
-            conv_dim3 = input_shape[4] * self.size[2] if input_shape[4] is not None else None
-        elif self.dim_ordering == 'tf':
-            conv_dim1 = input_shape[1] * self.size[0] if input_shape[1] is not None else None
-            conv_dim2 = input_shape[2] * self.size[0] if input_shape[2] is not None else None
-            conv_dim3 = input_shape[3] * self.size[0] if input_shape[3] is not None else None
+    def build(self, inputs_shape):
+        input_shape = inputs_shape[0]
+        print(input_shape)
+        dim = input_shape[self.axis]
+        if dim is None:
+            raise ValueError('Axis ' + str(self.axis) + ' of '
+                                                        'input tensor should have a defined dimension '
+                                                        'but the layer received an input with shape ' +
+                             str(input_shape) + '.')
+        self.input_spec = [InputSpec(ndim=len(input_shape), axes={self.axis: dim}),
+                           InputSpec(ndim=len(input_shape), axes={self.axis: dim})]
+
+        shape = (dim,)
+
+        if self.scale:
+            self.gamma = self.add_weight(shape=shape,
+                                         name='gamma',
+                                         initializer=self.gamma_initializer,
+                                         regularizer=self.gamma_regularizer,
+                                         constraint=self.gamma_constraint)
         else:
-            raise Exception('Invalid dim_ordering: ' + self.dim_ordering)
-
-        if self.dim_ordering == 'th':
-            return (input_shape[0], input_shape[1], conv_dim1, conv_dim2, conv_dim3)
-        elif self.dim_ordering == 'tf':
-            return (input_shape[0], conv_dim1, conv_dim2, conv_dim3, input_shape[4])
+            self.gamma = None
+        if self.center:
+            self.beta = self.add_weight(shape=shape,
+                                        name='beta',
+                                        initializer=self.beta_initializer,
+                                        regularizer=self.beta_regularizer,
+                                        constraint=self.beta_constraint)
         else:
-            raise Exception('Invalid dim_ordering: ' + self.dim_ordering)
+            self.beta = None
+        self.moving_mean = self.add_weight(
+            shape=shape,
+            name='moving_mean',
+            initializer=self.moving_mean_initializer,
+            trainable=False)
+        self.moving_variance = self.add_weight(
+            shape=shape,
+            name='moving_variance',
+            initializer=self.moving_variance_initializer,
+            trainable=False)
+        self.built = True
+
+    def call(self, inputs, training=None):
+        inputs, mask = inputs
+        input_shape = K.int_shape(inputs)
+
+        # Prepare broadcasting shape.
+        ndim = len(input_shape)
+        reduction_axes = list(range(len(input_shape)))
+        del reduction_axes[self.axis]
+        broadcast_shape = [1] * len(input_shape)
+        broadcast_shape[self.axis] = input_shape[self.axis]
+
+        # Determines whether broadcasting is needed.
+        needs_broadcasting = (sorted(reduction_axes) != list(range(ndim))[:-1])
+
+        def normalize_inference():
+            if needs_broadcasting:
+
+                # In this case we must explicitly broadcast all parameters.
+                broadcast_moving_mean = K.reshape(self.moving_mean,
+                                                  broadcast_shape)
+                broadcast_moving_variance = K.reshape(self.moving_variance,
+                                                      broadcast_shape)
+                if self.center:
+                    broadcast_beta = K.reshape(self.beta, broadcast_shape)
+                else:
+                    broadcast_beta = None
+                if self.scale:
+                    broadcast_gamma = K.reshape(self.gamma,
+                                                broadcast_shape)
+                else:
+                    broadcast_gamma = None
+                return K.batch_normalization(
+                    inputs,
+                    broadcast_moving_mean,
+                    broadcast_moving_variance,
+                    broadcast_beta,
+                    broadcast_gamma,
+                    epsilon=self.epsilon)
+            else:
+                return K.batch_normalization(
+                    inputs,
+                    self.moving_mean,
+                    self.moving_variance,
+                    self.beta,
+                    self.gamma,
+                    epsilon=self.epsilon)
+
+        # If the learning phase is *static* and set to inference:
+        if training in {0, False}:
+            return normalize_inference()
+
+        # If the learning is either dynamic, or set to training:
+        normed_training, mean, variance = K.normalize_batch_in_training(
+            inputs, self.gamma, self.beta, reduction_axes,
+            epsilon=self.epsilon)
+
+        self.add_update([K.moving_average_update(self.moving_mean,
+                                                 mean,
+                                                 self.momentum),
+                         K.moving_average_update(self.moving_variance,
+                                                 variance,
+                                                 self.momentum)],
+                        inputs)
+
+        # Pick the normalized form corresponding to the training phase.
+        return K.in_train_phase(normed_training,
+                                normalize_inference,
+                                training=training)
+
+    @staticmethod
+    def _normalize_batch_in_training(x, mask, gamma, beta,
+                                    reduction_axes, epsilon=1e-3):
+        """Computes mean and std for batch then apply batch_normalization on batch.
+        # Arguments
+            x: Input tensor or variable.
+            gamma: Tensor by which to scale the input.
+            beta: Tensor with which to center the input.
+            reduction_axes: iterable of integers,
+                axes over which to normalize.
+            epsilon: Fuzz factor.
+        # Returns
+            A tuple length of 3, `(normalized_tensor, mean, variance)`.
+        """
+        mean = K.sum(x*mask, axis=reduction_axes, keepdims=True)/K.sum(mask, axis=reduction_axes, keepdims=True)
+        var = 1/K.sum(mask, axis=reduction_axes, keepdims=True)*K.sum(K.square(x-mean), axis=reduction_axes, keepdims=True)
+
+        if sorted(reduction_axes) == list(range(K.ndim(x)))[:-1]:
+            normed = tf.nn.batch_normalization(x, mean, var,
+                                               beta, gamma,
+                                               epsilon)
+        else:
+            # need broadcasting
+            target_shape = []
+            for axis in range(K.ndim(x)):
+                if axis in reduction_axes:
+                    target_shape.append(1)
+                else:
+                    target_shape.append(tf.shape(x)[axis])
+            target_shape = tf.stack(target_shape)
+
+            broadcast_mean = tf.reshape(mean, target_shape)
+            broadcast_var = tf.reshape(var, target_shape)
+            if gamma is None:
+                broadcast_gamma = None
+            else:
+                broadcast_gamma = tf.reshape(gamma, target_shape)
+            if beta is None:
+                broadcast_beta = None
+            else:
+                broadcast_beta = tf.reshape(beta, target_shape)
+            normed = tf.nn.batch_normalization(x, broadcast_mean, broadcast_var,
+                                               broadcast_beta, broadcast_gamma,
+                                               epsilon)
+        return normed, mean, var
+
 

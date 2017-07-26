@@ -1,13 +1,11 @@
-
-from os.path import join
-import params as p
-from params import params_example
-from src.dataset import BRATS_dataset_semantic
-import sys
 import argparse
-from params import params_pretrain as model_params
+import sys
+
 import numpy as np
 
+import params as p
+from params import params_pretrain as model_params
+from src.dataset import BRATS_dataset_semantic
 
 if __name__ == "__main__":
 

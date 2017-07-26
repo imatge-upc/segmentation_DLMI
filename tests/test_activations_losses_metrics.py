@@ -6,11 +6,10 @@ import numpy as np
 from keras.layers import Lambda, Dense, Convolution2D
 from keras.models import Sequential
 import keras.backend as K
-from src.callbacks import GetActivationsLayer, GetWeightsLayer
 from src.activations import elementwise_softmax_3d
-from src.losses import categorical_crossentropy_3d, categorical_crossentropy_3d_mask
+from src.losses import categorical_crossentropy_3d, dice_cost
 from src.metrics import dice, dice_whole, dice_core, dice_enhance, recall_0, accuracy_mask
-from src.helpers.preprocessing_utils import one_hot_representation
+from src.utils.preprocessing import one_hot_representation
 from keras.utils import np_utils
 from keras.utils.test_utils import get_test_data
 
@@ -187,6 +186,20 @@ class TestDiceScore(unittest.TestCase):
         self.assertTrue(np.allclose(dice_score, K.eval(dice_enhance(y_true_onehot, y_pred_onehot)), rtol=1.e-5, atol=1.e-5),
                         msg='Dice score within the enhancing class in 3D does not produce the expected results')
 
+    def test_dice_loss(self):
+        # Create keras model with this activation and compile it
+        y_true = np.reshape(np.asarray([0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0]),(2,2,2,2))
+        y_true_onehot = K.variable(one_hot_representation(y_true,5))
+        y_pred = np.reshape(np.asarray([0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0]),(2,2,2,2))
+        y_pred_onehot = K.variable(one_hot_representation(y_pred,5)*0.6)
+        dice_score = - 2.0 * 7 / (8 + 10)
+
+        # Assertions
+        print('Expected Dice: {}'.format(K.eval(dice_cost(y_true_onehot, y_pred_onehot))))
+        print('Actual Dice: {}'.format(dice_score))
+        self.assertTrue(np.allclose(dice_score, K.eval(dice_whole(y_true_onehot, y_pred_onehot)), rtol=1.e-5, atol=1.e-5),
+                        msg='Dice whole 3D does not produce the expected results')
+
 
     def test_recall_0(self):
         # Create keras model with this activation and compile it
@@ -220,71 +233,6 @@ class TestDiceScore(unittest.TestCase):
         self.assertTrue(
             np.allclose(accuracy_score, K.eval(accuracy(y_true_onehot, y_pred_onehot)), rtol=1.e-5, atol=1.e-5),
             msg='Dice whole 3D does not produce the expected results')
-
-class TestCallbacks(unittest.TestCase):
-
-    def setUp(self):
-
-        self.input_dim = 5
-        self.nb_hidden = 4
-        self.nb_class = 2
-        self.batch_size = 5
-        self.train_samples = 20
-        self.test_samples = 20
-
-    # def test_callback_save_activations(self):
-    #     (X_train, y_train), (X_test, y_test) = get_test_data(nb_train=self.train_samples,
-    #                                                          nb_test=self.test_samples,
-    #                                                          input_shape=(self.input_dim,),
-    #                                                          classification=True,
-    #                                                          nb_class=self.nb_class)
-    #
-    #     y_test = np_utils.to_categorical(y_test)
-    #     y_train = np_utils.to_categorical(y_train)
-    #     # case 1
-    #     monitor = 'val_loss'
-    #     save_best_only = False
-    #     mode = 'auto'
-    #
-    #     model = Sequential()
-    #     model.add(Dense(self.nb_hidden, input_dim=self.input_dim, activation='relu'))
-    #     model.add(Dense(self.nb_hidden, activation='relu'))
-    #     model.add(Dense(self.nb_hidden, activation='relu'))
-    #     model.add(Dense(self.nb_class, activation='softmax'))
-    #     model.compile(loss='mse',
-    #                   optimizer='sgd',
-    #                   metrics=['accuracy'])
-    #
-    #     cbks = [GetActivationsLayer(layer_num=0)]
-    #     model.fit(X_train, y_train, batch_size=self.batch_size,
-    #               validation_data=(X_test, y_test), callbacks=cbks, nb_epoch=1)
-
-    def test_callback_save_weights(self):
-            (X_train, y_train), (X_test, y_test) = get_test_data(nb_train=self.train_samples,
-                                                                 nb_test=self.test_samples,
-                                                                 input_shape=(self.input_dim,),
-                                                                 classification=True,
-                                                                 nb_class=self.nb_class)
-
-            print(X_train.shape)
-            y_test = np_utils.to_categorical(y_test)
-            y_train = np_utils.to_categorical(y_train)
-            # case 1
-            monitor = 'val_loss'
-            save_best_only = False
-            mode = 'auto'
-
-            model = Sequential()
-            model.add(Convolution2D(self.nb_hidden, 3,3,  activation='relu', input_shape = X_train.shape))
-            model.add(Convolution2D(self.nb_hidden, 3, 3, activation='relu'))
-            model.add(Dense(self.nb_class, activation='softmax'))
-            model.compile(loss='mse',
-                          optimizer='sgd',
-                          metrics=['accuracy'])
-
-            cbks = [GetWeightsLayer(layer_num=1)]
-            model.fit(X_train, y_train, batch_size=self.batch_size,
-                      validation_data=(X_test, y_test), callbacks=cbks, nb_epoch=1)
 
 
 if __name__ == '__main__':

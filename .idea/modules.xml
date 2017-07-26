@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/neuroimage-brats.iml" filepath="$PROJECT_DIR$/.idea/neuroimage-brats.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/segmentation_DLMI.iml" filepath="$PROJECT_DIR$/.idea/segmentation_DLMI.iml" />
     </modules>
   </component>
 </project>
