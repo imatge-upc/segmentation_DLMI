@@ -8,10 +8,10 @@ from os.path import join
 
 import params.WMH as p
 from src.config import DB
-from database.WMH.data_loader_resample import Loader
+from database.WMH.data_loader import Loader
 from src.dataset import Dataset_train
 from src.models import SegmentationModels, WMH_models
-from src.utils import io
+from src.utils import io, preprocessing
 import nibabel as nib
 
 def dice(im1, im2):
@@ -61,11 +61,11 @@ if __name__ == "__main__":
     params[p.BATCH_SIZE] = 1
 
 
-    filename = params[p.MODEL_NAME]+'_continue'
+    filename = params[p.MODEL_NAME] + '_continue'
     dir_path = join(params[p.OUTPUT_PATH],
                     'LR_' + str(params[p.LR]) + '_DA_6_4' )
 
-    logs_filepath = join(dir_path, 'logs', filename + '.txt')
+    logs_filepath = join(dir_path, 'results', filename + '.txt')
     weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
 
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     print('Output redirected to file... ')
     print('Suggestion: Use tail command to see the output')
     io.create_results_dir(dir_path=dir_path)
-    # io.redirect_stdout_to_file(filepath=logs_filepath)
+    io.redirect_stdout_to_file(filepath=logs_filepath)
 
 
 
@@ -116,7 +116,7 @@ if __name__ == "__main__":
         num_modalities=num_modalities,
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
-        model_name=params[p.MODEL_NAME],
+        model_name=params[p.MODEL_NAME]+'_old',
         shortcut_input = params[p.SHORTCUT_INPUT],
         mode='test'
     )
@@ -124,13 +124,12 @@ if __name__ == "__main__":
     model.load_weights(weights_filepath)
     model = WMH_models.compile(model, lr=params[p.LR], num_classes=params[p.N_CLASSES])
 
-    model.summary()
+    # model.summary()
 
 
-    """ MODEL TRAINING """
+    """ MODEL TESTINT """
     print()
-    print('Training started...')
-    print('Steps per epoch: ' + str(params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE]))
+    print('Testint started...')
     print('Output_shape: ' + str(output_shape))
 
     subject_list_train = subject_list_train
@@ -147,20 +146,26 @@ if __name__ == "__main__":
     for inputs,labels in generator_val:
         subject = subject_list_validation[n_sbj]
 
-        predictions = model.predict_on_batch(inputs)
-        predictions = np.floor(predictions/np.max(predictions,axis=4,keepdims=True)).astype('int')
-        # print(np.unique(np.argmax(predictions[:, :, :, :, :],axis=4)))
-        #
-        img = nib.Nifti1Image(np.argmax(predictions[:, :, :, :, :],axis=4)[0], subject.get_affine())
+        predictions = model.predict_on_batch(inputs)[0]
+        predictions = np.floor((predictions+np.finfo(float).eps)/np.max(predictions,axis=3,keepdims=True)).astype('int')
+
+        shape = subject.get_subject_shape()
+        predictions_resized = np.zeros(shape+(params[p.N_CLASSES],))
+        for i in range(params[p.N_CLASSES]):
+            predictions_resized[:,:,:,i] = preprocessing.resize_image(predictions[:,:,:,i],shape)
+
+
+        img = nib.Nifti1Image(np.argmax(predictions_resized,axis=3), subject.get_affine())
         nib.save(img, join(dir_path, 'results', subject.id + '_predictions.nii.gz'))
 
-        img = nib.Nifti1Image(np.argmax(labels[0, :, :, :, :],axis=3), subject.get_affine())
-        nib.save(img, join(dir_path, 'results', subject.id + '_labels.nii.gz'))
+        # img = nib.Nifti1Image(np.argmax(labels[0, :, :, :, :],axis=3), subject.get_affine())
+        # nib.save(img, join(dir_path, 'results', subject.id + '_labels.nii.gz'))
 
-        dice_1[n_sbj] = dice(predictions[0,:,:,:,1].flatten(),labels[0,:,:,:,1].flatten())
-        dice_2[n_sbj] = dice(predictions[0,:,:,:,2].flatten(),labels[0,:,:,:,2].flatten())
 
-        print("Count 1: " + str(np.sum(predictions[0,:,:,:,1]*labels[0,:,:,:,1])) +' '+ str(np.sum(predictions[0,:,:,:,1])) + ' ' + str(np.sum(labels[0,:,:,:,1])))
+        dice_1[n_sbj] = dice(predictions[:,:,:,1].flatten(),labels[0,:,:,:,1].flatten())
+        dice_2[n_sbj] = dice(predictions[:,:,:,2].flatten(),labels[0,:,:,:,2].flatten())
+
+        print("Count 1: " + str(np.sum(predictions[:,:,:,1]*labels[0,:,:,:,1])) +' '+ str(np.sum(predictions[:,:,:,1])) + ' ' + str(np.sum(labels[0,:,:,:,1])))
         print("Dice 1: " + str(dice_1[n_sbj]))
         print("Dice 2: " + str(dice_2[n_sbj]))
 

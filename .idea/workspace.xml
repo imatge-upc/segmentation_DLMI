@@ -2,113 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4193b78b-ac6d-4f84-a004-de4540f14dbb" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/BraTS/data_loader.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/BraTS/data_loader_tumor_mask.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/IBSR/condition.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/IBSR/data_loader.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/WMH/condition.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/WMH/data_loader.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/WMH/data_loader_resample.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/WMH/resample_images.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/data_loader.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/iSeg/condition.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/database/iSeg/data_loader.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/BraTS/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/BraTS/params_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/BraTS/params_VNET_1.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/BraTS/params_VNET_full.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/BraTS/params_VNET_survival.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/BraTS/params_two_pathways.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/ISBR/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/ISBR/params_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/WMH/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/WMH/params_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/WMH/params_VNET_patches.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/iSeg/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/iSeg/params_SCAE.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/iSeg/params_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/iSeg/params_VNET_ACNN.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/iSeg/params_VNET_patches.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Dataset/class_distribution.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Dataset/test_dataset.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Models/plot_model_activations.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Models/read_model_activations.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Models/read_model_weights.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Plot/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/BraTS/test.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/BraTS/test_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/BraTS/test_VNET_1.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/BraTS/test_VNET_full.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/BraTS/test_two_pathways.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/WMH/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/WMH/test.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/WMH/test_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/WMH/test_VNET_masked.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/iSeg/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/iSeg/test.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Test/iSeg/test_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/BraTS/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/BraTS/train.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/BraTS/train_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/BraTS/train_VNET_1.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/BraTS/train_VNET_full.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/BraTS/train_VNET_survival.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/BraTS/train_survival.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/ISBR/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/ISBR/train.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/ISBR/train_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/WMH/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/WMH/train.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/WMH/train_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/WMH/train_VNET_masked.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/iSeg/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/iSeg/train.sh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/iSeg/train_SCAE.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/iSeg/train_VNET.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/Train/iSeg/train_VNET_ACNN.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/config.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/metrics_old.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/utils/__init__.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/prova_loss.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Dataset/create_masks_normalize.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Dataset/rebase_db.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Dataset/segments_distribution.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Model_analysis/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Model_analysis/compare_training_metrics.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Model_analysis/compute_model_memory.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Model_analysis/get_activations.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Model_analysis/layer_weight_histogram.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Model_analysis/plot_model.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Test/test.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Test/test_training.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/scripts/Train/train.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/scripts/Model_analysis/plot_training_metrics.py" afterPath="$PROJECT_DIR$/scripts/Plot/plot_training_metrics.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/helpers/__init__.py" afterPath="$PROJECT_DIR$/database/ISLES/condition.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/helpers/io_utils.py" afterPath="$PROJECT_DIR$/src/utils/io.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/helpers/post_processing.py" afterPath="$PROJECT_DIR$/src/utils/postprocessing.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/helpers/preprocessing_utils.py" afterPath="$PROJECT_DIR$/src/utils/preprocessing.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/helpers/sampling.py" afterPath="$PROJECT_DIR$/src/utils/sampling.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/helpers/subject.py" afterPath="$PROJECT_DIR$/database/ISLES/data_loader.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/helpers/visualization.py" afterPath="$PROJECT_DIR$/src/utils/visualization.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/params/params_example.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dataset_example.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dataset_example.py" afterPath="$PROJECT_DIR$/dataset_example.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/params/__init__.py" afterPath="$PROJECT_DIR$/params/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/Dataset/profile_time_dataset.py" afterPath="$PROJECT_DIR$/scripts/Dataset/profile_time_dataset.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/Test/filter_area.py" afterPath="$PROJECT_DIR$/scripts/Test/filter_area.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/prova.py" afterPath="$PROJECT_DIR$/scripts/prova.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/activations.py" afterPath="$PROJECT_DIR$/src/activations.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/callbacks.py" afterPath="$PROJECT_DIR$/src/callbacks.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example.py" afterPath="$PROJECT_DIR$/example.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/params/iSeg/params_VNET_patches.py" afterPath="$PROJECT_DIR$/params/iSeg/params_VNET_patches.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/Models/read_model_weights.py" afterPath="$PROJECT_DIR$/scripts/Models/read_model_weights.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/Test/WMH/test_VNET.py" afterPath="$PROJECT_DIR$/scripts/Test/WMH/test_VNET.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/Train/iSeg/train_VNET.py" afterPath="$PROJECT_DIR$/scripts/Train/iSeg/train_VNET.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/dataset.py" afterPath="$PROJECT_DIR$/src/dataset.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/layers.py" afterPath="$PROJECT_DIR$/src/layers.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/losses.py" afterPath="$PROJECT_DIR$/src/losses.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/metrics.py" afterPath="$PROJECT_DIR$/src/metrics.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/models.py" afterPath="$PROJECT_DIR$/src/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/test_activations_losses_metrics.py" afterPath="$PROJECT_DIR$/tests/test_activations_losses_metrics.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/test_dataset.py" afterPath="$PROJECT_DIR$/tests/test_dataset.py" />
     </list>
     <ignored path="neuroimage-brats.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -133,48 +39,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="train_VNET.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/Train/iSeg/train_VNET.py">
+      <file leaf-file-name="example.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/example.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="51" column="50" selection-start-line="51" selection-start-column="50" selection-end-line="51" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dataset.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/dataset.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
-              <caret line="282" column="49" selection-start-line="282" selection-start-column="49" selection-end-line="282" selection-end-column="63" />
+            <state relative-caret-position="766">
+              <caret line="133" column="8" selection-start-line="133" selection-start-column="8" selection-end-line="133" selection-end-column="8" />
               <folding>
-                <element signature="e#3145#3531#0" expanded="true" />
-                <element signature="e#13953#15658#0" expanded="false" />
-                <element signature="e#14898#15658#0" expanded="false" />
-                <element signature="e#18037#18933#0" expanded="false" />
-                <element signature="e#35570#35585#0" expanded="false" />
-                <element signature="e#36460#39308#0" expanded="true" />
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="params_VNET_patches.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/params/iSeg/params_VNET_patches.py">
+      <file leaf-file-name="params_example.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/params/params_example.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="28" column="45" selection-start-line="28" selection-start-column="45" selection-end-line="28" selection-end-column="45" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="data_loader.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/database/iSeg/data_loader.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+            <state relative-caret-position="396">
+              <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -183,15 +64,15 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="4320" column="60" selection-start-line="4320" selection-start-column="60" selection-end-line="4320" selection-end-column="60" />
+            <state relative-caret-position="529">
+              <caret line="974" column="50" selection-start-line="974" selection-start-column="50" selection-end-line="974" selection-end-column="50" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-                <element signature="e#1123#51062#0" expanded="false" />
-                <element signature="e#13994#24600#0" expanded="true" />
-                <element signature="e#51089#64105#0" expanded="false" />
-                <element signature="e#54610#58282#0" expanded="true" />
-                <element signature="e#64140#132833#0" expanded="false" />
+                <element signature="e#50930#63946#0" expanded="false" />
+                <element signature="e#54451#58123#0" expanded="true" />
+                <element signature="e#63981#132674#0" expanded="false" />
+                <element signature="e#132708#289230#0" expanded="false" />
+                <element signature="e#342331#358705#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -246,12 +127,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../../../mcata/Repositories/neuroimage_2017/src/models.py" />
-        <option value="$PROJECT_DIR$/src/metrics.py" />
-        <option value="$PROJECT_DIR$/scripts/Test/BraTS/test.sh" />
-        <option value="$PROJECT_DIR$/params/BraTS/params_VNET_1.py" />
-        <option value="$PROJECT_DIR$/scripts/Train/BraTS/train_VNET_1.py" />
-        <option value="$PROJECT_DIR$/scripts/Test/BraTS/test_VNET_1.py" />
         <option value="$PROJECT_DIR$/scripts/Models/plot_model_activations.py" />
         <option value="$PROJECT_DIR$/scripts/Test/BraTS/test_VNET_full.py" />
         <option value="$PROJECT_DIR$/params/iSeg/params_VNET_masked.py" />
@@ -284,19 +159,25 @@
         <option value="$PROJECT_DIR$/database/WMH/data_loader_resample.py" />
         <option value="$PROJECT_DIR$/scripts/Test/iSeg/test.sh" />
         <option value="$PROJECT_DIR$/scripts/Test/WMH/test.sh" />
-        <option value="$PROJECT_DIR$/scripts/Test/WMH/test_VNET.py" />
         <option value="$PROJECT_DIR$/scripts/Train/WMH/train_VNET.py" />
-        <option value="$PROJECT_DIR$/params/WMH/params_VNET_patches.py" />
         <option value="$PROJECT_DIR$/database/WMH/data_loader.py" />
         <option value="$PROJECT_DIR$/scripts/prova.py" />
         <option value="$PROJECT_DIR$/src/layers.py" />
-        <option value="$PROJECT_DIR$/scripts/Train/iSeg/train_VNET.py" />
         <option value="$PROJECT_DIR$/params/iSeg/params_VNET.py" />
         <option value="$PROJECT_DIR$/scripts/Test/iSeg/test_VNET.py" />
-        <option value="$PROJECT_DIR$/src/models.py" />
         <option value="$PROJECT_DIR$/database/iSeg/data_loader.py" />
-        <option value="$PROJECT_DIR$/src/dataset.py" />
+        <option value="$PROJECT_DIR$/scripts/Train/iSeg/train_VNET.py" />
         <option value="$PROJECT_DIR$/params/iSeg/params_VNET_patches.py" />
+        <option value="$PROJECT_DIR$/scripts/Models/read_model_weights.py" />
+        <option value="$PROJECT_DIR$/params/WMH/params_VNET_patches.py" />
+        <option value="$PROJECT_DIR$/scripts/Test/WMH/test_VNET.py" />
+        <option value="$PROJECT_DIR$/requirements.txt" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/src/dataset.py" />
+        <option value="$PROJECT_DIR$/src/models.py" />
+        <option value="$PROJECT_DIR$/params/params_example.py" />
+        <option value="$PROJECT_DIR$/example.py" />
       </list>
     </option>
   </component>
@@ -351,6 +232,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -487,6 +370,46 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WMH" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="segmentation_DLMI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="segmentation_DLMI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="segmentation_DLMI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="segmentation_DLMI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="params" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -506,24 +429,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="iSeg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="segmentation_DLMI" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="segmentation_DLMI" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="params" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="WMH" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -579,8 +484,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -590,18 +493,18 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/database/WMH" />
-      <recent name="$PROJECT_DIR$/scripts/Train/BraTS" />
-      <recent name="$PROJECT_DIR$/params/iSeg" />
-      <recent name="$PROJECT_DIR$/scripts/Train/iSeg" />
-      <recent name="$PROJECT_DIR$/params/BraTS" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/params/iSeg" />
       <recent name="$PROJECT_DIR$/params/WMH" />
       <recent name="$PROJECT_DIR$/scripts/Train/WMH" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/params" />
+      <recent name="$PROJECT_DIR$/database/WMH" />
+      <recent name="$PROJECT_DIR$/scripts/Train/BraTS" />
+      <recent name="$PROJECT_DIR$/params/iSeg" />
+      <recent name="$PROJECT_DIR$/scripts/Train/iSeg" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -901,27 +804,27 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1282" height="999" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17423014" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17747164" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32990867" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.6689498" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" x="0" y="34" width="1920" height="986" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.32990867" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32990867" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26027396" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -986,88 +889,17 @@
           <line>6</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/example.py</url>
+          <line>121</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="38" />
+      <option name="time" value="42" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/params/WMH/params_VNET_masked.py" />
-    <entry file="file://$PROJECT_DIR$/src/utils/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="107" column="0" selection-start-line="107" selection-start-column="0" selection-end-line="107" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2016.1/system/python_stubs/2080926115/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="283">
-          <caret line="340" column="4" selection-start-line="340" selection-start-column="4" selection-end-line="340" selection-end-column="8" />
-          <folding>
-            <element signature="e#10963#11166#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/params/WMH/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#20#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/sampling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="171" column="37" selection-start-line="171" selection-start-column="37" selection-end-line="171" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2016.1/system/remote_sources/2080926115/675075022/keras/regularizers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="543">
-          <caret line="55" column="4" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#38#0" expanded="false" />
-            <element signature="e#730#934#0" expanded="false" />
-            <element signature="e#1166#1191#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/params/BraTS/params_VNET_full.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="36" column="31" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/params/BraTS/params_VNET_survival.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/params/BraTS/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="49" selection-start-line="8" selection-start-column="49" selection-end-line="8" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Train/BraTS/train_VNET_full.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="55" column="41" selection-start-line="55" selection-start-column="41" selection-end-line="55" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/params/iSeg/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -1146,7 +978,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="37" column="34" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1154,10 +985,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="211">
           <caret line="371" column="0" selection-start-line="371" selection-start-column="0" selection-end-line="371" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="false" />
-            <marker date="1500734753000" expanded="true" signature="22893:22904" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1165,7 +992,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="522">
           <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="35" selection-end-column="62" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1174,8 +1000,8 @@
         <state relative-caret-position="13">
           <caret line="401" column="8" selection-start-line="401" selection-start-column="8" selection-end-line="401" selection-end-column="8" />
           <folding>
-            <element signature="e#14723#19904#0" expanded="true" />
-            <element signature="e#20284#25889#0" expanded="true" />
+            <element signature="e#14723#19904#0" expanded="false" />
+            <element signature="e#20284#25889#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1185,7 +1011,7 @@
         <state relative-caret-position="54">
           <caret line="86" column="33" selection-start-line="86" selection-start-column="33" selection-end-line="86" selection-end-column="33" />
           <folding>
-            <element signature="e#3683#5354#0" expanded="true" />
+            <element signature="e#3683#5354#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1194,27 +1020,19 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
           <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Train/iSeg/train_VNET_masked.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Train/iSeg/train_VNET_masked.py" />
     <entry file="file://$PROJECT_DIR$/database/BraTS/data_loader.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
           <caret line="86" column="54" selection-start-line="86" selection-start-column="52" selection-end-line="86" selection-end-column="54" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#1240#1944#0" expanded="true" />
-            <element signature="e#1981#2235#0" expanded="true" />
-            <element signature="e#2275#2521#0" expanded="true" />
+            <element signature="e#0#21#0" expanded="false" />
+            <element signature="e#1240#1944#0" expanded="false" />
+            <element signature="e#1981#2235#0" expanded="false" />
+            <element signature="e#2275#2521#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1223,15 +1041,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1512">
           <caret line="84" column="37" selection-start-line="84" selection-start-column="37" selection-end-line="84" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#21#0" expanded="false" />
-            <element signature="e#272#963#0" expanded="false" />
-            <element signature="e#1007#1022#0" expanded="false" />
-            <element signature="e#1058#1094#0" expanded="false" />
-            <element signature="e#1151#1859#0" expanded="false" />
-            <element signature="e#1896#2181#0" expanded="false" />
-            <element signature="e#2222#2468#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1239,11 +1048,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="23" column="8" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="8" />
-          <folding>
-            <element signature="e#809#927#0" expanded="false" />
-            <element signature="e#1082#1386#0" expanded="false" />
-            <element signature="e#1730#1952#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1261,35 +1065,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Test/iSeg/test.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="81" selection-start-line="18" selection-start-column="81" selection-end-line="18" selection-end-column="81" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/params/WMH/params_VNET.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="9" column="21" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/Test/WMH/test.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="19" column="41" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Test/WMH/test_VNET.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="38" selection-start-line="10" selection-start-column="38" selection-end-line="10" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1307,7 +1086,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1328,7 +1106,7 @@
         <state relative-caret-position="378">
           <caret line="140" column="4" selection-start-line="140" selection-start-column="4" selection-end-line="140" selection-end-column="4" />
           <folding>
-            <element signature="e#5202#5716#0" expanded="true" />
+            <element signature="e#5202#5716#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1345,9 +1123,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="561">
           <caret line="117" column="33" selection-start-line="117" selection-start-column="33" selection-end-line="117" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1355,28 +1130,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
           <caret line="212" column="31" selection-start-line="212" selection-start-column="31" selection-end-line="212" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-            <element signature="e#266#406#0" expanded="true" />
-            <element signature="e#3226#5067#0" expanded="true" />
-            <element signature="e#8139#10106#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/params/WMH/params_VNET_patches.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Train/WMH/train_VNET.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="54" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1384,30 +1137,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="594">
           <caret line="34" column="43" selection-start-line="34" selection-start-column="43" selection-end-line="34" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params/iSeg/params_VNET_patches.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Test/iSeg/test_VNET.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Train/iSeg/train_VNET.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1281">
-          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
+        <state relative-caret-position="234">
+          <caret line="27" column="89" selection-start-line="27" selection-start-column="89" selection-end-line="27" selection-end-column="89" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="4320" column="60" selection-start-line="4320" selection-start-column="60" selection-end-line="4320" selection-end-column="60" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <element signature="e#1123#51062#0" expanded="false" />
-            <element signature="e#13994#24600#0" expanded="true" />
-            <element signature="e#51089#64105#0" expanded="false" />
-            <element signature="e#54610#58282#0" expanded="true" />
-            <element signature="e#64140#132833#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1419,34 +1164,171 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/Train/iSeg/train_VNET.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Models/read_model_weights.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="51" column="50" selection-start-line="51" selection-start-column="50" selection-end-line="51" selection-end-column="50" />
+        <state relative-caret-position="615">
+          <caret line="49" column="40" selection-start-line="49" selection-start-column="40" selection-end-line="49" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Test/iSeg/test_VNET.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="151" selection-end-column="97" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params/WMH/params_VNET.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="9" column="21" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params/WMH/params_VNET_patches.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="34" column="68" selection-start-line="34" selection-start-column="68" selection-end-line="34" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="23" column="12" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataset_example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;MarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownFxPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params/WMH/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#20#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Train/WMH/train_VNET.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="105" column="9" selection-start-line="101" selection-start-column="7" selection-end-line="105" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/dataset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="282" column="49" selection-start-line="282" selection-start-column="49" selection-end-line="282" selection-end-column="63" />
+        <state relative-caret-position="604">
+          <caret line="497" column="67" selection-start-line="497" selection-start-column="67" selection-end-line="497" selection-end-column="67" />
           <folding>
-            <element signature="e#3145#3531#0" expanded="true" />
-            <element signature="e#13953#15658#0" expanded="false" />
-            <element signature="e#14898#15658#0" expanded="false" />
-            <element signature="e#18037#18933#0" expanded="false" />
-            <element signature="e#35570#35585#0" expanded="false" />
-            <element signature="e#36460#39308#0" expanded="true" />
+            <element signature="e#13366#15071#0" expanded="false" />
+            <element signature="e#14311#15071#0" expanded="false" />
+            <element signature="e#17015#17911#0" expanded="false" />
+            <element signature="e#33453#33468#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/params/iSeg/params_VNET_patches.py">
+    <entry file="file://$PROJECT_DIR$/scripts/Test/WMH/test_VNET.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="28" column="45" selection-start-line="28" selection-start-column="45" selection-end-line="28" selection-end-column="45" />
+        <state relative-caret-position="252">
+          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#15#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/Test/iSeg/test.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="18" column="54" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="54" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="529">
+          <caret line="974" column="50" selection-start-line="974" selection-start-column="50" selection-end-line="974" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#50930#63946#0" expanded="false" />
+            <element signature="e#54451#58123#0" expanded="true" />
+            <element signature="e#63981#132674#0" expanded="false" />
+            <element signature="e#132708#289230#0" expanded="false" />
+            <element signature="e#342331#358705#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/params/params_example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="766">
+          <caret line="133" column="8" selection-start-line="133" selection-start-column="8" selection-end-line="133" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

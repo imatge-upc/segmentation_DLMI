@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name='neuroimage-brats',
+    name='segmentation_DLMI',
     version='0.0.0',
     packages=[''],
     url='',

@@ -272,21 +272,7 @@ class Dataset_train(Dataset):
         batch_size = batch_size if batch_size is not None else self.batch_size
         if mode == 'train':
             n_segments_subepoch = int(np.ceil(self.n_segments_per_epoch_train / self.n_subepochs))
-
-            if self.data_augmentation_flag == 'all-planes':
-                for i in range(3):
-                    subject_list_augmentation = copy.deepcopy(subject_list)
-                    for sbj in subject_list_augmentation:
-                        sbj.data_augmentation_flag = i
-
-                    subject_list += subject_list_augmentation
-            elif self.data_augmentation_flag == 'sagittal-plane':
-                subject_list_augmentation = copy.deepcopy(subject_list)
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation_flag = 0
-
-                subject_list += subject_list_augmentation
-
+            subject_list = self.data_augmentation(subject_list)
             n_subjects = len(subject_list) if self.n_subjects_per_subepoch_train is None else self.n_subjects_per_subepoch_train
 
         elif mode == 'validation':
@@ -332,13 +318,7 @@ class Dataset_train(Dataset):
     def data_generator_full(self, subject_list, mode='train', data_format = 'channels_last', normalize_bool = False):
 
         if mode == 'train':
-            if self.data_augmentation_flag:
-                subject_list_augmentation = copy.deepcopy(subject_list)
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation_flag = True
-
-                subject_list += subject_list_augmentation
-
+                subject_list = self.data_augmentation(subject_list)
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
@@ -364,12 +344,7 @@ class Dataset_train(Dataset):
 
     def data_generator_full_mask(self, subject_list, mode='train', normalize_bool = False):
         if mode == 'train':
-            if self.data_augmentation_flag:
-                subject_list_augmentation = copy.deepcopy(subject_list)
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation_flag = True
-
-                subject_list += subject_list_augmentation
+            subject_list = self.data_augmentation(subject_list)
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
@@ -394,12 +369,7 @@ class Dataset_train(Dataset):
 
     def data_generator_iSeg_ACNN(self, subject_list, mode='train', normalize_bool = False):
         if mode == 'train':
-            if self.data_augmentation_flag:
-                subject_list_augmentation = copy.deepcopy(subject_list)
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation_flag = True
-
-                subject_list += subject_list_augmentation
+            subject_list = self.data_augmentation(subject_list)
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
@@ -428,12 +398,7 @@ class Dataset_train(Dataset):
 
     def data_generator_BraTS(self, subject_list, mode='train'):
         if mode == 'train':
-            if self.data_augmentation_flag:
-                subject_list_augmentation = copy.deepcopy(subject_list)
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation_flag = True
-
-                subject_list += subject_list_augmentation
+            subject_list = self.data_augmentation(subject_list)
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
@@ -475,12 +440,7 @@ class Dataset_train(Dataset):
 
     def data_generator_BraTS_survival(self, subject_list, mode='train'):
         if mode == 'train':
-            if self.data_augmentation_flag:
-                subject_list_augmentation = copy.deepcopy(subject_list)
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation_flag = True
-
-                subject_list += subject_list_augmentation
+            subject_list = self.data_augmentation(subject_list)
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
@@ -508,12 +468,7 @@ class Dataset_train(Dataset):
 
     def data_generator_BraTS_seg(self, subject_list, mode='train'):
         if mode == 'train':
-            if self.data_augmentation_flag:
-                subject_list_augmentation = copy.deepcopy(subject_list)
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation_flag = True
-
-                subject_list += subject_list_augmentation
+            subject_list = self.data_augmentation(subject_list)
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
@@ -542,12 +497,7 @@ class Dataset_train(Dataset):
 
     def data_generator_BraTS_old(self, subject_list, mode='train'):
         if mode == 'train':
-            if self.data_augmentation_flag:
-                subject_list_augmentation = copy.deepcopy(subject_list)
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation_flag = True
-
-                subject_list += subject_list_augmentation
+            subject_list = self.data_augmentation(subject_list)
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
@@ -729,6 +679,25 @@ class Dataset_train(Dataset):
     #         return image,labels
     #     else:
     #         return image,labels
+
+    def data_augmentation(self, subject_list):
+
+        if self.data_augmentation_flag == 'all-planes':
+            for i in range(3):
+                subject_list_augmentation = copy.deepcopy(subject_list)
+                for sbj in subject_list_augmentation:
+                    sbj.data_augmentation_flag = i
+
+                subject_list += subject_list_augmentation
+
+        elif self.data_augmentation_flag == 'sagittal-plane' or self.data_augmentation_flag is True:
+            subject_list_augmentation = copy.deepcopy(subject_list)
+            for sbj in subject_list_augmentation:
+                sbj.data_augmentation_flag = 0
+
+            subject_list += subject_list_augmentation
+
+        return subject_list
 
     @staticmethod
     def data_shuffle(image,labels):

@@ -25,7 +25,7 @@ if __name__ == "__main__":
     params_string = arg.p
     params = p.PARAMS_DICT[params_string].get_params()
     filename = params[p.MODEL_NAME]
-    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_shortcutTrue')
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_allplanes_shortcutTrue')
 
     logs_filepath = join(dir_path, 'logs', filename + '.txt')
     weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
