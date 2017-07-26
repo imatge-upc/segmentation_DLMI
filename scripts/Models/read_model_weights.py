@@ -47,13 +47,14 @@ def print_structure(weight_file_path):
                         continue
 
                     for k,v in param.items():
+                        print(param.name)
                         print("      {}: {}".format(k, v.shape))
-                        print(np.mean(np.asarray(v.value).flatten()))
-                        print(np.std(np.asarray(v.value).flatten()))
-                        print(v.value)
-                        plt.hist(np.asarray(v.value).flatten())
-                        plt.show()
-                        plt.close()
+                        # print(np.mean(np.asarray(v.value).flatten()))
+                        # print(np.std(np.asarray(v.value).flatten()))
+                        # print(v.value)
+                        # plt.hist(np.asarray(v.value).flatten())
+                        # plt.show()
+                        # plt.close()
     except:
         print("Error")
     finally:
@@ -63,7 +64,7 @@ def print_structure(weight_file_path):
 if __name__ == "__main__":
     # Parse arguments from command-line
 
-    file = ''
-    w_file_path = join('', file)
+    file = 'v_net_BN_patches_sr.h5'
+    w_file_path = join('/work/acasamitjana/segmentation/WMH/20170724/VNet_patches/LR_0.0005_DA_6_4_32size/model_weights', file)
 
     print_structure(w_file_path)

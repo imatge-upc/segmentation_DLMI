@@ -4,7 +4,7 @@
 .cache
 *.pyc
 params/params*
-src/config.py
+#src/config.py
 !params/params_example.py
 scripts/write_plot_val_subjects.py
 mprofile*
