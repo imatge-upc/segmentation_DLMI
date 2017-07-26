@@ -1,1 +1,1 @@
-neuroimage 2017
+Segmentation algorithms for medical imaging.
