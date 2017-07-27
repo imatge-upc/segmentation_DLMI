@@ -15,7 +15,7 @@ class DB():
     }
     WMH = {
         'db_name': 'WMH',
-        'data_dir': ['/input']
+        'data_dir': '/input'#'/projects/neuro/WMH/Utrecht/11'#
     }
 
     iSEG = {

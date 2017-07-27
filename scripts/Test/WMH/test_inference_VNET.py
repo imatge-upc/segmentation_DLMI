@@ -5,7 +5,7 @@ import numpy as np
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from keras.utils import plot_model
 from os.path import join
-
+import os
 import params.WMH as p
 from src.config import DB
 from database.WMH.data_loader_test import Loader
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     params[p.BATCH_SIZE] = 1
     dir_path = params[p.OUTPUT_PATH]
 
-    weights_filepath = 'WMH.h5'
+    weights_filepath = join(os.getcwd(),'scripts','Test','WMH','WMH.h5')
 
     """ ARCHITECTURE DEFINITION """
 
@@ -113,20 +113,27 @@ if __name__ == "__main__":
     print('Testint started...')
     print('Output_shape: ' + str(output_shape))
 
+
+    print('Loading...')
+    shape = subject.get_subject_shape()
     image = subject.load_channels(normalize=True)
-    mask = subject.load_ROI_mask()
+    image_resize = np.zeros(params[p.INPUT_DIM]+ (params[p.NUM_MODALITIES],))
+    for i in range(params[p.NUM_MODALITIES]):
+        image_resize[:,:,:,i] = preprocessing.resize_image(image[:,:,:,i],params[p.INPUT_DIM])
 
-    mask_complete = np.zeros(mask.shape + (params[p.N_CLASSES],))
-    for i in range(params[p.N_CLASSES]):
-        mask_complete[:,:,:,i] = mask
+    print('mask0')
+    mask = preprocessing.resize_image(subject.load_ROI_mask(),params[p.INPUT_DIM])
 
-    image = image[np.newaxis,:]
-    mask_complete = mask_complete[np.newaxis,:]
+    print('mask')
 
 
+    image_resize = image_resize[np.newaxis,:]
+    mask_complete = mask[np.newaxis,:,:,:,np.newaxis]
 
-    prediction = model.predict_on_batch([image,mask_complete])[0]
-    prediction_resized = np.argmax(prediction,axis=3)
+
+    print('Predicting...')
+    prediction = model.predict_on_batch([image_resize,mask_complete])[0]
+    prediction_resized = preprocessing.resize_image(np.argmax(prediction,axis=3),shape)
     img = nib.Nifti1Image(prediction_resized, subject.get_affine())
     nib.save(img, join(dir_path, 'result.nii.gz'))
 
