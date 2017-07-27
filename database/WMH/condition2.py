@@ -50,11 +50,11 @@ for INPUT_DIR in INPUT_DIR_LIST:
     subjects = os.listdir(INPUT_DIR)
     for subject in subjects:
         print(subject)
-        if subject not in ['109']:
-            continue
+        # if subject not in ['109']:
+        #     continue
         subject_path = join(INPUT_DIR,subject)
         modalities_path = join(subject_path,'pre')
-        proxy = nib.load(join(modalities_path,'T1.nii.gz'))
+        proxy = nib.load(join(modalities_path,'FLAIR.nii.gz'))
         image_array = np.asarray(proxy.dataobj)
         image_array = normalize_image(image_array)
 

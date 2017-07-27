@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     filename = params[p.MODEL_NAME] #+ '_continue'
     dir_path = join(params[p.OUTPUT_PATH],
-                    'LR_' + str(params[p.LR]) + '_DA_6_4_no_concat' )
+                    'LR_' + str(params[p.LR]) + '_DA_6_4' )
 
     logs_filepath = join(dir_path, 'results', filename + '.txt')
     weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
@@ -116,7 +116,7 @@ if __name__ == "__main__":
         num_modalities=num_modalities,
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
-        model_name=params[p.MODEL_NAME],
+        model_name=params[p.MODEL_NAME]+'_old',
         shortcut_input = params[p.SHORTCUT_INPUT],
         mode='test'
     )
