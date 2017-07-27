@@ -1,5 +1,5 @@
-from params import *
-from params.iSeg import params_VNET, params_SCAE, params_VNET_patches, params_VNET_ACNN
+from params.iSeg import params_VNET, params_SCAE, params_VNET_ACNN
+from scripts.Test.WMH import params_VNET_patches
 
 PARAMS_DICT = {
     'params_VNET': params_VNET,
