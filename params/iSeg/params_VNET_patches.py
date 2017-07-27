@@ -17,21 +17,21 @@ def get_params():
 
         p.SAMPLING_SCHEME: 'uniform',
         p.SAMPLING_WEIGHTS: [0.5,0.5],
-        p.N_SEGMENTS_TRAIN: 240,
+        p.N_SEGMENTS_TRAIN: 120,#240,
         p.N_SUBJECTS_TRAIN: None,
 
-        p.N_SEGMENTS_VALIDATION: 60,
+        p.N_SEGMENTS_VALIDATION: 40,#60,
         p.N_SUBJECTS_VALIDATION: None,
 
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
 
-        p.DATA_AUGMENTATION_FLAG: 'all-planes',
+        p.DATA_AUGMENTATION_FLAG: 'saggital-plane',
         p.NUM_MODALITIES: 2,
 
         p.SHORTCUT_INPUT: True,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170726/VNet_patches',#'VNet'
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170727/VNet_patches',#'VNet'
         p.MODEL_NAME: 'v_net_BN_patches_sr',
         p.LR: 0.0005
     }

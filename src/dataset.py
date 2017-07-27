@@ -157,7 +157,8 @@ class Dataset_train(Dataset):
                             subject_list,
                             n_subjects,
                             n_segments,
-                            samplingInstance
+                            samplingInstance,
+                            normalize_bool = True
                             ):
 
         subject_list = self._get_subjects_subepoch(subject_list, n_subjects)
@@ -177,7 +178,7 @@ class Dataset_train(Dataset):
 
         cur_segment = 0
         for index, subject in enumerate(subject_list):
-            image_channels = subject.load_channels() #4D array [dim0,dim1,dim2,channels]
+            image_channels = subject.load_channels(normalize=normalize_bool) #4D array [dim0,dim1,dim2,channels]
             image_labels = subject.load_labels() #3D array [dim0,dim1,dim2]
             roi_mask = subject.load_ROI_mask()
 
@@ -267,7 +268,7 @@ class Dataset_train(Dataset):
         return (coord_central_voxels, coord_segments)
 
 
-    def data_generator(self, subject_list, batch_size = None, mode = 'train', data_format = 'channels_last'):
+    def data_generator(self, subject_list, batch_size = None, mode = 'train', data_format = 'channels_last', normalize_bool = True):
 
         batch_size = batch_size if batch_size is not None else self.batch_size
         if mode == 'train':
@@ -291,7 +292,8 @@ class Dataset_train(Dataset):
                 image_segments, label_segments = self.load_image_segments(subject_list,
                                                                           n_subjects,
                                                                           n_segments_subepoch,
-                                                                          self.sampling_scheme
+                                                                          self.sampling_scheme,
+                                                                          normalize_bool = normalize_bool
                                                                           )
                 s = np.arange(image_segments.shape[0])
                 np.random.seed(42)
@@ -342,7 +344,7 @@ class Dataset_train(Dataset):
                     it_subject_batch +=1
 
 
-    def data_generator_full_mask(self, subject_list, mode='train', normalize_bool = False):
+    def data_generator_full_mask(self, subject_list, mode='train', normalize_bool = True):
         if mode == 'train':
             subject_list = self.data_augmentation(subject_list)
 
@@ -367,7 +369,7 @@ class Dataset_train(Dataset):
                     it_subject_batch += 1
 
 
-    def data_generator_iSeg_ACNN(self, subject_list, mode='train', normalize_bool = False):
+    def data_generator_iSeg_ACNN(self, subject_list, mode='train', normalize_bool = True):
         if mode == 'train':
             subject_list = self.data_augmentation(subject_list)
 
