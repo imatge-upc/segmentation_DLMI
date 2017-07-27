@@ -537,21 +537,24 @@ class Dataset_train(Dataset):
                     it_subject_batch += 1
 
 
-    def data_generator_inference(self, subject_list):
+    def data_generator_inference(self, subject_list, normalize_bool = False):
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
+        mask = np.zeros((self.batch_size,) + self.input_shape + (1,))
+
         while True:
 
             for subject in subject_list:
-                image = subject.load_channels()
+                image = subject.load_channels(normalize=normalize_bool)
                 for mod in range(image.shape[-1]):
                     image_batch[it_subject_batch,:, :, :, mod] = resize_image(image[:, :, :, mod], self.input_shape, pad_value=image[0, 0, 0, mod])
 
-
+                mask[it_subject_batch, :, :, :, 0] = resize_image(subject.load_ROI_mask(), self.input_shape,
+                                                                  pad_value=0)
                 if it_subject_batch+1==self.batch_size:
                     it_subject_batch = 0
-                    yield image_batch
+                    yield [image_batch, mask]
                 else:
                     it_subject_batch+=1
 

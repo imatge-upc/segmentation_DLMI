@@ -30,7 +30,7 @@ class Subject:
         return self._id
 
     def get_affine(self):
-        return nib.load(self.GT_FILE).affine
+        return nib.load(self.T1_FILE).affine
 
     def load_channels(self, normalize=False):
         modalities = []

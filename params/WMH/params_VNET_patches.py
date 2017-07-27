@@ -7,9 +7,9 @@ from src.config import DB
 def get_params():
     params = {
         p.DATABASE: DB.WMH,
-        p.INPUT_DIM: [64,64,16],#
+        p.INPUT_DIM: [64,64,32],#
 
-        p.N_CLASSES: 3,
+        p.N_CLASSES: 2,
         p.N_EPOCHS: 250,
         p.N_SUBEPOCHS: 1,
         p.BATCH_SIZE: 10,
@@ -26,13 +26,13 @@ def get_params():
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
 
-        p.DATA_AUGMENTATION_FLAG: True,
+        p.DATA_AUGMENTATION_FLAG: 'saggital-plane',
         p.NUM_MODALITIES: 2,
 
 
-        p.SHORTCUT_INPUT: True,
+        p.SHORTCUT_INPUT: False,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/WMH/20170719/VNet_patches',
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/WMH/20170727/VNet_patches',
         p.MODEL_NAME: 'v_net_BN_patches_sr',
         p.LR: 0.0005
     }

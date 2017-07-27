@@ -30,7 +30,7 @@ def get_params():
         p.NUM_MODALITIES: 2,
 
 
-        p.SHORTCUT_INPUT: True,
+        p.SHORTCUT_INPUT: False,
 
         p.OUTPUT_PATH: '/work/acasamitjana/segmentation/WMH/20170722/VNet_patches',
         p.MODEL_NAME: 'v_net_BN_patches_sr',

@@ -19,7 +19,7 @@ class Subject:
         self.FLAIR_FILE = join(self.subject_filepath,'pre','FLAIR.nii.gz')
         self.T1_FILE = join(self.subject_filepath,'pre','T1.nii.gz')
         self.GT_FILE = join(self.subject_filepath,'wmh.nii.gz')
-        self.ROIMASK_FILE = join(self.subject_filepath,'pre','mask_morph.nii.gz')
+        self.ROIMASK_FILE = join(self.subject_filepath,'pre','mask_closing.nii.gz')
 
         self.data_augmentation = False
 

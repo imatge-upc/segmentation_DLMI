@@ -4,8 +4,8 @@ import sys
 import numpy as np
 from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from keras.utils import plot_model
-from os.path import join
-
+from os.path import join, exists
+import os
 import params.iSeg as p
 from src.config import DB
 from database.iSeg.data_loader import Loader
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_shortcutTrue')
 
     logs_filepath = join(dir_path, 'logs', filename + '.txt')
-    weights_filepath = join(dir_path, 'model_weights', filename + '_copy.h5')
+    weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
 
 
     """ REDIRECT STDOUT TO FILE """
@@ -136,13 +136,14 @@ if __name__ == "__main__":
     print('Steps per epoch: ' + str(params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE]))
     print('Output_shape: ' + str(output_shape))
 
-    generator = dataset.data_generator_inference(subject_list)
+    generator = dataset.data_generator_inference(subject_list, normalize_bool=False)
 
     n_sbj = 0
 
 
     for inputs in generator:
         subject = subject_list[n_sbj]
+        print(subject.id)
 
         predictions = model.predict_on_batch(inputs)[0]
 
@@ -155,8 +156,14 @@ if __name__ == "__main__":
         predictions_resize_argmax = np.argmax(predictions_resized,axis=3)
         predictions_argmax = np.argmax(predictions, axis=3)
 
+        if not exists(join(dir_path, 'results_test')):
+            os.makedirs(join(dir_path, 'results_test'))
+
         img = nib.Nifti1Image(tf_labels(predictions_resize_argmax), subject.get_affine())
-        nib.save(img, join(dir_path, 'results', 'subject-' + subject.id + '-label.nii.gz'))
+        nib.save(img, join(dir_path, 'results_test', 'subject-' + subject.id + '-label.nii.gz'))
+        n_sbj += 1
+        if n_sbj >= len(subject_list):
+            break
 
 
 
