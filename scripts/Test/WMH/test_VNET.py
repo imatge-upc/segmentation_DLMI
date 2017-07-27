@@ -59,22 +59,9 @@ if __name__ == "__main__":
     params = p.PARAMS_DICT[params_string].get_params()
     params[p.INPUT_DIM] = (192, 192, 96)
     params[p.BATCH_SIZE] = 1
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR]) + '_full_DA')
 
-
-    filename = params[p.MODEL_NAME] + '_continue'
-    dir_path = join(params[p.OUTPUT_PATH],
-                    'LR_' + str(params[p.LR]) + '_DA_6_4' )
-
-    logs_filepath = join(dir_path, 'results', filename + '.txt')
-    weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
-
-
-    """ REDIRECT STDOUT TO FILE """
-    print('Output redirected to file... ')
-    print('Suggestion: Use tail command to see the output')
-    io.create_results_dir(dir_path=dir_path)
-    io.redirect_stdout_to_file(filepath=logs_filepath)
-
+    weights_filepath = 'WMH.h5'
 
 
     print("Architecture defined ...")
