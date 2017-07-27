@@ -177,9 +177,10 @@ class Dataset_train(Dataset):
 
         cur_segment = 0
         for index, subject in enumerate(subject_list):
-            image_channels = subject.load_channels() #4D array [dim0,dim1,dim2,channels]
+            image_channels = subject.load_channels(normalize = True) #4D array [dim0,dim1,dim2,channels]
             image_labels = subject.load_labels() #3D array [dim0,dim1,dim2]
             roi_mask = subject.load_ROI_mask()
+
 
             # image_channels, image_labels, roi_mask = samplingInstance.get_proper_images(self.input_shape,
             #                                                                             image_channels,

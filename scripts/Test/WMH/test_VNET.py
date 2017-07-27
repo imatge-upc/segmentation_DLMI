@@ -133,8 +133,8 @@ if __name__ == "__main__":
     print('Output_shape: ' + str(output_shape))
 
     subject_list_train = subject_list_train
-    generator_train = dataset.data_generator_full_mask(subject_list_train, mode='validation')
-    generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation')
+    generator_train = dataset.data_generator_full_mask(subject_list_train, mode='validation', normalize_bool=True)
+    generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=True)
 
     n_sbj = 0
     # metrics = model.evaluate_generator(generator_val, steps=len(subject_list_validation))
