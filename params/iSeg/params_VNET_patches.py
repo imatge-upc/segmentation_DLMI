@@ -26,12 +26,12 @@ def get_params():
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
 
-        p.DATA_AUGMENTATION_FLAG: 'saggital-plane',
+        p.DATA_AUGMENTATION_FLAG: 'all-planes',
         p.NUM_MODALITIES: 2,
 
         p.SHORTCUT_INPUT: True,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170726/VNet_patches',#'VNet'
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170727/VNet_patches',#'VNet'
         p.MODEL_NAME: 'v_net_BN_patches_sr',
         p.LR: 0.0005
     }
