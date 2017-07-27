@@ -7,8 +7,8 @@ import numpy as np
 from scipy.ndimage.filters import laplace
 from scipy.ndimage.morphology import binary_closing
 
-INPUT_DIR = '/projects/neuro/iSeg-2017/Training'
-OUTPUT_DIR = '/projects/neuro/WMH/Utrecht'
+INPUT_DIR = '/projects/neuro/iSeg-2017/Testing'
+OUTPUT_DIR = '/projects/neuro/iSeg-2017/Testing'
 
 
 images = glob(join(INPUT_DIR,'*img'))

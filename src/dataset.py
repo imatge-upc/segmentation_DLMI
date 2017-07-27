@@ -539,7 +539,6 @@ class Dataset_train(Dataset):
 
         it_subject_batch = 0
         image_batch = np.zeros((self.batch_size,) + self.input_shape + (self.num_modalities,))
-        labels_batch = np.zeros((self.batch_size,) + self.input_shape + (1,))
         while True:
 
             for subject in subject_list:
@@ -547,11 +546,12 @@ class Dataset_train(Dataset):
                 for mod in range(image.shape[-1]):
                     image_batch[it_subject_batch,:, :, :, mod] = resize_image(image[:, :, :, mod], self.input_shape, pad_value=image[0, 0, 0, mod])
 
-                labels_batch[it_subject_batch,:] = resize_image(subject.load_labels(), self.input_shape, pad_value=0)
 
                 if it_subject_batch+1==self.batch_size:
                     it_subject_batch = 0
-                    yield (image, one_hot_representation(labels_batch,self.n_classes), subject.id)
+                    yield image_batch
+                else:
+                    it_subject_batch+=1
 
     def data_generator_one(self, subject):
         image_batch = np.zeros((1,) + self.input_shape + (self.num_modalities,))

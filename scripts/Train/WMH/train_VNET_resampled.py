@@ -9,7 +9,7 @@ from src.dataset import Dataset_train
 from src.utils import io
 from src.models import SegmentationModels, WMH_models
 from src.config import DB
-from src.callbacks import LearningRateExponentialDecay
+from src.callbacks import LearningRateExponentialDecay, LearningRateDecay
 from keras.utils import plot_model
 import numpy as np
 
@@ -26,8 +26,8 @@ if __name__ == "__main__":
     print('Getting parameters to train the model...')
     params_string = arg.p
     params = p.PARAMS_DICT[params_string].get_params()
-    filename = params[p.MODEL_NAME]
-    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_DA_dice')
+    filename = params[p.MODEL_NAME] + '_continue'
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_DA_6_4')
 
     logs_filepath = join(dir_path, 'logs', filename + '.txt')
     load_weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
@@ -41,20 +41,21 @@ if __name__ == "__main__":
 
     print('PARAMETERS')
     print(params)
+    print('ADDING CLASS WEIGHTS')
     print('Learning rate exponential decay')
 
     """ ARCHITECTURE DEFINITION """
-    num_modalities = 2
     model, output_shape = WMH_models.get_model(
-        num_modalities=num_modalities,
+        num_modalities=params[p.NUM_MODALITIES],
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
         model_name=params[p.MODEL_NAME],
+        shortcut_input = params[p.SHORTCUT_INPUT],
         l1=0.0001,
-        l2=0.001
+        l2=0.0001
     )
-
-    model = WMH_models.compile_masked(model, lr=params[p.LR])
+    # model.load_weights(join(dir_path, 'model_weights', params[p.MODEL_NAME] + '.h5'))
+    model = WMH_models.compile(model, lr=params[p.LR],num_classes=params[p.N_CLASSES])#
 
 
     model.summary()
@@ -87,7 +88,7 @@ if __name__ == "__main__":
 
                             train_size=params[p.TRAIN_SIZE],
                             dev_size=params[p.DEV_SIZE],
-                            num_modalities=num_modalities,
+                            num_modalities=params[p.NUM_MODALITIES],
 
                             data_augmentation_flag= params[p.DATA_AUGMENTATION_FLAG],
                             class_weights=params[p.CLASS_WEIGHTS]
@@ -100,8 +101,8 @@ if __name__ == "__main__":
     if params[p.SAMPLING_SCHEME] == 'whole':
         steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(2*len(subject_list_train))
         validation_steps = int(len(subject_list_validation))
-        generator_train = dataset.data_generator_full_masked(subject_list_train, mode='train', normalize_bool=True)
-        generator_val = dataset.data_generator_full_masked(subject_list_validation, mode='validation', normalize_bool=True)
+        generator_train = dataset.data_generator_full_mask(subject_list_train, mode='train', normalize_bool=True)
+        generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=True)
     else:
         steps_per_epoch = int(np.ceil(params[p.N_SEGMENTS_TRAIN] / params[p.BATCH_SIZE]))
         validation_steps = int(np.ceil(params[p.N_SEGMENTS_VALIDATION] / params[p.BATCH_SIZE]))
@@ -112,16 +113,16 @@ if __name__ == "__main__":
 
     cb_saveWeights = ModelCheckpoint(filepath=weights_filepath)
     cb_earlyStopping = EarlyStopping(patience=5)
-    cb_learningRateScheduler = LearningRateExponentialDecay(epoch_n=0,num_epoch=params[p.N_EPOCHS])
+    cb_learningRateScheduler = LearningRateDecay(epoch_n=0,decay=0.001)
     callbacks_list = [cb_saveWeights,cb_learningRateScheduler]
 
 
     """ MODEL TRAINING """
-    print()
+    print('')
     print('Training started...')
     print('Steps per epoch: ' + str(steps_per_epoch))
     print('Output_shape: ' + str(output_shape))
-    print('Class weight' + str(dataset.class_weights(subject_list)))
+    print('Class weight' + str(class_weights))
 
     model.fit_generator(generator=generator_train,
                         steps_per_epoch=steps_per_epoch,
@@ -129,6 +130,6 @@ if __name__ == "__main__":
                         validation_data=generator_val,
                         validation_steps=validation_steps,
                         callbacks=callbacks_list,
-                        )# class_weight=class_weights)
+                        class_weight=class_weights)
 
     print('Finished training')

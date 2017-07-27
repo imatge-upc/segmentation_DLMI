@@ -3,6 +3,8 @@ import numpy as np
 import os
 from os.path import join
 from src.utils.preprocessing import flip_plane, normalize_image
+from scipy.ndimage.morphology import binary_closing
+
 
 to_int = lambda b: 1 if b else 0
 
@@ -16,10 +18,10 @@ class Subject:
 
         self.subject_filepath = join(self.data_path, self.id)
 
-        self.FLAIR_FILE = join(self.subject_filepath,'pre','FLAIR_resampled.nii.gz')
-        self.T1_FILE = join(self.subject_filepath,'pre','T1_resampled.nii.gz')
-        self.GT_FILE = join(self.subject_filepath,'wmh_resample.nii.gz')
-        self.ROIMASK_FILE = join(self.subject_filepath,'pre','mask_closing_resample.nii.gz')
+        self.FLAIR_FILE = join(self.subject_filepath,'pre','FLAIR.nii.gz')
+        self.T1_FILE = join(self.subject_filepath,'pre','T1.nii.gz')
+        self.GT_FILE = join(self.subject_filepath,'wmh.nii.gz')
+        self.ROIMASK_FILE = join(self.subject_filepath,'pre','mask_closing.nii.gz')
 
         self.data_augmentation = False
 
@@ -55,17 +57,26 @@ class Subject:
             labels = flip_plane(np.asarray(labels_proxy.dataobj))
         else:
             labels = np.asarray(labels_proxy.dataobj)
-        # labels[np.where(labels == 2)] = 0 # To get rid of other pathologies
+        labels[np.where(labels == 2)] = 0 # To get rid of other pathologies
         return labels
 
     def load_ROI_mask(self):
 
-        roimask_proxy = nib.load(self.ROIMASK_FILE)
-        if self.data_augmentation:
-            mask = flip_plane(np.asarray(roimask_proxy.dataobj))
-        else:
-            mask = np.asarray(roimask_proxy.dataobj)
-        return mask.astype('bool')
+        proxy = nib.load(self.FLAIR_FILE)
+        image_array = np.asarray(proxy.dataobj)
+
+        mask = np.ones_like(image_array)
+        mask[np.where(image_array < 90)] = 0
+
+        # img = nib.Nifti1Image(mask, proxy.affine)
+        # nib.save(img, join(modalities_path,'mask.nii.gz'))
+
+        struct_element_size = (20, 20, 20)
+        mask_augmented = np.pad(mask, [(21, 21), (21, 21), (21, 21)], 'constant', constant_values=(0, 0))
+        mask_augmented = binary_closing(mask_augmented, structure=np.ones(struct_element_size, dtype=bool)).astype(
+            np.int)
+
+        return mask_augmented[21:-21, 21:-21, 21:-21].astype('bool')
 
 
     def get_subject_shape(self):

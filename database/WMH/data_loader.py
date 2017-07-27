@@ -55,7 +55,7 @@ class Subject:
             labels = flip_plane(np.asarray(labels_proxy.dataobj))
         else:
             labels = np.asarray(labels_proxy.dataobj)
-        # labels[np.where(labels == 2)] = 0 # To get rid of other pathologies
+        labels[np.where(labels == 2)] = 0 # To get rid of other pathologies
         return labels
 
     def load_ROI_mask(self):

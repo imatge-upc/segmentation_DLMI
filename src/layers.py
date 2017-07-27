@@ -13,6 +13,15 @@ def repeat_channels_shape(rep):
         return (input_shape[0], input_shape[1], input_shape[2], input_shape[3], input_shape[4]*rep)
     return funct
 
+def repeat_slices(rep):
+    def funct(x):
+        return K.repeat_elements(x, rep, axis=3)
+    return funct
+
+def repeat_slices_shape(rep):
+    def funct(input_shape):
+        return (input_shape[0], input_shape[1], input_shape[2], input_shape[3]*rep, input_shape[4])
+    return funct
 
 def complementary_mask(x):
     return K.ones_like(x) - x

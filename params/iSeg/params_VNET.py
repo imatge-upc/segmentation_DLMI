@@ -32,7 +32,7 @@ def get_params():
         p.SHORTCUT_INPUT: True,
 
         p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170725/VNet',#'VNet'
-        p.MODEL_NAME: 'v_net_BN_patches_sr2',#'v_net_BN'
+        p.MODEL_NAME: 'v_net_BN_patches_sr',#'v_net_BN'
         p.LR: 0.0005
     }
 

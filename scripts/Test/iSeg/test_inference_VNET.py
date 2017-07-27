@@ -10,7 +10,7 @@ import params.iSeg as p
 from src.config import DB
 from database.iSeg.data_loader import Loader
 from src.dataset import Dataset_train
-from src.models import SegmentationModels, iSeg_models
+from src.models import iSeg_models
 from src.utils import io, preprocessing
 import nibabel as nib
 
@@ -69,18 +69,18 @@ if __name__ == "__main__":
     params[p.BATCH_SIZE] = 1
 
 
-    filename = params[p.MODEL_NAME]+'_copy'
-    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_allplanes_shortcutTrue')
+    filename = params[p.MODEL_NAME]
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_shortcutTrue')
 
-    logs_filepath = join(dir_path, 'results', filename + '.txt')
-    weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
+    logs_filepath = join(dir_path, 'logs', filename + '.txt')
+    weights_filepath = join(dir_path, 'model_weights', filename + '_copy.h5')
 
 
     """ REDIRECT STDOUT TO FILE """
     print('Output redirected to file... ')
     print('Suggestion: Use tail command to see the output')
     io.create_results_dir(dir_path=dir_path)
-    io.redirect_stdout_to_file(filepath=logs_filepath)
+    # io.redirect_stdout_to_file(filepath=logs_filepath)
 
 
 
@@ -92,7 +92,7 @@ if __name__ == "__main__":
         segment_dimensions=params[p.INPUT_DIM],
         num_classes=params[p.N_CLASSES],
         model_name=params[p.MODEL_NAME],
-        shortcut_input=params[p.SHORTCUT_INPUT],
+        shortcut_input=[p.SHORTCUT_INPUT],
         mode='test'
     )
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     print("Architecture defined ...")
     """ DATA LOADING """
-    iseg_db = Loader.create(config_dict=DB.iSEG)
+    iseg_db = Loader.create(config_dict=DB.iSEG_test)
     subject_list = iseg_db.load_subjects()
 
     dataset = Dataset_train(input_shape=params[p.INPUT_DIM],
@@ -129,31 +129,22 @@ if __name__ == "__main__":
                             class_weights=params[p.CLASS_WEIGHTS]
                             )
 
-    print('TrainVal Dataset initialized')
-    subject_list_train, subject_list_validation = dataset.split_train_val(subject_list)
 
-
-    """ MODEL TESTING """
+    """ MODEL TRAINING """
     print('')
+    print('Training started...')
+    print('Steps per epoch: ' + str(params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE]))
     print('Output_shape: ' + str(output_shape))
 
-    generator_train = dataset.data_generator_full_mask(subject_list_train, mode='validation')
-    generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation')
+    generator = dataset.data_generator_inference(subject_list)
 
     n_sbj = 0
-    # metrics = model.evaluate_generator(generator_train, steps=len(subject_list_train))
-    # print(metrics)
-    dice_1 = np.zeros(len(subject_list_validation))
-    dice_2 = np.zeros(len(subject_list_validation))
-    dice_3 = np.zeros(len(subject_list_validation))
 
-    for inputs, labels in generator_val:
-        subject = subject_list_validation[n_sbj]
+
+    for inputs in generator:
+        subject = subject_list[n_sbj]
 
         predictions = model.predict_on_batch(inputs)[0]
-        predictions = np.floor(predictions/np.max(predictions,axis=3,keepdims=True)).astype('int')
-
-        labels = labels[0]
 
         shape = subject.get_subject_shape()
         predictions_resized = np.zeros(shape+(params[p.N_CLASSES],))
@@ -165,46 +156,8 @@ if __name__ == "__main__":
         predictions_argmax = np.argmax(predictions, axis=3)
 
         img = nib.Nifti1Image(tf_labels(predictions_resize_argmax), subject.get_affine())
-        nib.save(img, join(dir_path, 'results', subject.id + '_predictions.nii.gz'))
-
-
-        img = nib.Nifti1Image(preprocessing.resize_image(inputs[1][0,:,:,:,0],shape), subject.get_affine())
-        nib.save(img, join(dir_path, 'results', subject.id + '_mask.nii.gz'))
+        nib.save(img, join(dir_path, 'results', 'subject-' + subject.id + '-label.nii.gz'))
 
 
 
-
-        # img = nib.Nifti1Image(np.argmax(labels[0, :, :, :, :], axis=3), subject.get_affine())
-        # nib.save(img, join(dir_path, 'results', subject.id + '_labels.nii.gz'))
-        #
-
-        dice_1[n_sbj] = dice(predictions[:, :, :, 1].flatten(), labels[:, :, :, 1].flatten())
-        dice_2[n_sbj] = dice(predictions[:, :, :, 2].flatten(), labels[:, :, :, 2].flatten())
-        dice_3[n_sbj] = dice(predictions[:, :, :, 3].flatten(), labels[:, :, :, 3].flatten())
-
-        print("Dice 1: " + str(dice_1[n_sbj]))
-        print("Dice 2: " + str(dice_2[n_sbj]))
-        print("Dice 3: " + str(dice_3[n_sbj]))
-
-
-        # labels = preprocessing.one_hot_representation(subject.load_labels(),params[p.N_CLASSES])
-        # dice_1[n_sbj] = dice(predictions_resized[:, :, :, 1].flatten(), labels[:, :, :, 1].flatten())
-        # dice_2[n_sbj] = dice(predictions_resized[:, :, :, 2].flatten(), labels[:, :, :, 2].flatten())
-        # dice_3[n_sbj] = dice(predictions_resized[:, :, :, 3].flatten(), labels[:, :, :, 3].flatten())
-        #
-        # print("Dice 1: " + str(dice_1[n_sbj]))
-        # print("Dice 2: " + str(dice_2[n_sbj]))
-        # print("Dice 3: " + str(dice_3[n_sbj]))
-
-        print('Subject ' + str(subject.id) + ' has finished')
-        n_sbj += 1
-        if n_sbj >= len(subject_list_validation):
-            break
-
-
-    print('Average Metrics: ')
-    print('Dice_1: ' + str(np.mean(dice_1)))
-    print('Dice_2: ' + str(np.mean(dice_2)))
-    print('Dice_3: ' + str(np.mean(dice_3)))
-
-    print('Finished training')
+    print('Finished testing')

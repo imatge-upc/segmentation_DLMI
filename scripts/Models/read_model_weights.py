@@ -65,6 +65,6 @@ if __name__ == "__main__":
     # Parse arguments from command-line
 
     file = 'v_net_BN_patches_sr.h5'
-    w_file_path = join('/work/acasamitjana/segmentation/WMH/20170724/VNet_patches/LR_0.0005_DA_6_4_32size/model_weights', file)
+    w_file_path = join('/work/acasamitjana/segmentation/WMH/20170725/VNet_patches/LR_0.0005_DA_6_4_concatFLAIR/model_weights', file)
 
     print_structure(w_file_path)

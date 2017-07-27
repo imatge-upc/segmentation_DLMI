@@ -30,10 +30,10 @@ def get_params():
         p.NUM_MODALITIES: 2,
 
 
-        p.SHORTCUT_INPUT: False,
+        p.SHORTCUT_INPUT: True,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/WMH/20170725/VNet_patches',
-        p.MODEL_NAME: 'v_net_BN_patches_sr',
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/WMH/20170726/VNet_patches_resampled',
+        p.MODEL_NAME: 'v_net_BN_patches_sr_resampled',
         p.LR: 0.0005
     }
 
