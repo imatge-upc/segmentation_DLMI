@@ -25,7 +25,7 @@ if __name__ == "__main__":
     params_string = arg.p
     params = p.PARAMS_DICT[params_string].get_params()
     filename = params[p.MODEL_NAME]
-    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_allplanes_shortcutTrue')
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_shortcutTrue_allDB')
 
     logs_filepath = join(dir_path, 'logs', filename + '.txt')
     weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
@@ -40,6 +40,8 @@ if __name__ == "__main__":
     print('PARAMETERS')
     print(params)
     print('Learning rate exponential decay')
+    print('One subepoch')
+    print('double l1, l2')
 
 
     """ ARCHITECTURE DEFINITION """
@@ -96,24 +98,26 @@ if __name__ == "__main__":
     class_weight = dataset.class_weights(subject_list)
     class_weight[0] = 0.01
     print('TrainVal Dataset initialized')
-    subject_list_train, subject_list_validation = dataset.split_train_val(subject_list)
+    # subject_list_train, subject_list_validation = dataset.split_train_val(subject_list)
 
     print("Brats Dataset initialized")
 
     if params[p.SAMPLING_SCHEME] == 'whole':
-        steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(2*len(subject_list_train))
-        validation_steps = int(len(subject_list_validation))
-        generator_train = dataset.data_generator_full_mask(subject_list_train, mode='train', normalize_bool=True)
-        generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=True)
+        pass
+        # steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(2*len(subject_list_train))
+        # validation_steps = int(len(subject_list_validation))
+        # generator_train = dataset.data_generator_full_mask(subject_list_train, mode='train', normalize_bool=False)
+        # generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=False)
     else:
         steps_per_epoch = int(np.ceil(params[p.N_SEGMENTS_TRAIN] / params[p.BATCH_SIZE]))
         validation_steps = int(np.ceil(params[p.N_SEGMENTS_VALIDATION] / params[p.BATCH_SIZE]))
-        generator_train = dataset.data_generator(subject_list_train, mode='train', normalize_bool = True)
-        generator_val = dataset.data_generator(subject_list_validation, mode='validation',normalize_bool = True)
+        # generator_train = dataset.data_generator(subject_list_train, mode='train', normalize_bool = False)
+        # generator_val = dataset.data_generator(subject_list_validation, mode='validation',normalize_bool = False)
+        generator_train = dataset.data_generator(subject_list, mode='train', normalize_bool = False)
 
 
 
-    cb_saveWeights = ModelCheckpoint(filepath=weights_filepath)
+    cb_saveWeights = ModelCheckpoint(filepath=weights_filepath, save_best_only=True)
     cb_earlyStopping = EarlyStopping(patience=5)
     cb_learningRateScheduler = LearningRateExponentialDecay(epoch_n=0,num_epoch=params[p.N_EPOCHS])
     callbacks_list = [cb_saveWeights,cb_learningRateScheduler]
@@ -130,8 +134,8 @@ if __name__ == "__main__":
     model.fit_generator(generator=generator_train,
                         steps_per_epoch=steps_per_epoch,
                         epochs=params[p.N_EPOCHS],
-                        validation_data=generator_val,
-                        validation_steps=validation_steps,
+                        # validation_data=generator_val,
+                        # validation_steps=validation_steps,
                         callbacks=callbacks_list,
                         class_weight=class_weight)
 

@@ -19,7 +19,7 @@ if [ "${PARAMS}" = "params_VNET"  ]
     srun  -p fast --gres=gpu:1 --pty  --mem=8G  python test_VNET.py -p"${PARAMS}"
 elif [ "${PARAMS}" = "params_VNET_patches"  ]
     then
-    srun  -p fast --gres=gpu:1  --pty  --mem=8G  python test_VNET.py -p"${PARAMS}"
+    srun  --gres=gpu:1  --pty  --mem=8G  python test_VNET.py -p"${PARAMS}"
 else
     echo 'ERROR in "train.sh"'
     echo 'Please, specify a valid parameter filename'

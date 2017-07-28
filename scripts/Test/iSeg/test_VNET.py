@@ -69,8 +69,8 @@ if __name__ == "__main__":
     params[p.BATCH_SIZE] = 1
 
 
-    filename = params[p.MODEL_NAME]+'_copy'
-    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_allplanes_shortcutTrue')
+    filename = params[p.MODEL_NAME]
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full_DA_shortcutTrue')
 
     logs_filepath = join(dir_path, 'results', filename + '.txt')
     weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
@@ -137,8 +137,8 @@ if __name__ == "__main__":
     print('')
     print('Output_shape: ' + str(output_shape))
 
-    generator_train = dataset.data_generator_full_mask(subject_list_train, mode='validation')
-    generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation')
+    generator_train = dataset.data_generator_full_mask(subject_list_train, mode='validation', normalize_bool=False)
+    generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=False)
 
     n_sbj = 0
     # metrics = model.evaluate_generator(generator_train, steps=len(subject_list_train))

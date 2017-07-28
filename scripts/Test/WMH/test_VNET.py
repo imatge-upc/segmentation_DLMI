@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     filename = params[p.MODEL_NAME] #+ '_continue'
     dir_path = join(params[p.OUTPUT_PATH],
-                    'LR_' + str(params[p.LR]) + '_DA_6_4' )
+                    'LR_' + str(params[p.LR]) + '_DA_6_4_no_concat' )
 
     logs_filepath = join(dir_path, 'results', filename + '.txt')
     weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
@@ -116,7 +116,7 @@ if __name__ == "__main__":
         num_modalities=num_modalities,
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
-        model_name=params[p.MODEL_NAME]+'_old',
+        model_name=params[p.MODEL_NAME],
         shortcut_input = params[p.SHORTCUT_INPUT],
         mode='test'
     )
@@ -133,8 +133,8 @@ if __name__ == "__main__":
     print('Output_shape: ' + str(output_shape))
 
     subject_list_train = subject_list_train
-    generator_train = dataset.data_generator_full_mask(subject_list_train, mode='validation')
-    generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation')
+    generator_train = dataset.data_generator_full_mask(subject_list_train, mode='validation', normalize_bool=True)
+    generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=True)
 
     n_sbj = 0
     # metrics = model.evaluate_generator(generator_val, steps=len(subject_list_validation))
