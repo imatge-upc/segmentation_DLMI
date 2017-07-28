@@ -53,7 +53,7 @@ class Subject:
 
 
         mask = np.ones_like(image_array)
-        mask[np.where(image_array < -0.3)] = 0
+        mask[np.where(image_array < -0.4)] = 0
 
         struct_element_size = (20, 20, 20)
         mask_augmented = np.pad(mask, [(21, 21), (21, 21), (21, 21)], 'constant', constant_values=(0, 0))

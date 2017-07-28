@@ -7,7 +7,7 @@ from src.config import DB
 def get_params():
     params = {
         p.DATABASE: DB.WMH,
-        p.INPUT_DIM: [32,32,32],#
+        p.INPUT_DIM: [192,192,96],#
 
         p.N_CLASSES: 3,
         p.N_EPOCHS: 250,
@@ -32,7 +32,7 @@ def get_params():
 
         p.SHORTCUT_INPUT: True,
 
-        p.OUTPUT_PATH: '/output',
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation',
         p.MODEL_NAME: 'v_net_BN_patches_sr',
         p.LR: 0.0005
     }
