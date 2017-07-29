@@ -110,14 +110,14 @@ if __name__ == "__main__":
 
     """ MODEL TESTING """
     print()
-    print('Testint started...')
+    print('Testing started...')
     print('Output_shape: ' + str(output_shape))
 
 
     print('Loading...')
     print(subject.data_path)
     shape = subject.get_subject_shape()
-    image = subject.load_channels(normalize=False)
+    image = subject.load_channels(normalize=True)
     image_resize = np.zeros(params[p.INPUT_DIM]+ (params[p.NUM_MODALITIES],))
     for i in range(params[p.NUM_MODALITIES]):
         image_resize[:,:,:,i] = preprocessing.resize_image(image[:,:,:,i],params[p.INPUT_DIM])

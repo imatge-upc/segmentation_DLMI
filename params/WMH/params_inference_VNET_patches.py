@@ -32,7 +32,7 @@ def get_params():
 
         p.SHORTCUT_INPUT: True,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation',
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation',#'/output',#
         p.MODEL_NAME: 'v_net_BN_patches_sr',
         p.LR: 0.0005
     }
