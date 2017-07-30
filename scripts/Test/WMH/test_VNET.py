@@ -61,7 +61,7 @@ if __name__ == "__main__":
     params[p.BATCH_SIZE] = 1
 
 
-    filename = params[p.MODEL_NAME] #+ '_continue'
+    filename = params[p.MODEL_NAME] + '_continue_dice_copy3'
     dir_path = join(params[p.OUTPUT_PATH],
                     'LR_' + str(params[p.LR]) + '_DA_6_4_no_concat' )
 
@@ -81,7 +81,6 @@ if __name__ == "__main__":
     """ DATA LOADING """
     wmh_db = Loader.create(config_dict=DB.WMH)
     subject_list = wmh_db.load_subjects()
-    num_modalities = 2
 
     dataset = Dataset_train(input_shape=tuple(params[p.INPUT_DIM]),
                             output_shape=tuple(params[p.INPUT_DIM]),
@@ -100,7 +99,7 @@ if __name__ == "__main__":
 
                             train_size=params[p.TRAIN_SIZE],
                             dev_size=params[p.DEV_SIZE],
-                            num_modalities=num_modalities,
+                            num_modalities=params[p.NUM_MODALITIES],
 
                             data_augmentation_flag= params[p.DATA_AUGMENTATION_FLAG],
                             class_weights=params[p.CLASS_WEIGHTS]
@@ -113,7 +112,7 @@ if __name__ == "__main__":
     """ ARCHITECTURE DEFINITION """
 
     model, output_shape = WMH_models.get_model(
-        num_modalities=num_modalities,
+        num_modalities=params[p.NUM_MODALITIES],
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
         model_name=params[p.MODEL_NAME],

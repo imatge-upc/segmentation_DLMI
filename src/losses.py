@@ -71,6 +71,34 @@ def dice_cost(y_true, y_predicted):
 
     return -num_sum/den_sum
 
+def dice_cost_123(y_true, y_predicted):
+
+    dice_1 = dice_cost(y_true, y_predicted)
+    dice_2 = dice_cost_2(y_true, y_predicted)
+    dice_3 = dice_cost_3(y_true, y_predicted)
+
+
+    return 1/3*(dice_1+dice_2+dice_3)
+
+def dice_cost_2(y_true, y_predicted):
+
+    mask_true = K.flatten(y_true[:, :, :, :, 2])#
+    mask_pred = K.flatten(y_predicted[:, :, :, :, 2])#
+
+    num_sum = 2.0 * K.sum(mask_true * mask_pred) + K.epsilon()
+    den_sum = K.sum(mask_true) + K.sum(mask_pred)+ K.epsilon()
+
+    return -num_sum/den_sum
+
+def dice_cost_3(y_true, y_predicted):
+
+    mask_true = K.flatten(y_true[:, :, :, :, 3])#
+    mask_pred = K.flatten(y_predicted[:, :, :, :, 3])#
+
+    num_sum = 2.0 * K.sum(mask_true * mask_pred) + K.epsilon()
+    den_sum = K.sum(mask_true) + K.sum(mask_pred)+ K.epsilon()
+
+    return -num_sum/den_sum
 
 
 def scae_mean_squared_error_masked(vectors):

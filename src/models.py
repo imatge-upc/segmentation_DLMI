@@ -10,7 +10,8 @@ from src.layers import repeat_channels, repeat_channels_shape, complementary_mas
     dice_3 as d3, BatchNormalizationMasked, repeat_slices, repeat_slices_shape
 from src.activations import elementwise_softmax_3d
 from src.losses import categorical_crossentropy_3d, scae_mean_squared_error_masked, dice_cost,\
-    categorical_crossentropy_3d_masked,mean_squared_error_lambda, categorical_crossentropy_3d_lambda
+    categorical_crossentropy_3d_masked,mean_squared_error_lambda, categorical_crossentropy_3d_lambda, dice_cost_123, \
+    dice_cost_2, dice_cost_3
 from src.metrics import accuracy, dice_whole, dice_enhance, dice_core, recall_0,recall_1,recall_2,recall_3,\
     recall_4,precision_0,precision_1,precision_2,precision_3, precision_4, dice_0,dice_1,dice_2,dice_3
 import h5py
@@ -2673,8 +2674,8 @@ class iSeg_models(object):
             print('Loss: cross_entropy')
             loss = categorical_crossentropy_3d
         elif loss_name == 'dice':
-            print('Loss: dice')
-            loss = dice_cost
+            print('Loss: global_dice')
+            loss = dice_cost_123
         else:
             raise ValueError('Please, specify a valid loss function')
 

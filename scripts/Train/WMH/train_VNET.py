@@ -54,7 +54,7 @@ if __name__ == "__main__":
         l1=0.0001,
         l2=0.0001
     )
-    model.load_weights(join(dir_path, 'model_weights', params[p.MODEL_NAME] + '_copy.h5'))
+    model.load_weights(join('/work/acasamitjana/segmentation/WMH/20170727/VNet_patches/LR_0.0005_DA_6_4_no_concat/model_weights', params[p.MODEL_NAME] + '_copy.h5'))
     model = WMH_models.compile(model, lr=params[p.LR]*0.05,num_classes=params[p.N_CLASSES], loss_name='dice')#
 
 

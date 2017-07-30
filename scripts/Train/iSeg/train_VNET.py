@@ -52,12 +52,15 @@ if __name__ == "__main__":
         num_classes=params[p.N_CLASSES],
         model_name=params[p.MODEL_NAME],
         shortcut_input = params[p.SHORTCUT_INPUT],
+        mode='test',
         l1=0.0005,
         l2=0.005
 
     )
-    # model.load_weights(join(dir_path, 'model_weights', filename + '_first_part.h5'))
-    model = iSeg_models.compile(model, lr=params[p.LR],num_classes=params[p.N_CLASSES])
+
+
+    model.load_weights('/work/acasamitjana/segmentation/iSeg/20170728/VNet_patches/LR_0.0005_full_DA_shortcutTrue/model_weights/v_net_BN_patches_sr.h5')
+    model = iSeg_models.compile(model, lr=params[p.LR],num_classes=params[p.N_CLASSES], loss_name='dice')
 
 
     model.summary()
@@ -98,21 +101,21 @@ if __name__ == "__main__":
     class_weight = dataset.class_weights(subject_list)
     class_weight[0] = 0.01
     print('TrainVal Dataset initialized')
-    # subject_list_train, subject_list_validation = dataset.split_train_val(subject_list)
+    subject_list_train, subject_list_validation = dataset.split_train_val(subject_list)
 
     print("Brats Dataset initialized")
 
     if params[p.SAMPLING_SCHEME] == 'whole':
-        pass
-        # steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(2*len(subject_list_train))
-        # validation_steps = int(len(subject_list_validation))
-        # generator_train = dataset.data_generator_full_mask(subject_list_train, mode='train', normalize_bool=False)
-        # generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=False)
+        # pass
+        steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(2*len(subject_list_train))
+        validation_steps = int(len(subject_list_validation))
+        generator_train = dataset.data_generator_full_mask(subject_list_train, mode='train', normalize_bool=False)
+        generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=False)
     else:
         steps_per_epoch = int(np.ceil(params[p.N_SEGMENTS_TRAIN] / params[p.BATCH_SIZE]))
         validation_steps = int(np.ceil(params[p.N_SEGMENTS_VALIDATION] / params[p.BATCH_SIZE]))
-        # generator_train = dataset.data_generator(subject_list_train, mode='train', normalize_bool = False)
-        # generator_val = dataset.data_generator(subject_list_validation, mode='validation',normalize_bool = False)
+        generator_train = dataset.data_generator(subject_list_train, mode='train', normalize_bool = False)
+        generator_val = dataset.data_generator(subject_list_validation, mode='validation',normalize_bool = False)
         generator_train = dataset.data_generator(subject_list, mode='train', normalize_bool = False)
 
 
@@ -134,8 +137,8 @@ if __name__ == "__main__":
     model.fit_generator(generator=generator_train,
                         steps_per_epoch=steps_per_epoch,
                         epochs=params[p.N_EPOCHS],
-                        # validation_data=generator_val,
-                        # validation_steps=validation_steps,
+                        validation_data=generator_val,
+                        validation_steps=validation_steps,
                         callbacks=callbacks_list,
                         class_weight=class_weight)
 

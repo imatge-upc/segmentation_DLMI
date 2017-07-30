@@ -7,7 +7,7 @@ from src.config import DB
 def get_params():
     params = {
         p.DATABASE: 'iSeg',
-        p.INPUT_DIM: [192,192,144],
+        p.INPUT_DIM: [128,160,128],
 
         p.N_CLASSES: 4,
         p.N_EPOCHS: 250,
@@ -26,12 +26,12 @@ def get_params():
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
 
-        p.DATA_AUGMENTATION_FLAG: True,
+        p.DATA_AUGMENTATION_FLAG: 'saggital-plane',
         p.NUM_MODALITIES: 2,
 
         p.SHORTCUT_INPUT: True,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170725/VNet',#'VNet'
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170730/VNet',#'VNet'
         p.MODEL_NAME: 'v_net_BN_patches_sr',#'v_net_BN'
         p.LR: 0.0005
     }

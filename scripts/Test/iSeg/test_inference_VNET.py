@@ -136,7 +136,7 @@ if __name__ == "__main__":
     print('Steps per epoch: ' + str(params[p.N_SEGMENTS_TRAIN]/params[p.BATCH_SIZE]))
     print('Output_shape: ' + str(output_shape))
 
-    generator = dataset.data_generator_inference(subject_list, normalize_bool=False)
+    generator = dataset.data_generator_inference(subject_list, normalize_bool=True)
 
     n_sbj = 0
 

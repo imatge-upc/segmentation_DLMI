@@ -7,7 +7,7 @@ from src.config import DB
 def get_params():
     params = {
         p.DATABASE: DB.WMH,
-        p.INPUT_DIM: [64,64,32],#
+        p.INPUT_DIM: [96,96,32],#
 
         p.N_CLASSES: 2,
         p.N_EPOCHS: 50,
@@ -15,7 +15,7 @@ def get_params():
         p.BATCH_SIZE: 10,
         p.CLASS_WEIGHTS: 'inverse_weights',
 
-        p.SAMPLING_SCHEME: 'foreground-background',
+        p.SAMPLING_SCHEME: 'all-class',
         p.SAMPLING_WEIGHTS: [0.6, 0.4],
         p.N_SEGMENTS_TRAIN: 720,
         p.N_SUBJECTS_TRAIN: None,
@@ -32,7 +32,7 @@ def get_params():
 
         p.SHORTCUT_INPUT: False,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/WMH/20170727/VNet_patches',
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/WMH/20170730/VNet_patches',
         p.MODEL_NAME: 'v_net_BN_patches_sr',
         p.LR: 0.0005
     }
