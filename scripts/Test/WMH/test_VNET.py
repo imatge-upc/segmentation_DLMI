@@ -61,7 +61,7 @@ if __name__ == "__main__":
     params[p.BATCH_SIZE] = 1
 
 
-    filename = params[p.MODEL_NAME] + '_continue_dice_copy3'
+    filename = params[p.MODEL_NAME] + '_continue_dice'
     dir_path = join(params[p.OUTPUT_PATH],
                     'LR_' + str(params[p.LR]) + '_DA_6_4_no_concat' )
 
