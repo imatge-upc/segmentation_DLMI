@@ -69,7 +69,7 @@ if __name__ == "__main__":
         num_modalities=params[p.NUM_MODALITIES],
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
-        model_name=params[p.MODEL_NAME]+'_old',
+        model_name=params[p.MODEL_NAME],
         shortcut_input = params[p.SHORTCUT_INPUT],
         mode='test'
     )
@@ -135,9 +135,13 @@ if __name__ == "__main__":
 
     print('Predicting...')
     prediction = model.predict_on_batch([image_resize,mask_complete])[0]
+    print(np.sort(prediction[:,:,:,1].flatten()))
     prediction_resized = preprocessing.resize_image(np.argmax(prediction,axis=3),shape)
     img = nib.Nifti1Image(prediction_resized, subject.get_affine())
     nib.save(img, join(dir_path, 'result.nii.gz'))
+
+    img = nib.Nifti1Image(preprocessing.resize_image(mask_complete[0,:,:,:,0].astype('int'),shape), subject.get_affine())
+    nib.save(img, join(dir_path, 'mask.nii.gz'))
 
     # generator = dataset.data_generator_full_mask(subject_list, mode='validation', normalize_bool=True)
     #

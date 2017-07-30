@@ -9,7 +9,7 @@ def get_params():
         p.DATABASE: DB.WMH,
         p.INPUT_DIM: [192,192,96],#
 
-        p.N_CLASSES: 3,
+        p.N_CLASSES: 2,
         p.N_EPOCHS: 250,
         p.N_SUBEPOCHS: 1,
         p.BATCH_SIZE: 10,
@@ -30,7 +30,7 @@ def get_params():
         p.NUM_MODALITIES: 2,
 
 
-        p.SHORTCUT_INPUT: True,
+        p.SHORTCUT_INPUT: False,
 
         p.OUTPUT_PATH: '/work/acasamitjana/segmentation',#'/output',#
         p.MODEL_NAME: 'v_net_BN_patches_sr',

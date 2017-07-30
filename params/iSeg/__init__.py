@@ -1,5 +1,4 @@
-from params.iSeg import params_VNET, params_SCAE, params_VNET_ACNN
-from scripts.Test.WMH import params_VNET_patches
+from params.iSeg import params_VNET, params_SCAE, params_VNET_ACNN, params_VNET_patches
 
 PARAMS_DICT = {
     'params_VNET': params_VNET,

@@ -6437,7 +6437,7 @@ class WMH_models(object):
         return model, output_shape
 
     @staticmethod
-    def v_net_BN_patches_sr_old(num_modalities, segment_dimensions, num_classes, shortcut_input=False,
+    def v_net_BN_patches_sr(num_modalities, segment_dimensions, num_classes, shortcut_input=False,
                                 l1=0.0, l2=0.0, mode='train'):
         """
         U-Net based architecture for segmentation (http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/)
@@ -6508,6 +6508,7 @@ class WMH_models(object):
 
         x_up = Conv3D(4, (1, 1, 1), kernel_initializer=initializer, kernel_regularizer=regularizer,
                       name='conv_conn_0.1', padding='same')(x_up)
+
         end_11_b = Add()([z1_b, x_up])
 
         # First_c block (down)
@@ -6521,9 +6522,12 @@ class WMH_models(object):
         z1_c = Conv3D(4, (3, 3, 3), kernel_initializer=initializer, kernel_regularizer=regularizer, name='conv_1.3_c',
                       padding='same')(tmp)
 
+        # end_11_b = Conv3D(2, (1, 1, 1), kernel_initializer=initializer, kernel_regularizer=regularizer,
+        #               name='conv_conn_0.2', padding='same')(end_11_b)
         end_11_c = Add()([z1_c, end_11_b])
 
         # First_d block (down)
+        # end_11_c = MaxPooling3D(pool_size=pool_size)(end_11_c)
         tmp = BatchNormalization(axis=4, name='batch_norm_1.2_d')(end_11_c)
         tmp = Activation('relu')(tmp)
         tmp = Conv3D(4, (3, 3, 3), kernel_initializer=initializer, kernel_regularizer=regularizer, name='conv_1.2_d',
@@ -6532,6 +6536,9 @@ class WMH_models(object):
         tmp = Activation('relu')(tmp)
         z1_d = Conv3D(4, (3, 3, 3), kernel_initializer=initializer, kernel_regularizer=regularizer, name='conv_1.3_d',
                       padding='same')(tmp)
+
+        # end_11_c = Conv3D(4, (1, 1, 1), kernel_initializer=initializer, kernel_regularizer=regularizer,
+        #                   name='conv_conn_0.3', padding='same')(end_11_c)
 
         end_11_d = Add()([z1_d, end_11_c])
 
@@ -6707,15 +6714,12 @@ class WMH_models(object):
         tmp = MaxPooling3D(pool_size=pool_size, name='sr_down')(end_11_d)
         tmp = Concatenate(axis=4)([end_12, tmp])
 
-
         if shortcut_input:
-            tmp = Concatenate(axis=4)([tmp, x])
+            tmp = Concatenate(axis=4)([tmp, Lambda(lambda x: x[:, :, :, :, 0:1])(x)])
 
         tmp = BatchNormalization(axis=4, name='batch_norm_1.7')(tmp)
-
-
-
         tmp = Activation('relu')(tmp)
+
         tmp = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, kernel_regularizer=regularizer,
                      name='conv_pre_softmax', padding='same')(tmp)
 
@@ -6736,7 +6740,7 @@ class WMH_models(object):
                               name='complementary_tumor_mask')(true_mask)
             cmp_mask = Concatenate()([cmp_mask,
                                       Lambda(lambda x: K.zeros_like(x))(cmp_mask),
-                                      Lambda(lambda x: K.zeros_like(x))(cmp_mask)
+                                      # Lambda(lambda x: K.zeros_like(x))(cmp_mask)
                                       ])
 
             y = Multiply(name='mask_background')([y, mask1])
