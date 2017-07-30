@@ -10,28 +10,28 @@ def get_params():
         p.INPUT_DIM: [64,64,64],
 
         p.N_CLASSES: 4,
-        p.N_EPOCHS: 250,
+        p.N_EPOCHS: 350,
         p.N_SUBEPOCHS: 1,
         p.BATCH_SIZE: 10,
         p.CLASS_WEIGHTS: 'inverse_weights',
 
         p.SAMPLING_SCHEME: 'uniform',
         p.SAMPLING_WEIGHTS: [0.5,0.5],
-        p.N_SEGMENTS_TRAIN: 200,#240,
+        p.N_SEGMENTS_TRAIN: 120,#240,
         p.N_SUBJECTS_TRAIN: None,
 
         p.N_SEGMENTS_VALIDATION: 40,#60,
         p.N_SUBJECTS_VALIDATION: None,
 
-        p.TRAIN_SIZE: 1,
-        p.DEV_SIZE: 0,
+        p.TRAIN_SIZE: 0.6   ,
+        p.DEV_SIZE: 0.4,
 
         p.DATA_AUGMENTATION_FLAG: 'saggital-plane',
         p.NUM_MODALITIES: 2,
 
         p.SHORTCUT_INPUT: True,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170728/VNet_patches',#'VNet'
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/iSeg/20170729/VNet_patches',#'VNet'
         p.MODEL_NAME: 'v_net_BN_patches_sr',
         p.LR: 0.0005
     }

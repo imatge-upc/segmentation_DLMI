@@ -26,7 +26,7 @@ if __name__ == "__main__":
     print('Getting parameters to train the model...')
     params_string = arg.p
     params = p.PARAMS_DICT[params_string].get_params()
-    filename = params[p.MODEL_NAME]
+    filename = params[p.MODEL_NAME]+'_continue_dice'
     dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_DA_6_4_no_concat')
 
     logs_filepath = join(dir_path, 'logs', filename + '.txt')
@@ -54,8 +54,8 @@ if __name__ == "__main__":
         l1=0.0001,
         l2=0.0001
     )
-    # model.load_weights(join(dir_path, 'model_weights', params[p.MODEL_NAME] + '.h5'))
-    model = WMH_models.compile(model, lr=params[p.LR],num_classes=params[p.N_CLASSES])#
+    model.load_weights(join(dir_path, 'model_weights', params[p.MODEL_NAME] + '_copy.h5'))
+    model = WMH_models.compile(model, lr=params[p.LR]*0.05,num_classes=params[p.N_CLASSES], loss_name='dice')#
 
 
     model.summary()
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
 
 
-    cb_saveWeights = ModelCheckpoint(filepath=weights_filepath)
+    cb_saveWeights = ModelCheckpoint(filepath=weights_filepath, save_best_only=True)
     cb_earlyStopping = EarlyStopping(patience=5)
     cb_learningRateScheduler = LearningRateDecay(epoch_n=0,decay=0.001)
     callbacks_list = [cb_saveWeights,cb_learningRateScheduler]

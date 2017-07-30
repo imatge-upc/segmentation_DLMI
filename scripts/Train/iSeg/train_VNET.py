@@ -52,8 +52,8 @@ if __name__ == "__main__":
         num_classes=params[p.N_CLASSES],
         model_name=params[p.MODEL_NAME],
         shortcut_input = params[p.SHORTCUT_INPUT],
-        l1=0.0001,
-        l2=0.001
+        l1=0.0005,
+        l2=0.005
 
     )
     # model.load_weights(join(dir_path, 'model_weights', filename + '_first_part.h5'))

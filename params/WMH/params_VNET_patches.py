@@ -10,7 +10,7 @@ def get_params():
         p.INPUT_DIM: [64,64,32],#
 
         p.N_CLASSES: 2,
-        p.N_EPOCHS: 250,
+        p.N_EPOCHS: 50,
         p.N_SUBEPOCHS: 1,
         p.BATCH_SIZE: 10,
         p.CLASS_WEIGHTS: 'inverse_weights',
