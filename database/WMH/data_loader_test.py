@@ -46,7 +46,6 @@ class Subject:
 
     def load_ROI_mask(self):
 
-
         proxy = nib.load(self.FLAIR_FILE)
         image_array = np.asarray(proxy.dataobj)
         image_array = normalize_image(image_array)

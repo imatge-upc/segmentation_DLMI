@@ -130,7 +130,7 @@ def normalize_image(image, mask=None):
 
     if mask is not None:
         image = image*mask
-        mean = np.mean(image)
+        mean = np.mean(image)#np.sum(image) / np.sum(mask)
         std = np.sqrt( 1 / (np.sum(mask)-1) * np.sum((image - mean) ** 2))
     else:
         mean = np.mean(image)

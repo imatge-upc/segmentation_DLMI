@@ -59,9 +59,10 @@ if __name__ == "__main__":
     params = p.PARAMS_DICT[params_string].get_params()
     params[p.INPUT_DIM] = (192, 192, 96)
     params[p.BATCH_SIZE] = 1
-    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR]) + '_full_DA')
 
-    weights_filepath = 'WMH.h5'
+    filename = params[p.MODEL_NAME] + '_continue_dice'
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR]) + '_DA_6_4_no_concat')
+    weights_filepath = join(dir_path,'model_weights',filename + '.h5')
 
 
     print("Architecture defined ...")
@@ -103,7 +104,7 @@ if __name__ == "__main__":
         num_modalities=num_modalities,
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
-        model_name=params[p.MODEL_NAME]+'_old',
+        model_name=params[p.MODEL_NAME],
         shortcut_input = params[p.SHORTCUT_INPUT],
         mode='test'
     )
@@ -114,7 +115,7 @@ if __name__ == "__main__":
     # model.summary()
 
 
-    """ MODEL TESTINT """
+    """ MODEL TESTING """
     print()
     print('Testint started...')
     print('Output_shape: ' + str(output_shape))
@@ -145,16 +146,17 @@ if __name__ == "__main__":
         img = nib.Nifti1Image(np.argmax(predictions_resized,axis=3), subject.get_affine())
         nib.save(img, join(dir_path, 'results', subject.id + '_predictions.nii.gz'))
 
+
         # img = nib.Nifti1Image(np.argmax(labels[0, :, :, :, :],axis=3), subject.get_affine())
         # nib.save(img, join(dir_path, 'results', subject.id + '_labels.nii.gz'))
 
 
         dice_1[n_sbj] = dice(predictions[:,:,:,1].flatten(),labels[0,:,:,:,1].flatten())
-        dice_2[n_sbj] = dice(predictions[:,:,:,2].flatten(),labels[0,:,:,:,2].flatten())
+        # dice_2[n_sbj] = dice(predictions[:,:,:,2].flatten(),labels[0,:,:,:,2].flatten())
 
         print("Count 1: " + str(np.sum(predictions[:,:,:,1]*labels[0,:,:,:,1])) +' '+ str(np.sum(predictions[:,:,:,1])) + ' ' + str(np.sum(labels[0,:,:,:,1])))
         print("Dice 1: " + str(dice_1[n_sbj]))
-        print("Dice 2: " + str(dice_2[n_sbj]))
+        # print("Dice 2: " + str(dice_2[n_sbj]))
 
 
         print('Subject ' + str(subject.id) + ' has finished')
@@ -164,9 +166,9 @@ if __name__ == "__main__":
 
     print('Average Metrics: ')
     print(dice_1)
-    print(dice_2)
+    # print(dice_2)
     print('Dice_1: ' + str(np.mean(dice_1)))
-    print('Dice_2: ' + str(np.mean(dice_2)))
+    # print('Dice_2: ' + str(np.mean(dice_2)))
 
 
 

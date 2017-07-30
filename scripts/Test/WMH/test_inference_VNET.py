@@ -120,10 +120,10 @@ if __name__ == "__main__":
     image = subject.load_channels(normalize=True)
     image_resize = np.zeros(params[p.INPUT_DIM]+ (params[p.NUM_MODALITIES],))
     for i in range(params[p.NUM_MODALITIES]):
-        image_resize[:,:,:,i] = preprocessing.resize_image(image[:,:,:,i],params[p.INPUT_DIM])
+        image_resize[:,:,:,i] = preprocessing.resize_image(image[:,:,:,i],params[p.INPUT_DIM],pad_value=image[0, 0, 0, i])
 
     print('mask0')
-    mask = preprocessing.resize_image(subject.load_ROI_mask(),params[p.INPUT_DIM])#np.ones(params[p.INPUT_DIM])#
+    mask = preprocessing.resize_image(subject.load_ROI_mask(),params[p.INPUT_DIM])
 
     print('mask')
 
@@ -135,37 +135,11 @@ if __name__ == "__main__":
 
     print('Predicting...')
     prediction = model.predict_on_batch([image_resize,mask_complete])[0]
-    print(np.sort(prediction[:,:,:,1].flatten()))
+    prediction = np.floor((prediction + np.finfo(float).eps) / np.max(prediction, axis=3, keepdims=True)).astype('int')
+
     prediction_resized = preprocessing.resize_image(np.argmax(prediction,axis=3),shape)
     img = nib.Nifti1Image(prediction_resized, subject.get_affine())
     nib.save(img, join(dir_path, 'result.nii.gz'))
-
-    img = nib.Nifti1Image(preprocessing.resize_image(mask_complete[0,:,:,:,0].astype('int'),shape), subject.get_affine())
-    nib.save(img, join(dir_path, 'mask.nii.gz'))
-
-    # generator = dataset.data_generator_full_mask(subject_list, mode='validation', normalize_bool=True)
-    #
-    # n_sbj = 0
-    #
-    #
-    #
-    # for inputs,labels in generator:
-    #     subject = subject_list[n_sbj]
-    #
-    #     predictions = model.predict_on_batch(inputs)[0]
-    #     predictions = np.argmax(predictions,axis=3)
-    #
-    #     shape = subject.get_subject_shape()
-    #     predictions_resized = preprocessing.resize_image(predictions,shape)
-    #
-    #
-    #     img = nib.Nifti1Image(predictions_resized, subject.get_affine())
-    #     nib.save(img, join(dir_path, 'results', subject.id + 'result.nii.gz'))
-    #
-    #     print('Subject ' + str(subject.id) + ' has finished')
-    #     n_sbj += 1
-    #     if n_sbj >= len(subject_list):
-    #         break
 
 
     print('Finished testing')
