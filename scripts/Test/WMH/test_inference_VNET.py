@@ -138,8 +138,14 @@ if __name__ == "__main__":
     prediction = np.floor((prediction + np.finfo(float).eps) / np.max(prediction, axis=3, keepdims=True)).astype('int')
 
     prediction_resized = preprocessing.resize_image(np.argmax(prediction,axis=3),shape)
-    img = nib.Nifti1Image(prediction_resized, subject.get_affine())
-    nib.save(img, join(dir_path, 'result.nii.gz'))
+    print(prediction_resized.shape)
+
+    import SimpleITK as sitk
+    sitk_image = sitk.GetImageFromArray(prediction_resized, isVector=False)
+    sitk.WriteImage(sitk_image, join(dir_path, 'result.nii.gz'))
+
+    # img = nib.Nifti1Image(prediction_resized, subject.get_affine())
+    # nib.save(img, join(dir_path, 'result.nii.gz'))
 
 
     print('Finished testing')
