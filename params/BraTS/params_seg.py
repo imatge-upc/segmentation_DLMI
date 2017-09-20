@@ -10,18 +10,18 @@ def get_params():
         p.INPUT_DIM: [192,192,160],#[64,64,64],#
 
         p.N_CLASSES: 4,
-        p.N_EPOCHS: 150,
-        p.N_SUBEPOCHS: 1,#20,#
+        p.N_EPOCHS: 100,
+        p.N_SUBEPOCHS: None,#1,#
         p.BATCH_SIZE: 1,#10,#
         p.CLASS_WEIGHTS: 'inverse_weights',
 
-        p.SAMPLING_SCHEME: 'whole',#'foreground-background',#
-        p.SAMPLING_WEIGHTS: [0.5, 0.5],
-        p.N_SEGMENTS_TRAIN: 120,#4000,#
-        p.N_SUBJECTS_TRAIN: None,#100,#
+        p.SAMPLING_SCHEME: 'whole',#'whole',#
+        p.SAMPLING_WEIGHTS: None,
+        p.N_SEGMENTS_TRAIN: None,#120,#
+        p.N_SUBJECTS_TRAIN: None,#None,#
 
-        p.N_SEGMENTS_VALIDATION: 10,#400,#
-        p.N_SUBJECTS_VALIDATION: None, #80,#
+        p.N_SEGMENTS_VALIDATION: None,#10,#
+        p.N_SUBJECTS_VALIDATION: None,#None, #
 
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
@@ -29,13 +29,12 @@ def get_params():
         p.DATA_AUGMENTATION_FLAG: False,
         p.NUM_MODALITIES: 4,
 
-        p.BN_LAST: False,
-        p.SHORTCUT_INPUT: False,
-        p.BOOL_MASK: True,
+        p.MODEL_TYPE: 'segmentation',
+        p.LOSS: 'xentropy',
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/BraTS/brats2017/survival',
-        p.MODEL_NAME: 'vnet_2',
-        p.LR: 0.01
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/BraTS/seg/20170810',
+        p.MODEL_NAME: 'brats2017',
+        p.LR: 0.0005
     }
 
     return params

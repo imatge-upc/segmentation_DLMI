@@ -13,15 +13,13 @@ case $i in
 esac
 done
 
-if [ "${PARAMS}" = "params_VNET"  ]
+if [ "${PARAMS}" = "params_full"  ]
     then
-#    srun  --pty  --mem=8G  python test_VNET.py -p"${PARAMS}"
-    srun  --gres=gpu:1,gmem:12GB --pty  --mem=8G  python test_VNET.py -p"${PARAMS}"
-elif [ "${PARAMS}" = "params_VNET_patches"  ]
+    srun  --gres=gpu:1,gmem:12GB --pty  --mem=8G  python test_evaluate.py -p"${PARAMS}"
+elif [ "${PARAMS}" = "params_patches"  ]
     then
-#    srun  --pty  --mem=8G  python test_VNET.py -p"${PARAMS}"
-    srun  -p fast --gres=gpu:1,gmem:12GB --pty  --mem=8G  python test_VNET.py -p"${PARAMS}"
+    srun  -p fast --gres=gpu:1,gmem:12GB --pty  --mem=8G  python test_evaluate.py -p"${PARAMS}"
 else
-    echo 'ERROR in "train.sh"'
+    echo 'ERROR in "test.sh"'
     echo 'Please, specify a valid parameter filename'
 fi

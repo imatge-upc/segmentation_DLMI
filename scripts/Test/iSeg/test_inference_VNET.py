@@ -9,7 +9,7 @@ import os
 import params.iSeg as p
 from src.config import DB
 from database.iSeg.data_loader import Loader
-from src.dataset import Dataset_train
+from src.dataset import Dataset_test
 from src.models import iSeg_models
 from src.utils import io, preprocessing
 import nibabel as nib
@@ -106,29 +106,12 @@ if __name__ == "__main__":
     iseg_db = Loader.create(config_dict=DB.iSEG_test)
     subject_list = iseg_db.load_subjects()
 
-    dataset = Dataset_train(input_shape=params[p.INPUT_DIM],
+    dataset = Dataset_test(input_shape=params[p.INPUT_DIM],
                             output_shape=params[p.INPUT_DIM],
                             n_classes=params[p.N_CLASSES],
-                            n_subepochs=params[p.N_SUBEPOCHS],
                             batch_size=params[p.BATCH_SIZE],
-
-                            sampling_scheme=params[p.SAMPLING_SCHEME],
-                            sampling_weights=params[p.SAMPLING_WEIGHTS],
-
-                            n_subjects_per_epoch_train=params[p.N_SUBJECTS_TRAIN],
-                            n_segments_per_epoch_train=params[p.N_SEGMENTS_TRAIN],
-
-                            n_subjects_per_epoch_validation=params[p.N_SUBJECTS_VALIDATION],
-                            n_segments_per_epoch_validation=params[p.N_SEGMENTS_VALIDATION],
-
-                            train_size=params[p.TRAIN_SIZE],
-                            dev_size=params[p.DEV_SIZE],
-                            num_modalities=num_modalities,
-
-                            data_augmentation_flag= params[p.DATA_AUGMENTATION_FLAG],
-                            class_weights=params[p.CLASS_WEIGHTS]
+                            num_modalities=num_modalities
                             )
-
 
     """ MODEL TRAINING """
     print('')
@@ -139,20 +122,18 @@ if __name__ == "__main__":
     generator = dataset.data_generator_inference(subject_list, normalize_bool=True)
 
     n_sbj = 0
-
-
     for inputs in generator:
         subject = subject_list[n_sbj]
         print(subject.id)
 
         predictions = model.predict_on_batch(inputs)[0]
 
+        #Saving images
         shape = subject.get_subject_shape()
         predictions_resized = np.zeros(shape+(params[p.N_CLASSES],))
         for i in range(params[p.N_CLASSES]):
             predictions_resized[:,:,:,i] = preprocessing.resize_image(predictions[:,:,:,i],shape)
 
-        #Saving images
         predictions_resize_argmax = np.argmax(predictions_resized,axis=3)
         predictions_argmax = np.argmax(predictions, axis=3)
 
@@ -161,10 +142,9 @@ if __name__ == "__main__":
 
         img = nib.Nifti1Image(tf_labels(predictions_resize_argmax), subject.get_affine())
         nib.save(img, join(dir_path, 'results_test', 'subject-' + subject.id + '-label.nii.gz'))
+
         n_sbj += 1
         if n_sbj >= len(subject_list):
             break
-
-
 
     print('Finished testing')

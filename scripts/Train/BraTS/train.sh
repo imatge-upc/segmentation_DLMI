@@ -13,21 +13,20 @@ case $i in
 esac
 done
 
-if [ "${PARAMS}" = "params_VNET"  ]
+if [ "${PARAMS}" = "params_mask"  ]
     then
-    srun  --gres=gpu:1,gmem:12GB --pty  --mem=15G  python train_VNET.py -p"${PARAMS}"
-#    srun  -p fast --pty  --mem=20G  python train_VNET.py -p"${PARAMS}"
-elif [ "${PARAMS}" = "params_VNET_1"  ]
+    srun  --gres=gpu:1,gmem:12GB --pty  --mem=15G  python train_mask.py -p"${PARAMS}"
+elif [ "${PARAMS}" = "params_mask_seg"  ]
     then
-    srun  --gres=gpu:1,gmem:12GB --pty  --mem=15G  python train_VNET_1.py -p"${PARAMS}"
-#    srun  -p fast --pty  --mem=20G  python train_VNET_1.py -p"${PARAMS}"
-elif [ "${PARAMS}" = "params_VNET_full"  ]
+    srun  --gres=gpu:1,gmem:12GB --pty  --mem=15G  python train_mask_seg.py -p"${PARAMS}"
+
+elif [ "${PARAMS}" = "params_seg"  ]
     then
-    srun  --gres=gpu:1,gmem:11GB --pty  --mem=15G  python train_VNET_full.py -p"${PARAMS}"
-    elif [ "${PARAMS}" = "params_VNET_survival"  ]
+    srun  --gres=gpu:1,gmem:12GB --pty  --mem=15G  python train_seg.py -p"${PARAMS}"
+
+elif [ "${PARAMS}" = "params_survival"  ]
     then
-    srun  --gres=gpu:1,gmem:11GB --pty  --mem=15G  python train_VNET_survival.py -p"${PARAMS}"
-#    srun  -p fast --pty  --mem=20G  python train_VNET_full.py -p"${PARAMS}"
+    srun  --gres=gpu:1,gmem:12GB --pty  --mem=15G  python train_survival.py -p"${PARAMS}"
 else
     echo 'ERROR in "train.sh"'
     echo 'Please, specify a valid parameter filename'

@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def one_hot_representation(y_data, number_classes):
+def one_hot_representation(y_data, number_classes, class_weights=None):
     """
     Given a n-dimensional matrix representing the ground truth labels, with the following
     structure (n_samples, dim1, dim2, ..., dimN) and containing values between 0 and number_classes7
@@ -24,11 +24,22 @@ def one_hot_representation(y_data, number_classes):
     if isinstance(y_data,list):
         y_data = np.asarray(y_data)
     shape = y_data.shape
-    result = np.zeros((shape[0],) + shape[1:]+(number_classes,))
-    for i in range(number_classes):
-        index = np.where(y_data == i)
-        one_hot_index = (index[0], ) + index[1:] + (i,)
-        result[one_hot_index] = 1
+
+    if class_weights is not None:
+        result = np.zeros((shape[0],) + shape[1:]+(2*number_classes,))
+        for i in range(number_classes):
+            index = np.where(y_data == i)
+            one_hot_index = (index[0], ) + index[1:] + (i,)
+            one_hot_index_w = (index[0], ) + index[1:] + (i+number_classes,)
+            result[one_hot_index] = 1
+            result[one_hot_index_w] = class_weights[i]
+
+    else:
+        result = np.zeros((shape[0],) + shape[1:]+(number_classes,))
+        for i in range(number_classes):
+            index = np.where(y_data == i)
+            one_hot_index = (index[0], ) + index[1:] + (i,)
+            result[one_hot_index] = 1
     return np.asarray(result, dtype=np.float64)
 
 def padding3D(input, width_mode, pad_factor):
@@ -129,14 +140,16 @@ def _bias_correction(image_patch):
 def normalize_image(image, mask=None):
 
     if mask is not None:
-        image = image*mask
-        mean = np.mean(image)
-        std = np.sqrt( 1 / (np.sum(mask)-1) * np.sum((image - mean) ** 2))
+        mean = np.sum(image*mask)/np.sum(mask)
+        std = np.sqrt( 1 / (np.sum(mask)-1) * np.sum(mask*(image - mean) ** 2))
+        return (image - mean) / std
+        # return mask * (image - mean) / std
+
     else:
         mean = np.mean(image)
         std = np.std(image)
+        return  (image - mean) / std
 
-    return (image-mean)/std
 
 def flip_plane(array,plane=0):
     # Flip axial plane LR, i.e. change left/right hemispheres. 3D tensors-only, batch_size=1.

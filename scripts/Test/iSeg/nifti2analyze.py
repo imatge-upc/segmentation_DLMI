@@ -21,7 +21,3 @@ for image in images:
     print(array.shape)
     sitk_image = sitk.GetImageFromArray(array, isVector=False)
     sitk.WriteImage(sitk_image,join(OUTPUT_DIR,subject[:-7]+".img") )
-    # io.imsave(join(OUTPUT_DIR,subject[:-7]+'.img'),array,plugin='simpleitk')
-
-    # img = nib.Nifti1Pair(array,proxy.affine, proxy.header)
-    # nib.nifti1.save(img, join(OUTPUT_DIR,image[:-7]+'.img'))

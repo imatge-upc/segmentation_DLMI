@@ -58,8 +58,7 @@ if __name__ == "__main__":
 
     )
 
-
-    model.load_weights('/work/acasamitjana/segmentation/iSeg/20170728/VNet_patches/LR_0.0005_full_DA_shortcutTrue/model_weights/v_net_BN_patches_sr.h5')
+    # model.load_weights('/work/acasamitjana/segmentation/iSeg/20170728/VNet_patches/LR_0.0005_full_DA_shortcutTrue/model_weights/v_net_BN_patches_sr.h5')
     model = iSeg_models.compile(model, lr=params[p.LR],num_classes=params[p.N_CLASSES], loss_name='dice')
 
 
@@ -98,26 +97,23 @@ if __name__ == "__main__":
                             data_augmentation_flag= params[p.DATA_AUGMENTATION_FLAG],
                             class_weights=params[p.CLASS_WEIGHTS]
                             )
+
     class_weight = dataset.class_weights(subject_list)
     class_weight[0] = 0.01
-    print('TrainVal Dataset initialized')
     subject_list_train, subject_list_validation = dataset.split_train_val(subject_list)
-
-    print("Brats Dataset initialized")
+    print('TrainVal Dataset initialized')
 
     if params[p.SAMPLING_SCHEME] == 'whole':
-        # pass
-        steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(2*len(subject_list_train))
+        steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(len(params[p.DATA_AUGMENTATION_FLAG])*len(subject_list_train))
         validation_steps = int(len(subject_list_validation))
-        generator_train = dataset.data_generator_full_mask(subject_list_train, mode='train', normalize_bool=False)
-        generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=False)
+        generator_train = dataset.data_generator_full(subject_list_train, mode='train', normalize_bool=False, mask = True)
+        generator_val = dataset.data_generator_full(subject_list_validation, mode='validation', normalize_bool=False,
+                                                    mask = True)
     else:
         steps_per_epoch = int(np.ceil(params[p.N_SEGMENTS_TRAIN] / params[p.BATCH_SIZE]))
         validation_steps = int(np.ceil(params[p.N_SEGMENTS_VALIDATION] / params[p.BATCH_SIZE]))
         generator_train = dataset.data_generator(subject_list_train, mode='train', normalize_bool = False)
         generator_val = dataset.data_generator(subject_list_validation, mode='validation',normalize_bool = False)
-        generator_train = dataset.data_generator(subject_list, mode='train', normalize_bool = False)
-
 
 
     cb_saveWeights = ModelCheckpoint(filepath=weights_filepath, save_best_only=True)

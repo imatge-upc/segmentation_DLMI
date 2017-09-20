@@ -39,5 +39,8 @@ BN_LAST = 'batch_normalization_last'
 SHORTCUT_INPUT = 'shortcut_input'
 BOOL_MASK = 'use_mask_before_softmax'
 
+MODEL_TYPE = 'brats2017_model_type'
+LOSS = 'loss_function'
+SAMPLE_WEIGHTS_BOOL = 'sample_weights_T_F'
 
 DATABASE = 'database'

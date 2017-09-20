@@ -65,7 +65,6 @@ class Subject:
             labels[np.where(labels == u_l)] = it_u_l
         return labels
 
-
     def load_ROI_mask(self):
 
         roimask_proxy = nib.load(self.ROIMASK_FILE)

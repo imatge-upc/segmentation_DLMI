@@ -8,9 +8,6 @@ from scipy.ndimage.morphology import binary_closing
 INPUT_DIR_LIST = ['/projects/neuro/WMH/Utrecht','/projects/neuro/WMH/Singapore']#['/projects/neuro/WMH/GE3T']#
 
 
-
-
-
 for INPUT_DIR in INPUT_DIR_LIST:
     subjects = os.listdir(INPUT_DIR)
     for subject in subjects:

@@ -43,15 +43,13 @@ def print_structure(weight_file_path):
                 param = g[p_name]
                 if len(param) > 0:
                     param = param[p_name]
-                    if 'batch_normalization' in param.name:
-                        continue
 
                     for k,v in param.items():
                         print(param.name)
                         print("      {}: {}".format(k, v.shape))
-                        # print(np.mean(np.asarray(v.value).flatten()))
-                        # print(np.std(np.asarray(v.value).flatten()))
-                        # print(v.value)
+                        print(np.mean(np.asarray(v.value).flatten()))
+                        print(np.std(np.asarray(v.value).flatten()))
+                        print(v.value)
                         # plt.hist(np.asarray(v.value).flatten())
                         # plt.show()
                         # plt.close()
@@ -64,7 +62,7 @@ def print_structure(weight_file_path):
 if __name__ == "__main__":
     # Parse arguments from command-line
 
-    file = 'v_net_BN_patches_sr.h5'
-    w_file_path = join('/work/acasamitjana/segmentation/WMH/20170725/VNet_patches/LR_0.0005_DA_6_4_concatFLAIR/model_weights', file)
+    file = 'brats2017.h5'
+    w_file_path = join('/work/acasamitjana/segmentation/BraTS/mask/LR_0.0005_mask_dice/model_weights', file)
 
     print_structure(w_file_path)

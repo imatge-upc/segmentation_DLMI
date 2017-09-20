@@ -1,128 +1,74 @@
 import unittest
+from src.layers import BatchNormalizationMasked
+from database.BraTS.data_loader import Loader
+from src.config import DB
+from keras.models import Sequential, Model
+from keras.layers import Input, BatchNormalization
+import numpy as np
 
-from src.models import BratsModels
 
+class TestLayers(unittest.TestCase):
 
-class TestBratsModels(unittest.TestCase):
     def setUp(self):
-        # Set up configuration variables
-        self.num_classes = 5
-        self.num_modalities = 4
-
-    def test_onepathway(self):
-        # Try to get model using the static method and see if it fails to compile
-        self.assertTrue(BratsModels.one_pathway(self.num_modalities, (25, 25, 25), self.num_classes),
-                        msg='One pathway model does not compile')
-        # Try to get model using the get method
-        self.assertTrue(BratsModels.get_model(self.num_modalities, (25, 25, 25), self.num_classes,
-                                              model_name='one_pathway'),
-                        msg='One pathway model cannot be retrieved using the BratsModels class method get()')
-
-    def test_onepathway_no_downsampling(self):
-        # Try to get model using the static method and see if it fails to compile
-        self.assertTrue(BratsModels.one_pathway_no_downsampling(
-            self.num_modalities, (32, 32, 32),
-            self.num_classes),
-            msg='One pathway without downsampling model does not compile'
-        )
-        # Try to get model using the get method
-        self.assertTrue(BratsModels.get_model(self.num_modalities, (32, 32, 32), self.num_classes,
-                                              model_name='one_pathway_no_downsampling'),
-                        msg='One pathway without downsampling model cannot be '
-                            'retrieved using the BratsModels class method get()')
-
-    def test_unet(self):
-        # Try to get model using the static method and see if it fails to compile
-        self.assertTrue(BratsModels.u_net(
-            self.num_modalities, (32, 32, 32),
-            self.num_classes),
-            msg='U-net model does not compile'
-        )
-        # Try to get model using the get method
-        self.assertTrue(BratsModels.get_model(self.num_modalities, (32, 32, 32), self.num_classes,
-                                              model_name='u_net'),
-                        msg='U-net model cannot be retrieved using the BratsModels class method get()')
-
-    def test_onepathway_upsampling(self):
-        # Try to get model using the static method and see if it fails to compile
-        self.assertTrue(BratsModels.one_pathway_skipped_upsampling(
-            self.num_modalities, (32, 32, 32),
-            self.num_classes),
-            msg='One pathway skipped upsampling model does not compile'
-        )
-        # Try to get model using the get method
-        self.assertTrue(BratsModels.get_model(self.num_modalities, (32, 32, 32), self.num_classes,
-                                              model_name='one_pathway_skipped_upsampling'),
-                        msg='One pathway skipped upsampling model cannot be '
-                            'retrieved using the BratsModels class method get()')
-
-    def test_fcn_8(self):
-        # Try to get model using the static method and see if it fails to compile
-        self.assertTrue(BratsModels.fcn_8(
-            self.num_modalities, (32, 32, 32),
-            self.num_classes),
-            msg='FCN 8 (Long) model does not compile'
-        )
-        # Try to get model using the get method
-        self.assertTrue(BratsModels.get_model(self.num_modalities, (32, 32, 32), self.num_classes,
-                                              model_name='fcn_8'),
-                        msg='FCN 8 (Long) model cannot be '
-                            'retrieved using the BratsModels class method get()')
-
-    def test_two_pathways(self):
-        # Try to get model using the static method and see if it fails to compile
-        self.assertTrue(BratsModels.two_pathways(
-            self.num_modalities, (32, 32, 32),
-            self.num_classes),
-            msg='Two pathways model does not compile'
-        )
-        # Try to get model using the get method
-        self.assertTrue(BratsModels.get_model(self.num_modalities, (32, 32, 32), self.num_classes,
-                                              model_name='two_pathways'),
-                        msg='Two pathways model cannot be '
-                            'retrieved using the BratsModels class method get()')
-        model, dummy = BratsModels.get_model(self.num_modalities, (64, 64, 64), self.num_classes,
-                                             model_name='fcn_8')
-
-        model.summary()
-
-    def test_deepmedic(self):
-        # Try to get model using the static method and see if it fails to compile
-        self.assertTrue(BratsModels.deepmedic(
-            self.num_modalities, (57,57,57),
-            self.num_classes,segment_dimensions_up=(25,25,25)),
-            msg='Two pathways model does not compile'
-        )
-        # Try to get model using the get method
-        self.assertTrue(BratsModels.get_model(self.num_modalities, (57,57,57), self.num_classes, segment_dimensions_up=(25,25,25),
-                                              model_name='deepmedic'),
-                        msg='Two pathways model cannot be '
-                            'retrieved using the BratsModels class method get()')
-
-        model, dummy = BratsModels.get_model(self.num_modalities, (57,57,57), self.num_classes,
-                                             model_name='deepmedic',segment_dimensions_up=(25,25,25))
-
-        model.summary()
+        brats_db = Loader.create(config_dict=DB.BRATS2017)
+        subject_list = brats_db.load_subjects()
+        self.subject = subject_list[0]
 
 
-    def test_two_pathwyas_dense(self):
-        # Try to get model using the static method and see if it fails to compile
-        self.assertTrue(BratsModels.deepmedic(
-            self.num_modalities, (57, 57, 57),
-            self.num_classes, segment_dimensions_up=(25, 25, 25)),
-            msg='Two pathways model does not compile'
-        )
-        # Try to get model using the get method
-        self.assertTrue(
-            BratsModels.get_model(self.num_modalities, (57, 57, 57), self.num_classes, segment_dimensions_up=(25, 25, 25),
-                                  model_name='deepmedic'),
-            msg='Two pathways model cannot be '
-                'retrieved using the BratsModels class method get()')
+    def test_BNmasked(self):
+        image = self.subject.load_channels()
+        image = image[np.newaxis,:] + 1
+        mask = self.subject.load_ROI_mask()
+        mask = mask[np.newaxis,:,:,:,np.newaxis]
+        mask = np.concatenate((mask,mask,mask,mask),axis=4)
+        print(mask.shape)
 
-        model, dummy = BratsModels.get_model(self.num_modalities, (57, 57, 57), self.num_classes,
-                                             model_name='deepmedic', segment_dimensions_up=(25, 25, 25))
+        mean = np.sum(image*mask,axis=(0,1,2,3))/np.sum(mask,axis=(0,1,2,3))
+        std = np.sqrt(np.sum(np.square((image - mean)*mask),axis=(0,1,2,3))/np.sum(mask,axis=(0,1,2,3)))
 
-        model.summary()
+        image_normalized = ((image -mean) / std)*mask
+
+        input_shape = self.subject.get_subject_shape() + (4,)
+
+        x = Input(shape=input_shape, name='V-net_input')
+        mask_brain = Input(shape=input_shape, name='V-net_mask1')
+
+        y = BatchNormalizationMasked(axis=4,momentum=0.0,center=False, scale=False)([x,mask_brain])
+
+        model = Model(inputs=[x,mask_brain],outputs=[y])
+        model.compile('sgd', 'mse')
+
+        # Predict data from the model
+        for i in range(2):
+            print(i)
+            model.train_on_batch([image,mask],image_normalized)
+        prediction = model.predict([image,mask], batch_size=1)
+
+        print(model.get_weights())
+
+        mean_pred = np.sum(prediction*mask,axis=(0,1,2,3))/np.sum(mask,axis=(0,1,2,3))
+        std_pred = np.sqrt(np.sum(np.square((prediction - mean_pred)*mask),axis=(0,1,2,3))/np.sum(mask,axis=(0,1,2,3)))
+
+        mean_true = np.sum(image_normalized * mask, axis=(0, 1, 2, 3)) / np.sum(mask, axis=(0, 1, 2, 3))
+        std_true = np.sqrt(np.sum(np.square((image_normalized - mean_true)*mask), axis=(0, 1, 2, 3)) / np.sum(mask, axis=(0, 1, 2, 3)))
+
+        print(mean)
+        print(mean_true)
+        print(mean_pred)
+        print(np.mean(prediction))
+
+        print(std)
+        print(std_true)
+        print(std_pred)
+
+
+        # Assertions
+        for i in range(4):
+            self.assertAlmostEqual(mean_pred[i], 0.0, places = 3, msg='Predicted mean is different from 0.000XX')
+            self.assertAlmostEqual(std_pred[i], 1.0, places = 2, msg='Predicted std is different from 1.000XX')
+
+
+
 
 
 if __name__ == '__main__':

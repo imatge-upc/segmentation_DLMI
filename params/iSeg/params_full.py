@@ -26,7 +26,7 @@ def get_params():
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
 
-        p.DATA_AUGMENTATION_FLAG: 'saggital-plane',
+        p.DATA_AUGMENTATION_FLAG: ['saggital-plane'],
         p.NUM_MODALITIES: 2,
 
         p.SHORTCUT_INPUT: True,

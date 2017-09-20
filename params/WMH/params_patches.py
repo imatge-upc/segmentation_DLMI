@@ -7,15 +7,15 @@ from src.config import DB
 def get_params():
     params = {
         p.DATABASE: DB.WMH,
-        p.INPUT_DIM: [192,192,96],#
+        p.INPUT_DIM: [96,96,32],#
 
-        p.N_CLASSES: 3,
-        p.N_EPOCHS: 250,
+        p.N_CLASSES: 2,
+        p.N_EPOCHS: 50,
         p.N_SUBEPOCHS: 1,
         p.BATCH_SIZE: 10,
         p.CLASS_WEIGHTS: 'inverse_weights',
 
-        p.SAMPLING_SCHEME: 'foreground-background',
+        p.SAMPLING_SCHEME: 'all-class',
         p.SAMPLING_WEIGHTS: [0.6, 0.4],
         p.N_SEGMENTS_TRAIN: 720,
         p.N_SUBJECTS_TRAIN: None,
@@ -26,13 +26,13 @@ def get_params():
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
 
-        p.DATA_AUGMENTATION_FLAG: True,
+        p.DATA_AUGMENTATION_FLAG: ['saggital-plane'],
         p.NUM_MODALITIES: 2,
 
 
-        p.SHORTCUT_INPUT: True,
+        p.SHORTCUT_INPUT: False,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation',
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/WMH/20170730/VNet_patches',
         p.MODEL_NAME: 'v_net_BN_patches_sr',
         p.LR: 0.0005
     }

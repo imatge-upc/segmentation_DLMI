@@ -9,10 +9,10 @@ from os.path import join
 import params.BraTS as p
 from src.config import DB
 from database.BraTS.data_loader import Loader
-from src.dataset import Dataset_train
-from src.models import SegmentationModels
+from src.dataset import Dataset_Brats
+from src.models import BraTS_models
 from src.utils import io
-from src.callbacks import LearningRateExponentialDecay
+from src.callbacks import LearningRateExponentialDecay, LearningRatePredefinedDecay
 
 if __name__ == "__main__":
 
@@ -24,8 +24,8 @@ if __name__ == "__main__":
     print('Getting parameters to train the model...')
     params_string = arg.p
     params = p.PARAMS_DICT[params_string].get_params()
-    filename = params[p.MODEL_NAME]
-    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_full')
+    filename = params[p.MODEL_NAME] + 'continue_withFLAIR_continue'
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_mask_dice_momentum0.99')
 
     logs_filepath = join(dir_path, 'logs', filename + '.txt')
     weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
@@ -41,20 +41,20 @@ if __name__ == "__main__":
     print(params)
     print('Learning rate exponential decay')
 
-
     """ ARCHITECTURE DEFINITION """
-    model, output_shape = SegmentationModels.get_model(
+    model, output_shape = BraTS_models.get_model(
         num_modalities=params[p.NUM_MODALITIES],
         segment_dimensions=tuple(params[p.INPUT_DIM]),
         num_classes=params[p.N_CLASSES],
         model_name=params[p.MODEL_NAME],
-        BN_last = True,
-        l1=0.0001,
-        l2=0.001
-
+        model_type=params[p.MODEL_TYPE],
+        l1=0.00001,
+        l2=0.005,
+        momentum=0.99,
+        # filepath_weights = {'mask':join(dir_path, 'model_weights', params[p.MODEL_NAME] + '_mask_part.h5')}
     )
-
-    model = SegmentationModels.compile(model, lr=params[p.LR],num_classes=params[p.N_CLASSES])
+    model.load_weights(join(dir_path, 'model_weights', params[p.MODEL_NAME] + 'continue_withFLAIR.h5'))
+    model = BraTS_models.compile(model, lr=params[p.LR]/10, model_type=params[p.MODEL_TYPE], loss_name=params[p.LOSS])
 
 
     model.summary()
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     brats_db = Loader.create(config_dict=DB.BRATS2017)
     subject_list = brats_db.load_subjects()
 
-    dataset = Dataset_train(input_shape=tuple(params[p.INPUT_DIM]),
+    dataset = Dataset_Brats(input_shape=tuple(params[p.INPUT_DIM]),
                             output_shape=tuple(params[p.INPUT_DIM]),
                             n_classes=params[p.N_CLASSES],
                             n_subepochs=params[p.N_SUBEPOCHS],
@@ -93,29 +93,32 @@ if __name__ == "__main__":
                             class_weights=params[p.CLASS_WEIGHTS]
                             )
 
-    print('TrainVal Dataset initialized')
+    print("BraTS Dataset initialized")
     subject_list_train, subject_list_validation = dataset.split_train_val(subject_list)
-    class_weights = dataset.class_weights(subject_list)
 
-    print("Brats Dataset initialized")
-
-    if params[p.SAMPLING_SCHEME] == 'whole':
-        steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(2*len(subject_list_train))
-        validation_steps = int(len(subject_list_validation))
-        generator_train = dataset.data_generator_full(subject_list_train, mode='train')
-        generator_val = dataset.data_generator_full(subject_list_validation, mode='validation')
+    if params[p.SAMPLE_WEIGHTS_BOOL]:
+        class_weights = [0, 2.32404037, 1., 3.14567243]  # dataset.class_weights(subject_list, mask_bool='labels')
+        print('Class_weight: ' + str(class_weights))
     else:
-        steps_per_epoch = int(np.ceil(params[p.N_SEGMENTS_TRAIN] / params[p.BATCH_SIZE]))
-        validation_steps = int(np.ceil(params[p.N_SEGMENTS_VALIDATION] / params[p.BATCH_SIZE]))
-        generator_train = dataset.data_generator(subject_list_train, mode='train')
-        generator_val = dataset.data_generator(subject_list_validation, mode='validation')
+        class_weights = None
+
+
+    steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(len(params[p.DATA_AUGMENTATION_FLAG])*len(subject_list_train))
+    validation_steps = int(len(subject_list_validation))
+    generator_train = dataset.data_generator_BraTS_mask(subject_list_train, mode='train',
+                                                            sample_weights_bool=params[p.SAMPLE_WEIGHTS_BOOL],
+                                                            class_weights=class_weights)
+    generator_val = dataset.data_generator_BraTS_mask(subject_list_validation, mode='validation',
+                                                          sample_weights_bool=False)
 
 
 
-    cb_saveWeights = ModelCheckpoint(filepath=weights_filepath)
+    cb_saveWeights = ModelCheckpoint(filepath=weights_filepath, save_best_only=True)
     cb_earlyStopping = EarlyStopping(patience=5)
     cb_learningRateScheduler = LearningRateExponentialDecay(epoch_n=0,num_epoch=params[p.N_EPOCHS])
-    callbacks_list = [cb_saveWeights,cb_learningRateScheduler]
+    cb_learningRateScheduler2 = LearningRatePredefinedDecay(decay_rate=2, predefined_epochs=[15,25,35,45,55,65,75,85,95])
+
+    callbacks_list = [cb_saveWeights,cb_learningRateScheduler, cb_learningRateScheduler2]
 
 
     """ MODEL TRAINING """
@@ -123,14 +126,12 @@ if __name__ == "__main__":
     print('Training started...')
     print('Steps per epoch: ' + str(steps_per_epoch))
     print('Output_shape: ' + str(output_shape))
-    print('Class weight' + str(class_weights))
 
     model.fit_generator(generator=generator_train,
                         steps_per_epoch=steps_per_epoch,
                         epochs=params[p.N_EPOCHS],
                         validation_data=generator_val,
                         validation_steps=validation_steps,
-                        callbacks=callbacks_list,
-                        class_weight=class_weights)
+                        callbacks=callbacks_list)
 
     print('Finished training')

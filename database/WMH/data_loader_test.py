@@ -78,58 +78,8 @@ class Subject:
 
         return mask_augmented[21:-21, 21:-21, 21:-21].astype('bool')
 
-
     def get_subject_shape(self):
 
         proxy = nib.load(self.T1_FILE)
         return proxy.shape
 
-
-
-class Loader():
-
-    def __init__(self, data_path):
-        self.data_path = data_path
-
-    @staticmethod
-    def create(config_dict):
-        return Loader(config_dict['data_dir'])
-
-    def load_subject(self, id):
-        subject = Subject(id, self.data_path)
-
-        return subject
-
-
-    def load_subjects(self):
-
-        subject_list = []
-        data_path = self.data_path
-        if not isinstance(self.data_path, list):
-            data_path = [data_path]
-
-        for path in data_path:
-            for subject in os.listdir(path):
-                subject_list.append(Subject(path,subject))
-
-        return subject_list
-
-
-    def _get_value(self, value):
-        '''
-         Checks that the value is not a nan, and returns None if it is
-        '''
-        if value == 'nan':
-            return None
-
-        if isinstance(value, str):
-            # if value.isnumeric():
-            #     return int(value)
-
-            # Check if it can be casted to a float...
-            try:
-                return float(value)
-            except ValueError:
-                pass
-
-        return value

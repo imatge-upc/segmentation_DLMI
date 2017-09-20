@@ -123,5 +123,7 @@ def create_results_dir(dir_path):
         os.makedirs(join(dir_path,'logs'))
     if not exists(join(dir_path, 'results')):
         os.makedirs(join(dir_path, 'results'))
+        if not exists(join(dir_path, 'results_test')):
+            os.makedirs(join(dir_path, 'results_test'))
 
 

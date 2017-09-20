@@ -21,13 +21,11 @@ def dice(y_true, y_pred):
     scalar
         Dice metric
     """
-    # Symbolically compute the intersection
-    y_pred_classes = y_pred / K.max(y_pred, axis=1, keepdims=True)
-    y_pred_classes = K.cast(y_pred_classes, 'int8')
-    y_true = K.cast(y_true, 'int8')
-    y_sum = K.sum(y_true & y_pred_classes)
-    # Sorensen-Dice index
-    return (2. * y_sum + K.epsilon()) / (K.sum(y_true) + K.sum(y_pred) + K.epsilon())
+    y_pred_decision = tf.floor((y_pred + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
+
+    y_sum = K.sum(y_true * y_pred_decision)
+
+    return (2. * y_sum + K.epsilon()) / (K.sum(y_true) + K.sum(y_pred_decision) + K.epsilon())
 
 
 def accuracy(y_true, y_pred):
@@ -63,11 +61,8 @@ def dice_whole(y_true, y_pred):
     scalar
         Dice metric
     """
-    print('shapes!')
-    print(np.shape(y_pred))
-    print(np.shape(y_true))
 
-    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
     print(np.shape(y_pred_decision))
 
     mask_true = K.sum(y_true[:, :, :, :,1:3], axis=4)
@@ -97,7 +92,7 @@ def dice_core(y_true, y_pred):
         Dice metric
     """
 
-    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
 
     mask_true1 = y_true[:, :, :, :, 3:]
     mask_true2 = y_true[:, :, :, :, 1:2]
@@ -130,13 +125,121 @@ def dice_enhance(y_true, y_pred):
         Dice metric
     """
 
-    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
     mask_true = y_true[:, :, :, :, 3]
     mask_pred = y_pred_decision[:, :, :, :, 3]
 
     y_sum = K.sum(mask_true * mask_pred)
 
     return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
+
+# def accuracy_survival(y_true, y_predicted):
+
+
+
+def dice_whole_mod(y_true, y_pred):
+    """
+    Computes the Sorensen-Dice metric, where P come from class 1,2,3,4,0
+                    TP
+        Dice = 2 -------
+                  T + P
+    Parameters
+    ----------
+    y_true : keras.placeholder
+        Placeholder that contains the ground truth labels of the classes
+    y_pred : keras.placeholder
+        Placeholder that contains the class prediction
+
+    Returns
+    -------
+    scalar
+        Dice metric
+    """
+    # mask = K.expand_dims(K.sum(y_true,axis=4),axis=4)
+    # cmp_mask = K.concatenate([K.ones_like(mask) - mask,K.zeros_like(mask), K.zeros_like(mask)],axis=4)
+    # y_pred = y_pred + cmp_mask
+
+    y_true = y_true[:,:,:,:,:3]
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
+
+    mask_true = K.sum(y_true, axis=4)
+    mask_pred = K.sum(y_pred_decision, axis=4) * K.sum(y_true, axis=4)
+
+    y_sum = K.sum(mask_true * mask_pred)
+
+    return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
+
+
+def dice_core_mod(y_true, y_pred):
+    """
+    Computes the Sorensen-Dice metric, where P come from class 1,2,3,4,5
+                    TP
+        Dice = 2 -------
+                  T + P
+    Parameters
+    ----------
+    y_true : keras.placeholder
+        Placeholder that contains the ground truth labels of the classes
+    y_pred : keras.placeholder
+        Placeholder that contains the class prediction
+
+    Returns
+    -------
+    scalar
+        Dice metric
+    """
+    y_true = y_true[:,:,:,:,:3]
+
+
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
+    y_pred_decision = tf.where(tf.is_nan(y_pred_decision), tf.zeros_like(y_pred_decision), y_pred_decision)
+
+
+    mask_true1 = K.expand_dims(y_true[:, :, :, :, 2],axis=4)
+    mask_true2 = K.expand_dims(y_true[:, :, :, :, 0],axis=4)
+    mask_true = K.sum(K.concatenate([mask_true1, mask_true2], axis=4), axis=4)
+    mask_pred1 = K.expand_dims(y_pred_decision[:, :, :, :, 2],axis=4)
+    mask_pred2 = K.expand_dims(y_pred_decision[:, :, :, :, 0],axis=4)
+    mask_pred = K.sum(K.concatenate([mask_pred1, mask_pred2], axis=4), axis=4) * K.sum(y_true, axis=4)
+
+    y_sum = K.sum(mask_true * mask_pred)
+
+    return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
+
+
+def dice_enhance_mod(y_true, y_pred):
+    """
+    Computes the Sorensen-Dice metric, where P come from class 1,2,3,4,5
+                    TP
+        Dice = 2 -------
+                  T + P
+    Parameters
+    ----------
+    y_true : keras.placeholder
+        Placeholder that contains the ground truth labels of the classes
+    y_pred : keras.placeholder
+        Placeholder that contains the class prediction
+
+    Returns
+    -------
+    scalar
+        Dice metric
+    """
+    y_true = y_true[:,:,:,:,:3]
+
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
+    # y_pred_decision = tf.where(tf.is_nan(y_pred_decision), tf.zeros_like(y_pred_decision), y_pred_decision)
+
+
+
+    mask_true = y_true[:, :, :, :, 2]
+    mask_pred = y_pred_decision[:, :, :, :, 2] * K.sum(y_true, axis=4)
+
+    y_sum = K.sum(mask_true * mask_pred)
+
+    return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
+
+
 
 
 
@@ -159,7 +262,7 @@ def dice_0(y_true, y_pred):
         Dice metric
     """
 
-    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
 
     mask_true = y_true[:, :, :, :,0]
     mask_pred = y_pred_decision[:, :, :, :, 0]
@@ -197,6 +300,34 @@ def dice_1(y_true, y_pred):
 
     return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
 
+def dice_1_2D(y_true, y_pred):
+    """
+    Computes the Sorensen-Dice metric, where P come from class 1,2,3,4,5
+                    TP
+        Dice = 2 -------
+                  T + P
+    Parameters
+    ----------
+    y_true : keras.placeholder
+        Placeholder that contains the ground truth labels of the classes
+    y_pred : keras.placeholder
+        Placeholder that contains the class prediction
+
+    Returns
+    -------
+    scalar
+        Dice metric
+    """
+
+    y_pred_decision = tf.floor((y_pred  + K.epsilon())/ K.max(y_pred, axis=2, keepdims=True))
+
+    mask_true = y_true[:, :, 1]
+    mask_pred = y_pred_decision[:, :, 1]
+
+    y_sum = K.sum(mask_true * mask_pred)
+
+    return (2. * y_sum + K.epsilon()) / (K.sum(mask_true) + K.sum(mask_pred) + K.epsilon())
+
 
 def dice_2(y_true, y_pred):
     """
@@ -217,7 +348,7 @@ def dice_2(y_true, y_pred):
         Dice metric
     """
 
-    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
 
     mask_true = y_true[:, :, :, :, 2]
     mask_pred = y_pred_decision[:, :, :, :, 2]
@@ -245,7 +376,7 @@ def dice_3(y_true, y_pred):
     scalar
         Dice metric
     """
-    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
 
     mask_true = y_true[:, :, :, :, 3]
     mask_pred = y_pred_decision[:, :, :, :, 3]
@@ -274,7 +405,7 @@ def dice_4(y_true, y_pred):
         Dice metric
     """
 
-    y_pred_decision = tf.floor(y_pred / K.max(y_pred, axis=4, keepdims=True))
+    y_pred_decision = tf.floor((y_pred  + K.epsilon()) / K.max(y_pred, axis=4, keepdims=True))
 
     mask_true = y_true[:, :, :, :, 4]
     mask_pred = y_pred_decision[:, :, :, :, 4]

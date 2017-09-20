@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 for i in "$@"
 do
 case $i in
@@ -14,11 +15,11 @@ done
 
 if [ "${PARAMS}" = "params_full"  ]
     then
-    srun  --gres=gpu:1,gmem:12GB --pty  --mem=50G  python train_VNET.py -p"${PARAMS}"
+    srun  -p fast --gres=gpu:1 --pty  --mem=8G  python test_evalulate_VNET.py -p"${PARAMS}"
 elif [ "${PARAMS}" = "params_patches"  ]
     then
-    srun  --gres=gpu:1,gmem:12GB --pty  --mem=60G  python train_VNET.py -p"${PARAMS}"
+    srun  --gres=gpu:1  --pty  --mem=8G  python test_evaluate_VNET.py -p"${PARAMS}"
 else
-    echo 'ERROR in "train.sh"'
+    echo 'ERROR in "test_evaluate.sh"'
     echo 'Please, specify a valid parameter filename'
 fi

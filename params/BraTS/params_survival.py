@@ -9,19 +9,19 @@ def get_params():
         p.DATABASE: 'BraTS2017',
         p.INPUT_DIM: [192,192,160],#[64,64,64],#
 
-        p.N_CLASSES: 2,
-        p.N_EPOCHS: 150,
-        p.N_SUBEPOCHS: 1,#20,#
-        p.BATCH_SIZE: 1,#10,#
+        p.N_CLASSES: 4,
+        p.N_EPOCHS: 100,
+        p.N_SUBEPOCHS: None,#1,#
+        p.BATCH_SIZE: 5,#10,#
         p.CLASS_WEIGHTS: 'inverse_weights',
 
-        p.SAMPLING_SCHEME: 'whole',#'foreground-background',#
-        p.SAMPLING_WEIGHTS: [0.5, 0.5],
-        p.N_SEGMENTS_TRAIN: 120,#400,#
-        p.N_SUBJECTS_TRAIN: None,#100,#
+        p.SAMPLING_SCHEME: 'whole',#'whole',#
+        p.SAMPLING_WEIGHTS: None,
+        p.N_SEGMENTS_TRAIN: None,#120,#
+        p.N_SUBJECTS_TRAIN: None,#None,#
 
-        p.N_SEGMENTS_VALIDATION: 10,#80,#
-        p.N_SUBJECTS_VALIDATION: None, #20,#
+        p.N_SEGMENTS_VALIDATION: None,#10,#
+        p.N_SUBJECTS_VALIDATION: None,#None, #
 
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
@@ -29,12 +29,11 @@ def get_params():
         p.DATA_AUGMENTATION_FLAG: False,
         p.NUM_MODALITIES: 4,
 
-        p.BN_LAST: False,
-        p.SHORTCUT_INPUT: False,
-        p.BOOL_MASK: True,
+        p.MODEL_TYPE: 'survival',
+        p.LOSS: None,
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/BraTS/VNet_1',
-        p.MODEL_NAME: 'v_net_BN',
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/BraTS/survival/20170810',
+        p.MODEL_NAME: 'brats2017',
         p.LR: 0.0005
     }
 

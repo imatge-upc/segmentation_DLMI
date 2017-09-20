@@ -3,25 +3,23 @@ from keras import backend as K
 from keras.callbacks import Callback
 import math
 
-class PredefinedLearningRateDecay(Callback):
+class LearningRatePredefinedDecay(Callback):
     def __init__(self, decay_rate, predefined_epochs=None):
         self.decay_rate = float(decay_rate)
         self.predefined_epochs = predefined_epochs if predefined_epochs is not None else [-1]
 
-        super(PredefinedLearningRateDecay, self).__init__()
+        super(LearningRatePredefinedDecay, self).__init__()
 
     def on_epoch_end(self, epoch, logs={}):
 
         if epoch in self.predefined_epochs or -1 in self.predefined_epochs:
-            lr = self.model.optimizer.lr.get_value() / self.decay_rate
-        else:
-            lr = self.model.optimizer.lr.get_value()
+            lr = K.get_value(self.model.optimizer.lr) / self.decay_rate
+            K.set_value(self.model.optimizer.lr, lr)
 
-        self.model.optimizer.lr.set_value(lr)
 
 
 class LearningRateExponentialDecay(Callback):
-    def __init__(self,epoch_n,num_epoch):
+    def __init__(self,epoch_n,num_epoch, ):
         self.epoch_n = epoch_n
         self.num_epoch = num_epoch
         super(LearningRateExponentialDecay, self).__init__()

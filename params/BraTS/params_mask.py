@@ -7,21 +7,21 @@ from src.config import DB
 def get_params():
     params = {
         p.DATABASE: 'BraTS2017',
-        p.INPUT_DIM: [224,224,160],#[64,64,64],#
+        p.INPUT_DIM: [192,192,160],#[64,64,64],#
 
-        p.N_CLASSES: 4,
-        p.N_EPOCHS: 150,
-        p.N_SUBEPOCHS: 20,#1,#
+        p.N_CLASSES: 3,
+        p.N_EPOCHS: 50,
+        p.N_SUBEPOCHS: None,#1,#
         p.BATCH_SIZE: 1,#10,#
         p.CLASS_WEIGHTS: 'inverse_weights',
 
-        p.SAMPLING_SCHEME: 'foreground-background',#'whole',#
-        p.SAMPLING_WEIGHTS: [0.5, 0.5],
-        p.N_SEGMENTS_TRAIN: 400,#120,#
-        p.N_SUBJECTS_TRAIN: 100,#None,#
+        p.SAMPLING_SCHEME: 'whole',#'whole',#
+        p.SAMPLING_WEIGHTS: None,
+        p.N_SEGMENTS_TRAIN: None,#120,#
+        p.N_SUBJECTS_TRAIN: None,#None,#
 
-        p.N_SEGMENTS_VALIDATION: 80,#10,#
-        p.N_SUBJECTS_VALIDATION: 20,#None, #
+        p.N_SEGMENTS_VALIDATION: None,#10,#
+        p.N_SUBJECTS_VALIDATION: None,#None, #
 
         p.TRAIN_SIZE: 0.6,
         p.DEV_SIZE: 0.4,
@@ -29,12 +29,13 @@ def get_params():
         p.DATA_AUGMENTATION_FLAG: False,
         p.NUM_MODALITIES: 4,
 
-        p.BN_LAST: False,
-        p.SHORTCUT_INPUT: False,
-        p.BOOL_MASK: False,
+        p.MODEL_TYPE: 'mask',
+        p.LOSS: 'dice',
 
-        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/BraTS/two_pathways',
-        p.MODEL_NAME: 'two_pathways',
+        p.SAMPLE_WEIGHTS_BOOL: False,
+
+        p.OUTPUT_PATH: '/work/acasamitjana/segmentation/BraTS/mask/20170812',
+        p.MODEL_NAME: 'brats2017',
         p.LR: 0.0005
     }
 

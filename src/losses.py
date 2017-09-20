@@ -30,6 +30,39 @@ def categorical_crossentropy_3d(y_true, y_predicted):
     mean_cross_entropy = cross_entropy / (num_total_elements + K.epsilon())
     return mean_cross_entropy
 
+
+def categorical_crossentropy_3d_SW(y_true_sw, y_predicted):
+    """
+    Computes categorical cross-entropy loss for a softmax distribution in a hot-encoded 3D array
+    with shape (num_samples, num_classes, dim1, dim2, dim3)
+
+    Parameters
+    ----------
+    y_true : keras.placeholder [batches, dim0,dim1,dim2]
+        Placeholder for data holding the ground-truth labels encoded in a one-hot representation
+    y_predicted : keras.placeholder [batches,channels,dim0,dim1,dim2]
+        Placeholder for data holding the softmax distribution over classes
+
+    Returns
+    -------
+    scalar
+        Categorical cross-entropy loss value
+    """
+    sw = y_true_sw[:,:,:,:,K.int_shape(y_predicted)[-1]:]
+    y_true = y_true_sw[:,:,:,:,:K.int_shape(y_predicted)[-1]]
+
+    y_true_flatten = K.flatten(y_true*sw)
+    y_pred_flatten = K.flatten(y_predicted)
+    y_pred_flatten_log = -K.log(y_pred_flatten + K.epsilon())
+    num_total_elements = K.sum(y_true_flatten)
+    # cross_entropy = K.dot(y_true_flatten, K.transpose(y_pred_flatten_log))
+    cross_entropy = tf.reduce_sum(tf.multiply(y_true_flatten, y_pred_flatten_log))
+    mean_cross_entropy = cross_entropy / (num_total_elements + K.epsilon())
+    return mean_cross_entropy
+
+
+
+
 def categorical_crossentropy_3d_masked(vectors):
     """
     Computes categorical cross-entropy loss for a softmax distribution in a hot-encoded 3D array
@@ -60,11 +93,17 @@ def categorical_crossentropy_3d_masked(vectors):
     return mean_cross_entropy
 
 
-
 def dice_cost(y_true, y_predicted):
 
-    mask_true = K.flatten(y_true[:, :, :, :, 1])#
-    mask_pred = K.flatten(y_predicted[:, :, :, :, 1])#
+    num_sum = 2.0 * K.sum(y_true * y_predicted) + K.epsilon()
+    den_sum = K.sum(y_true) + K.sum(y_predicted)+ K.epsilon()
+
+    return -num_sum/den_sum
+
+def dice_cost_1(y_true, y_predicted):
+
+    mask_true = y_true[:, :, :, :, 1]
+    mask_pred = y_predicted[:, :, :, :, 1]
 
     num_sum = 2.0 * K.sum(mask_true * mask_pred) + K.epsilon()
     den_sum = K.sum(mask_true) + K.sum(mask_pred)+ K.epsilon()
@@ -73,12 +112,20 @@ def dice_cost(y_true, y_predicted):
 
 def dice_cost_123(y_true, y_predicted):
 
-    dice_1 = dice_cost(y_true, y_predicted)
+    dice_1 = dice_cost_1(y_true, y_predicted)
     dice_2 = dice_cost_2(y_true, y_predicted)
     dice_3 = dice_cost_3(y_true, y_predicted)
 
 
     return 1/3*(dice_1+dice_2+dice_3)
+
+def dice_cost_12(y_true, y_predicted):
+
+    dice_1 = dice_cost_1(y_true, y_predicted)
+    dice_2 = dice_cost_2(y_true, y_predicted)
+
+
+    return 1/2*(dice_1+dice_2)
 
 def dice_cost_2(y_true, y_predicted):
 

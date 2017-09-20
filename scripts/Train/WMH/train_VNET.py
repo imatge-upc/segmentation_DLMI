@@ -1,13 +1,12 @@
 import argparse
 import sys
 import os
-from keras import backend as K
-from keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 from os.path import join
 from database.WMH.data_loader import Loader
 from src.dataset import Dataset_train
 from src.utils import io
-from src.models import SegmentationModels, WMH_models
+from src.models import WMH_models
 from src.config import DB
 from src.callbacks import LearningRateExponentialDecay, LearningRateDecay
 from keras.utils import plot_model
@@ -26,8 +25,8 @@ if __name__ == "__main__":
     print('Getting parameters to train the model...')
     params_string = arg.p
     params = p.PARAMS_DICT[params_string].get_params()
-    filename = params[p.MODEL_NAME]+'_continue_dice'
-    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR])+'_DA_6_4_no_concat')
+    filename = params[p.MODEL_NAME]
+    dir_path = join(params[p.OUTPUT_PATH], 'LR_' + str(params[p.LR]))
 
     logs_filepath = join(dir_path, 'logs', filename + '.txt')
     load_weights_filepath = join(dir_path, 'model_weights', filename + '.h5')
@@ -54,7 +53,8 @@ if __name__ == "__main__":
         l1=0.0001,
         l2=0.0001
     )
-    model.load_weights(join('/work/acasamitjana/segmentation/WMH/20170727/VNet_patches/LR_0.0005_DA_6_4_no_concat/model_weights', params[p.MODEL_NAME] + '_copy.h5'))
+
+    # model.load_weights(join('/work/acasamitjana/segmentation/WMH/20170727/VNet_patches/LR_0.0005_DA_6_4_no_concat/model_weights', params[p.MODEL_NAME] + '_copy.h5'))
     model = WMH_models.compile(model, lr=params[p.LR]*0.05,num_classes=params[p.N_CLASSES], loss_name='dice')#
 
 
@@ -94,15 +94,17 @@ if __name__ == "__main__":
                             class_weights=params[p.CLASS_WEIGHTS]
                             )
 
-    print('TrainVal Dataset initialized')
     class_weights = dataset.class_weights(subject_list)
     subject_list_train, subject_list_validation = dataset.split_train_val(subject_list)
+    print('TrainVal Dataset initialized')
+
 
     if params[p.SAMPLING_SCHEME] == 'whole':
         steps_per_epoch = int(len(subject_list_train)) if params[p.DATA_AUGMENTATION_FLAG] is False else int(2*len(subject_list_train))
         validation_steps = int(len(subject_list_validation))
-        generator_train = dataset.data_generator_full_mask(subject_list_train, mode='train', normalize_bool=True)
-        generator_val = dataset.data_generator_full_mask(subject_list_validation, mode='validation', normalize_bool=True)
+        generator_train = dataset.data_generator_full(subject_list_train, mode='train', normalize_bool=True, mask=True)
+        generator_val = dataset.data_generator_full(subject_list_validation, mode='validation', normalize_bool=True,
+                                                    mask=True)
     else:
         steps_per_epoch = int(np.ceil(params[p.N_SEGMENTS_TRAIN] / params[p.BATCH_SIZE]))
         validation_steps = int(np.ceil(params[p.N_SEGMENTS_VALIDATION] / params[p.BATCH_SIZE]))

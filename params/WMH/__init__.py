@@ -1,8 +1,7 @@
 from params import *
-from params.WMH import params_VNET, params_VNET_patches, params_VNET_patches_resampled
+from params.WMH import params_full, params_patches
 
 PARAMS_DICT = {
-    'params_VNET': params_VNET,
-    'params_VNET_patches': params_VNET_patches,
-    'params_VNET_patches_resampled': params_VNET_patches_resampled
+    'params_full': params_full,
+    'params_patches': params_patches,
 }

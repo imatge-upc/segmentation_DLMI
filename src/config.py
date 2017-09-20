@@ -13,6 +13,17 @@ class DB():
         'data_dir': ['/projects/neuro/BRATS/BRATS2017_Training/HGG',
                      '/projects/neuro/BRATS/BRATS2017_Training/LGG'],
     }
+
+    BRATS2017_Validation = {
+        'db_name': 'BRATS2017_Validation',
+        'data_dir': '/projects/neuro/BRATS/BRATS2017_Validation'
+    }
+
+    BRATS2017_Test = {
+        'db_name': 'BRATS2017_Test',
+        'data_dir': '/projects/neuro/BRATS/BRATS2017_Testing'
+    }
+
     WMH = {
         'db_name': 'WMH',
         'data_dir': ['/projects/neuro/WMH/Utrecht','/projects/neuro/WMH/GE3T', '/projects/neuro/WMH/Singapore']
