@@ -1357,7 +1357,7 @@ class BraTS_models(object):
 
 
     @staticmethod
-    def compile(model, lr=0.0005, optimizer_name='Adam', model_type='complete', loss_name = 'dice'):
+    def compile(model, lr=0.0005, optimizer_name='Adam', model_type=None, loss_name = 'dice'):
 
         if optimizer_name == 'Adam':
             beta_1 = 0.9
@@ -2291,7 +2291,7 @@ class BraTS_models(object):
         # First block (down)
         first_conv = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, kernel_regularizer=regularizer,
                             name='conv_initial', padding='same')(x)
-        tmp = BatchNormalizationMasked(axis=4, name='batch_norm_1.1')(first_conv)
+        tmp = BatchNormalization(axis=4, name='batch_norm_1.1')(first_conv)
         tmp = Activation('relu')(tmp)
         z1 = Conv3D(8, (3, 3, 3), kernel_initializer=initializer, kernel_regularizer=regularizer, name='conv_1.1',
                     padding='same')(tmp)

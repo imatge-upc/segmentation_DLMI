@@ -26,7 +26,7 @@ elif [ "${PARAMS}" = "params_seg"  ]
 
 elif [ "${PARAMS}" = "params_train"  ]
     then
-    srun  --gres=gpu:1,gmem:12GB --pty  --mem=15G  python train.py -p"${PARAMS}"
+    srun  -p fast --pty  --mem=15G  python train.py -p"${PARAMS}"
 
 elif [ "${PARAMS}" = "params_survival"  ]
     then

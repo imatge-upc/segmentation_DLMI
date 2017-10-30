@@ -329,7 +329,7 @@ class Dataset_train(Dataset):
 
                     yield features, labels
 
-    def data_generator_full(self, subject_list, mode='train', normalize_bool = True, mask = True):
+    def data_generator_full(self, subject_list, mode='train', normalize_bool = True, mask_bool = True):
         if mode == 'train':
             subject_list = self.data_augmentation(subject_list)
 
@@ -349,7 +349,7 @@ class Dataset_train(Dataset):
 
                 if it_subject_batch + 1 == self.batch_size:
                     it_subject_batch = 0
-                    if mask:
+                    if mask_bool:
                         yield ([image_batch, mask], one_hot_representation(labels_batch, self.n_classes))
                     else:
                         yield (image_batch,one_hot_representation(labels_batch, self.n_classes) )

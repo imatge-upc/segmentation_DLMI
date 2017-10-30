@@ -34,7 +34,7 @@ if __name__ == "__main__":
     print('Output redirected to file... ')
     print('Suggestion: Use tail command to see the output')
     io.create_results_dir(dir_path=dir_path)
-    io.redirect_stdout_to_file(filepath=logs_filepath)
+    # io.redirect_stdout_to_file(filepath=logs_filepath)
 
     print('PARAMETERS')
     print(params)
@@ -49,7 +49,7 @@ if __name__ == "__main__":
         l2=0.005,
         momentum=0.99,
     )
-    model = BraTS_models.compile(model, lr=params[p.LR], model_type=params[p.MODEL_TYPE], loss_name=params[p.LOSS])
+    model = BraTS_models.compile(model, lr=params[p.LR], loss_name=params[p.LOSS])
 
 
     model.summary()
