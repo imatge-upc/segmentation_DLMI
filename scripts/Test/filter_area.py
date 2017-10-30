@@ -31,9 +31,8 @@ def dice_enhance(y,y_pred):
 
     return (2. * np.sum(y_pred_enhance * y_enhance) + np.finfo(float).eps ) / (np.sum(y_enhance) + np.sum(y_pred_enhance) + np.finfo(float).eps)
 
-def remove_conn_components(num_cc):
+def remove_conn_components(pred_mask, num_cc):
 
-    pred_mask = np.asarray(pred_img > 0, np.uint8)
     labels = label(pred_mask)
 
     if num_cc == 1:
@@ -76,10 +75,11 @@ if __name__ == "__main__":
         affine = pred_nii.get_affine()
         hdr = pred_nii.get_header()
         pred_img = pred_nii.get_data()
+        pred_mask = np.asarray(pred_img > 0, np.uint8)
+
 
         # Remove small objects
-        mask = remove_conn_components(NUM_CONNECTED_COMPONENTS)
-
+        mask = remove_conn_components(pred_mask, NUM_CONNECTED_COMPONENTS)
 
         final_pred = pred_img * (pred_mask - (mask > 0))
 
