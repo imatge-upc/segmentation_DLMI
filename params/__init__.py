@@ -29,6 +29,8 @@ OUTPUT_PATH = 'output_path'
 BATCH_SIZE = 'batch_size'
 
 DATA_AUGMENTATION_FLAG = 'data_augmentation'
+DATA_AUGMENTATION_PLANES = 'data_augmentation_planes'
+
 CLASS_WEIGHTS = 'class_weights'
 
 N_SUBJECTS = 'N_subjects'

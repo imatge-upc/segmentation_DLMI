@@ -70,7 +70,8 @@ class Dataset_train(Dataset):
 
                  num_modalities,
 
-                 data_augmentation_flag =False,
+                 data_augmentation_flag = False,
+                 data_augmentation_planes = None,
                  class_weights = 'constant'):
 
         self.n_subepochs = n_subepochs
@@ -89,6 +90,8 @@ class Dataset_train(Dataset):
 
         print('Data_augmentation_flag: ' + str(data_augmentation_flag))
         self.data_augmentation_flag = data_augmentation_flag
+        self.data_augmentation_planes = data_augmentation_planes
+
         super(Dataset_train,self).__init__(input_shape,
                                            output_shape,
                                            n_classes,
@@ -395,26 +398,25 @@ class Dataset_train(Dataset):
 
     def data_augmentation(self, subject_list):
 
-        for d in self.data_augmentation_flag:
-            subject_list_augmentation = copy.deepcopy(subject_list)
-            if d == 'saggital-plane':
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation = 0
-                    sbj.data_augmentation_flag = True
+        if self.data_augmentation_flag:
+            for d in self.data_augmentation_planes:
+                subject_list_augmentation = copy.deepcopy(subject_list)
+                if d == 'saggital-plane':
+                    for sbj in subject_list_augmentation:
+                        sbj.data_augmentation = 0
+                        sbj.data_augmentation_flag = True
 
-            if d == 'coronal-plane':
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation = 1
-                    sbj.data_augmentation_flag = True
+                if d == 'coronal-plane':
+                    for sbj in subject_list_augmentation:
+                        sbj.data_augmentation = 1
+                        sbj.data_augmentation_flag = True
 
-            if d == 'axial-plane':
-                for sbj in subject_list_augmentation:
-                    sbj.data_augmentation = 2
-                    sbj.data_augmentation_flag = True
+                if d == 'axial-plane':
+                    for sbj in subject_list_augmentation:
+                        sbj.data_augmentation = 2
+                        sbj.data_augmentation_flag = True
 
-
-
-            subject_list += subject_list_augmentation
+                subject_list += subject_list_augmentation
 
 
 
